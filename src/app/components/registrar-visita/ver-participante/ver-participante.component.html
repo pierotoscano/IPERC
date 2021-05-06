@@ -1,0 +1,60 @@
+<h1 mat-dialog-title>Lista de participantes registrados</h1>
+<div mat-dialog-content>
+  <ng-template *ngIf="dialogGuardarVisita; else tableForCheckData">
+    <table *ngIf="data.listParticipantes.length > 0; else message" mat-table [dataSource]="data.listParticipantes"
+      class="mat-elevation-z8">
+
+      <ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let participante"> {{participante.Id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Title">
+        <th mat-header-cell *matHeaderCellDef> Usuario </th>
+        <td mat-cell *matCellDef="let participante"> {{participante.Title}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Email">
+        <th mat-header-cell *matHeaderCellDef> Correo </th>
+        <td mat-cell *matCellDef="let participante"> {{participante.Email}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <ng-template #message>
+      <p>No hay participantes para esta visita</p>
+    </ng-template>
+  </ng-template>
+  <ng-template #tableForCheckData>
+    <table *ngIf="data.listParticipantes.length > 0; else message" mat-table [dataSource]="data.listParticipantes"
+      class="mat-elevation-z8">
+
+      <ng-container matColumnDef="idParticipante">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let participante"> {{participante.idParticipante}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef> Usuario </th>
+        <td mat-cell *matCellDef="let participante"> {{participante.usuario}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Correo </th>
+        <td mat-cell *matCellDef="let participante"> {{participante.email}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsCheck"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsCheck;"></tr>
+    </table>
+    <ng-template #message>
+      <p>No hay participantes para esta visita</p>
+    </ng-template>
+  </ng-template>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cerrar</button>
+  <button mat-button (click)="closeDialog()">Ok</button>
+</div>

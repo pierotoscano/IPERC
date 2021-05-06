@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Agregar puesto</h1>
+<mat-dialog-content class="mat-typography">
+    <form class="puesto-form">
+
+        <mat-form-field class="full-width">
+          <mat-label>Nombre de puesto</mat-label>
+          <input [formControl]="puestoForm" type="text" matInput />
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Cancelar</button>
+    <!-- [mat-dialog-close]="data" -->
+    <button mat-button (click)="saveDialog()" mat-button cdkFocusInitial>
+      <mat-icon>save</mat-icon>
+      Grabar
+    </button>
+</mat-dialog-actions>

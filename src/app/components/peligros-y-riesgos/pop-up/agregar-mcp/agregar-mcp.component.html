@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Agregar MCP</h2>
+<form [formGroup]="formAddMCP" (ngSubmit)="addMCP()" >
+  <mat-dialog-content class="mat-typography">
+    <!-- <h3>Develop across all platforms</h3>
+  <p>Learn one way to build applications with Angular and reuse your code and abilities to build
+    apps for any deployment target. For web, mobile web, native mobile and native desktop.</p> -->
+
+
+    <!-- <mat-form-field class="full-width">
+          <mat-label>Favorite food</mat-label>
+          <input matInput placeholder="Ex. Pizza" value="Sushi">
+        </mat-form-field> -->
+
+    <mat-form-field class="full-width">
+      <mat-label>MCP</mat-label>
+      <textarea formControlName="descripcion" matInput rows=3 placeholder="Descripción"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="tipo">
+        <mat-option [value]="-1">Seleccione</mat-option>
+        <mat-option *ngFor="let item of listTiposMC" [value]="item.idTipoMC">
+          {{item.tipoMC}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Responsable</mat-label>
+      <mat-select formControlName="responsable">
+        <mat-option [value]="-1">Seleccione</mat-option>
+        <mat-option *ngFor="let item of listResponsables" [value]="item.idresponsable">
+          {{item.responsable}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!--
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <mat-form-field appearance="outline">
+                <mat-label>Proceso</mat-label>
+                <mat-select>
+                    <mat-option [value]="-1">Seleccione</mat-option>
+                    <mat-option *ngFor="let item of procesos" [value]="item.idProceso">
+                        {{item.proceso}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div> -->
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>
+      <mat-icon>save</mat-icon>
+      Grabar
+    </button>
+  </mat-dialog-actions>
+</form>

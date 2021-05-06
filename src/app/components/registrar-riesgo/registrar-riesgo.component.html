@@ -1,0 +1,66 @@
+<mat-card>
+    <div class="container">
+        <span mat-card-title>Registrar Riesgo</span>
+        <div fxLayout="row" fxLayoutAlign="center">
+            <form novalidate style="width: 90%;">
+                <div fxLayout="column">
+
+                    <mat-form-field appearance="standard">
+                        <mat-label>Matriz N°</mat-label>
+                        <input type="number" matInput/>
+                        <!-- <mat-error>
+                                {{ errors.DuracionTotalConservacion }}
+                            </mat-error> -->
+                    </mat-form-field>
+
+                    <mat-form-field appearance="standard">
+                        <mat-label>Actividad</mat-label>
+                        <mat-select [errorStateMatcher]="matcher">
+                            <mat-select-search placeholderLabel="Seleccione un típo"></mat-select-search>
+                            <mat-option [value]="-1">Seleccione</mat-option>
+                            <mat-option [value]="Actividad1">Actividad1</mat-option>
+                            <mat-option [value]="Actividad2">Actividad2</mat-option>
+                            <!-- <mat-option *ngFor="let desplegable of listaTipoMaterialFilter" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
+                        </mat-select>
+                        <!-- <mat-error>
+                                {{ errors.IdTipoMaterial }}
+                            </mat-error> -->
+                    </mat-form-field>
+
+                    <mat-form-field appearance="standard">
+                        <mat-label>Peligro</mat-label>
+                        <mat-select [errorStateMatcher]="matcher">
+                            <mat-select-search placeholderLabel="Seleccione un típo"></mat-select-search>
+                            <mat-option [value]="-1">Seleccione</mat-option>
+                            <mat-option [value]="Peligro1">Peligro1</mat-option>
+                            <mat-option [value]="Peligro2">Peligro2</mat-option>
+                            <!-- <mat-option *ngFor="let desplegable of listaTipoMaterialFilter" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
+                        </mat-select>
+                        <!-- <mat-error>
+                                {{ errors.IdTipoMaterial }}
+                            </mat-error> -->
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <textarea matInput placeholder="Riesgo"  rows="5"></textarea>
+                    </mat-form-field>
+                    
+                    <br>
+
+                    <br>
+
+                    <div>
+                        <button type="button" mat-raised-button color="primary" style="float: right; margin: 3px;">
+                            <mat-icon>save</mat-icon>
+                            <span>REGISTRAR</span>
+                        </button>
+                        <button type="button" mat-raised-button mat-raised-button style="float: right; margin: 3px;">
+                            <mat-icon>cancel</mat-icon>
+                            <span>CANCELAR</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</mat-card>

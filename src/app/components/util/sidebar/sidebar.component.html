@@ -1,0 +1,44 @@
+<mat-sidenav #sidenav role="navigation"
+    class=" padding-top"
+    mode="side"
+    opened>
+    <mat-nav-list>
+        <a mat-list-item class="md-no-sticky" style="background-color: rgb(250,250,250);">ADMINISTRADOR DE Solicitudes</a>
+        <a mat-list-item routerLink='/home' (click)="sidenav.toggle()" *ngIf="esMiembroDocumentOwnersGroup">
+        <mat-icon class="mt-9" mat-list-icon>home</mat-icon> Home</a>
+    </mat-nav-list>
+    <mat-divider></mat-divider>
+    <mat-nav-list>
+
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Módulos
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <a mat-list-item routerLink='/material-bandeja-solicitud' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>search</mat-icon> Consulta de Solicitudes</a>
+            <a mat-list-item routerLink='/material-formulario-solicitud/-1' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>edit</mat-icon> Formulario de solicitud</a>
+            <a mat-list-item routerLink='/duplicar-matriz' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>edit</mat-icon> Duplicado de matriz</a>
+            <a mat-list-item routerLink='/enviar-solicitud' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>assignment</mat-icon> Solicitar Matriz Riesgo
+            </a>
+            <!-- <a mat-list-item routerLink='/asignar-supervisor' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>perm_identity</mat-icon> Asignar Supervisor
+            </a>
+            <a mat-list-item routerLink='/registrar-visita' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>assignment_turned_in</mat-icon> Registrar Visita
+            </a>
+            <a mat-list-item routerLink='/registrar-actividad' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>assignment_turned_in</mat-icon> Registrar Actividad
+            </a>
+            <a mat-list-item routerLink='/registrar-riesgo' (click)="sidenav.toggle()">
+                <mat-icon mat-list-icon>assignment_turned_in</mat-icon> Registrar Riesgo
+            </a> -->
+
+        </mat-expansion-panel>
+    </mat-nav-list>
+</mat-sidenav>

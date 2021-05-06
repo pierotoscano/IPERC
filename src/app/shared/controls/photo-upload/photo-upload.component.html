@@ -1,0 +1,10 @@
+<button type="button" mat-raised-button color="primary" (click)="onClick()">
+  <mat-icon>add</mat-icon>
+  {{chooseLabel}}
+</button>
+<input #photoUpload type="file" class="input_fileupload--hidden" multiple="multiple" (change)="onFileChange($event)">
+
+<div *ngIf="filesSelected">
+    <h2>Upload Progress</h2>
+    <pre>{{uploadProgress$ | async | json}}</pre>
+</div>

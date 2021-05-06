@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Agregar riesgo</h1>
+<form [formGroup]="formAddRiesgo" (submit)="addNewRiesgo()" class="puesto-form">
+  <mat-dialog-content class="mat-typography">
+
+    <mat-form-field class="full-width">
+      <mat-label>Descripción de riesgo</mat-label>
+      <textarea formControlName="riesgoData" matInput rows=3 placeholder="Descripción"
+        onFocus="this.value=''"></textarea>
+    </mat-form-field>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>
+      <mat-icon>save</mat-icon>
+      Grabar
+    </button>
+  </mat-dialog-actions>
+</form>

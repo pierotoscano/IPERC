@@ -1,0 +1,47 @@
+<!-- <div style="width: 100%; height: 100%;background: linear-gradient(to bottom, #D4DBE1, #2983BE);position: absolute;">
+    <p-card [style]="{'width': '30rem', 'margin-bottom': '2em','margin':'auto','margin-top':'40px'}" styleClass="p-card-shadow">
+    <h1 style="text-align: center;">MUTUOS ACUERDOS</h1>
+    <h2 style="text-align: center;">Ingresar</h2>
+    <div class="p-fluid">
+        <div class="p-field" style="margin-top: 24px;">
+            <span class="p-float-label">
+                <input id="float-username2" [(ngModel)]="username" type="email"
+                   pInputText required >
+                <label for="float-username2">Correo</label>
+            </span>
+        </div>
+        <div class="p-field" style="margin-top: 24px;">
+            <span class="p-float-label">
+            <input type="password" pPassword [(ngModel)]="pass" id="float-pass" [feedback]="false" required >
+            <label for="float-pass">Contraseña</label>
+        </span>
+        </div>
+        <button pButton type="button" (click)="ingresar()" label="Ingresar" style="margin-top: 24px;" class="p-button-outlined"></button>
+    </div>
+</p-card>
+</div>
+<p-toast></p-toast> -->
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="user" (ngSubmit)="onSubmit()">
+      <h2>Inicio sesión</h2>
+      <!-- <mat-error *ngIf="loginInvalid">
+        Usuario y contraseña incorrectos
+      </mat-error> -->
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Email" formControlName="username" required>
+        <mat-error *ngIf="(user.get('username').hasError('required') && user.get('username').touched) || noRegisteredUser">
+          Ingrese un email válido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Password" type="password" formControlName="password" required>
+        <mat-error *ngIf="(user.get('password').hasError('required') && user.get('password').touched) || noRegisteredUser">
+          Ingrese una contraseña válida
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button type="submit" color="primary">Login</button>
+    </form>
+  </mat-card-content>
+</mat-card>

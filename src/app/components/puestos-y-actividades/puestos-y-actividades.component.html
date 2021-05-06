@@ -1,0 +1,74 @@
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <mat-form-field appearance="outline">
+        <mat-label>Puesto</mat-label>
+        <!-- [(value)]="puestoSelected"  -->
+        <mat-select [formControl]="puertoForm" (selectionChange)="changePuesto($event.value)">
+            <mat-option>Seleccione</mat-option>
+            <mat-option *ngFor="let item of puestos" [value]="item">
+                {{item.puesto}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="openAgregarPuesto()">
+        <mat-icon>add</mat-icon>
+    </button>
+    <button mat-raised-button color="primary" (click)="eliminarPuesto()">
+        <mat-icon>clear</mat-icon>
+    </button>
+</div>
+<button mat-raised-button color="primary" (click)="openAgregarActividad()">
+    Agregar Actividad
+</button>
+<div class="col-lg-12 col-md-12 col-sm-12 mat-form-field-wrapper full-width">
+    <!-- [more]="hasMore()" -->
+    <!-- <app-scroll-container
+        [scrollOffset]="2500"
+        [scrollDelay]="3000"
+        (scrolled)="handleScroll($event)"
+        [class.full]="false"
+        [class.part]="true"> -->
+        <table mat-table #tableActividades [dataSource]="actividades" class="mat-elevation-z8">
+            <ng-container matColumnDef="eliminar">
+            <th mat-header-cell *matHeaderCellDef> Eliminar </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+            </ng-container>
+            <ng-container matColumnDef="actividad">
+            <th mat-header-cell *matHeaderCellDef> Actividad </th>
+            <td mat-cell *matCellDef="let element"> {{element.actividad}} </td>
+            </ng-container>
+            <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef> Tipo Riesgo </th>
+            <td mat-cell *matCellDef="let element"> {{element.tipoRiesgo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="maquina">
+            <th mat-header-cell *matHeaderCellDef> Maquina </th>
+            <td mat-cell *matCellDef="let element"> {{element.maquina}} </td>
+            </ng-container>
+            <ng-container matColumnDef="herramientas">
+            <th mat-header-cell *matHeaderCellDef> Herramientas</th>
+            <td mat-cell *matCellDef="let element"> {{element.herramienta}} </td>
+            </ng-container>
+            <ng-container matColumnDef="equipo">
+            <th mat-header-cell *matHeaderCellDef> Equipos </th>
+            <td mat-cell *matCellDef="let element"> {{element.equipo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="producto">
+            <th mat-header-cell *matHeaderCellDef> Productos </th>
+            <td mat-cell *matCellDef="let element"> {{element.producto}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="actividadesColumnas"></tr>
+            <tr mat-row *matRowDef="let row; columns: actividadesColumnas;"></tr>
+        </table>
+    <!-- </app-scroll-container> -->
+</div>
+<div class="col-lg-6 col-md-6 col-sm-12">
+    <!-- (click)="guardarActividadMatriz()" -->
+    <button mat-raised-button color="primary" (click)="guardarPuestoAndActividad()">
+        <mat-icon>save</mat-icon>
+        Guardar
+    </button>
+</div>

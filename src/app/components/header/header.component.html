@@ -1,0 +1,26 @@
+<mat-toolbar color="warn" class="position-fixed main-toolbar">
+    <mat-toolbar-row>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sidenav.toggle()" color="primary">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+
+    <button type="button" mat-button class="mat-icon-button" aria-label="Go Back" hide-xs hide-sm (click)="goBack()">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+
+
+    <a type="button" mat-button class="mat-icon-button" aria-label="Go Home" routerLink="/">
+        <mat-icon>home</mat-icon>
+    </a>
+    <h3 md-truncate class="md-truncate-titulo">
+        <a class="colorBlanco" routerLink='/'>IPERC – Gestión de Solicitudes</a>
+    </h3>
+
+    <span class="cls-spacer"></span>
+
+    <!-- <button type="button" type="button" mat-button class="mat-icon-button" aria-label="Expand" (click)="toggleExpand()">
+      <mat-icon>apps</mat-icon>
+    </button> -->
+
+    </mat-toolbar-row>
+</mat-toolbar>
