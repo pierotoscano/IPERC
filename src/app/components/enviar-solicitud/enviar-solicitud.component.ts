@@ -1,4 +1,13 @@
-import { Component, Injectable, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import {
+  Component,
+  Injectable,
+  OnChanges,
+  OnInit,
+  Pipe,
+  PipeTransform,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { MotivoService } from '../../shared/services/motivo.service';
@@ -66,7 +75,7 @@ export type Proceso = {
   templateUrl: './enviar-solicitud.component.html',
   styleUrls: ['./enviar-solicitud.component.scss'],
 })
-export class EnviarSolicitudComponent implements OnInit {
+export class EnviarSolicitudComponent implements OnInit,OnChanges {
   empresas: Empresa[] = [];
   alcances: Alcance[] = [];
   procesos: Proceso[] = [];
@@ -126,7 +135,6 @@ export class EnviarSolicitudComponent implements OnInit {
     Id: 1,
   };
 
-
   //Parámetros genéricos
   solicitudMatrizSelected: SolicitudMatriz;
   matrizSelected: Matriz;
@@ -135,7 +143,7 @@ export class EnviarSolicitudComponent implements OnInit {
   estadoSolicitud = null;
   estadoMatriz = null;
   formularioBloqueado: boolean = false;
-  nuevaSolicitud: boolean= false;
+  nuevaSolicitud: boolean = false;
   formCabeceraSolicitud: FormGroup;
   formGuardarSolicitudMatriz: FormGroup;
 
@@ -187,9 +195,13 @@ export class EnviarSolicitudComponent implements OnInit {
       ),
     });
     this.formCabeceraSolicitud = this.formBuilder.group({
-      idsolicitud: new FormControl({value: ''}),
-      idmatriz: new FormControl({value: ''})
+      idsolicitud: new FormControl({ value: '' }),
+      idmatriz: new FormControl({ value: '' }),
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.matrizSelected)
   }
 
   // handleScroll = (scrolled: boolean) => {
@@ -227,11 +239,17 @@ export class EnviarSolicitudComponent implements OnInit {
           listSolicitudesMatriz.forEach((solicitudMatriz) => {
             if (solicitudMatriz.id === this.idSolicitudMatrizSelected) {
               this.solicitudMatrizSelected = solicitudMatriz;
-              console.log(this.solicitudMatrizSelected)
+              console.log(this.solicitudMatrizSelected);
 
-              this.formCabeceraSolicitud.controls["idsolicitud"].setValue(this.solicitudMatrizSelected.id);
-              this.formCabeceraSolicitud.controls["idmatriz"].setValue(this.solicitudMatrizSelected.idMatriz);
-              this.formGuardarSolicitudMatriz.controls["centro"].setValue(this.solicitudMatrizSelected.idCentro);
+              this.formCabeceraSolicitud.controls['idsolicitud'].setValue(
+                this.solicitudMatrizSelected.id
+              );
+              this.formCabeceraSolicitud.controls['idmatriz'].setValue(
+                this.solicitudMatrizSelected.idMatriz
+              );
+              this.formGuardarSolicitudMatriz.controls['centro'].setValue(
+                this.solicitudMatrizSelected.idCentro
+              );
               // this.formGuardarSolicitudMatriz.controls["empresa"].setValue(this.solicitudMatrizSelected.);
               // this.formGuardarSolicitudMatriz.controls["proceso"].setValue(this.solicitudMatrizSelected.);
               this.formGuardarSolicitudMatriz.controls['centro'].setValue(
@@ -251,7 +269,9 @@ export class EnviarSolicitudComponent implements OnInit {
                 this.solicitudMatrizSelected.motivo
               );
 
-              this.matrizSelected = new Matriz(this.solicitudMatrizSelected.idMatriz);
+              this.matrizSelected = new Matriz(
+                this.solicitudMatrizSelected.idMatriz
+              );
               this.matrizSelected.idArea = this.solicitudMatrizSelected.idArea;
               this.setCombosValue();
               return false;
@@ -263,14 +283,14 @@ export class EnviarSolicitudComponent implements OnInit {
 
           if (this.solicitudMatrizSelected.idMatriz) {
             //Obtener la matriz
-            console.log('Existe matriz')
+            console.log('Existe matriz');
             this.matrizservice.obtenerMatriz().then((matrices) => {
               let listMatrices = matrices ? matrices : [];
 
               this.matrizSelected = listMatrices.find(
                 (m) => m.id == this.solicitudMatrizSelected.idMatriz
               );
-              console.log(this.matrizSelected)
+              console.log(this.matrizSelected);
             });
           }
         });
@@ -305,7 +325,10 @@ export class EnviarSolicitudComponent implements OnInit {
             (p) =>
               p.idProceso == proceso.idProceso &&
               p.proceso == proceso.proceso &&
-              p.idAlcance == proceso.idAlcance
+              p.idAlcance == proceso.idAlcance &&
+              p.idArea == proceso.idArea &&
+              p.idCentro == proceso.idCentro &&
+              p.idEmpresa == proceso.idEmpresa
           ) == index
       );
 
@@ -324,7 +347,9 @@ export class EnviarSolicitudComponent implements OnInit {
             (a) =>
               a.idAlcance == alcance.idAlcance &&
               a.alcance == alcance.alcance &&
-              a.idArea == alcance.idArea
+              a.idArea == alcance.idArea &&
+              a.idCentro == alcance.idCentro &&
+              a.idEmpresa == alcance.idEmpresa
           ) == index
       );
 
@@ -342,7 +367,8 @@ export class EnviarSolicitudComponent implements OnInit {
             (a) =>
               a.idArea == area.idArea &&
               a.area == area.area &&
-              a.idCentro == area.idCentro
+              a.idCentro == area.idCentro &&
+              a.idEmpresa == area.idEmpresa
           ) == index
       );
 

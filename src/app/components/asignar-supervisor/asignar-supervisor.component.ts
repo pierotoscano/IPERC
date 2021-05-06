@@ -77,18 +77,20 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
       proceso: new FormControl('', [Validators.required]),
       supervisor: new FormControl('', [Validators.required]),
     });
+    this.procesoService.obtenerProceso().then((procesos) => {
+      this.listProcesos = procesos ? procesos : [];
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.matriz.currentValue.id !== null) {
+    console.log(changes.matriz.currentValue)
+    if (changes.matriz.currentValue) {
       this.matrizExists = true;
       this.formDatosAsignarSupervisor.controls['supervisor'].setValue(
         this.matriz.idSupervisor
       );
     }
     if (changes.solicitudMatriz.currentValue.id !== null) {
-      // console.log(changes.solicitudMatriz.currentValue);
-      // console.log(this.solicitudMatriz);
       this.asignarSupervisor();
       this.setProceso();
     }
