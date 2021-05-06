@@ -1,284 +1,168 @@
-<!-- <ng-http-loader [backdrop]="false" [backgroundColor]="'#ff0000'" [debounceDelay]="100" [extraDuration]="300" [minDuration]="300" [opacity]="7" [spinner]="spinkit.skWave">
-</ng-http-loader> -->
-<!-- <mat-toolbar color="warn" class=" position-fixed main-toolbar"> -->
-    <app-header></app-header>
+<div class="row">
+    <div class="col-xs-12 md-display-1">
 
-    <!-- <mat-sidenav-container class="padding-top position-fixed"> -->
-    <mat-sidenav-container class="padding-top position-fixed"
-        hasBackdrop="false">
-        <mat-sidenav #sidenav role="navigation"
-            class=" padding-top"
-            mode="side"
-            opened>
-            <mat-nav-list>
-                <a mat-list-item class="md-no-sticky" style="background-color: rgb(250,250,250);">ADMINISTRADOR DE Solicitudes</a>
-                <a mat-list-item routerLink='/home' (click)="sidenav.toggle()">
-                    <!-- *ngIf="esMiembroDocumentOwnersGroup"> -->
-                <mat-icon class="mt-9" mat-list-icon>home</mat-icon> Home</a>
-            </mat-nav-list>
-            <mat-divider></mat-divider>
-            <mat-nav-list>
-                <mat-expansion-panel [expanded]="true">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Módulos
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-    
-                    <a mat-list-item routerLink='/material-bandeja-solicitud' (click)="sidenav.toggle()">
-                        <mat-icon mat-list-icon>search</mat-icon> Consulta de Solicitudes</a>
-                    <a mat-list-item routerLink='/material-formulario-solicitud/-1' (click)="sidenav.toggle()">
-                        <mat-icon mat-list-icon>edit</mat-icon> Formulario de solicitud</a>
-                    <a mat-list-item routerLink='/duplicar-matriz' (click)="sidenav.toggle()">
-                        <mat-icon mat-list-icon>edit</mat-icon> Duplicado de matriz</a>
-                    <a mat-list-item routerLink='/enviar-solicitud' (click)="sidenav.toggle()">
-                        <mat-icon mat-list-icon>assignment</mat-icon> Solicitar Matriz Riesgo
-                    </a>
-                </mat-expansion-panel>
-            </mat-nav-list>
-        </mat-sidenav>
-        <mat-sidenav-content class="padding-top" >
-            <!-- <main [@routeAnimations]="o && o.isActivated? o.activatedRoute : ''" class="contenedor-main main-custom paddingtop70"> -->
-    
-                <!-- <main [@routeAnimations]="o && o.isActivated? o.activatedRoute : ''" class="contenedor-main main-custom">
-                <router-outlet #o="outlet"></router-outlet>
-            </main> -->
-    
+        <!-- Inicio Usuario -->
+        <!-- <div *ngIf="currentUserPictureUrl" class="col-xs-12 animated fade"></div> -->
+        <!-- <div class="col-sm-12 col-md-12 col-lg-3">
+            <mat-card class="mt-12 pt-0 pb-54 flotante">
+                <mat-card-header>
+                </mat-card-header>
+                <img mat-card-image [src]="currentUserPictureUrl" alt="Usuario Logueado" class="ht-274">
+                <mat-card-content>
+                    <p class="mb-1">
+                        {{ currentUserName }}
+                    </p>
+                    <p class="mb-1 fs-11">
+                        {{ currentUserEmail }}
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </div> -->
+        <!-- Fin Usuario -->
+
+        <div class="col-sm-12 col-lg-9">
+            <!-- {{currentUserName}} -->
+            <h1 class="mt-10 mb-10 ml-0 mr-10">¡Bienvenido!</h1>
+            <br />
             <div class="row">
-                <div class="col-xs-12 md-display-1">
-    
-                    <!-- Inicio Usuario -->
-                    <!-- <div *ngIf="currentUserPictureUrl" class="col-xs-12 animated fade"></div> -->
-                    <!-- <div class="col-sm-12 col-md-12 col-lg-3">
-                        <mat-card class="mt-12 pt-0 pb-54 flotante">
-                            <mat-card-header>
-                            </mat-card-header>
-                            <img mat-card-image [src]="currentUserPictureUrl" alt="Usuario Logueado" class="ht-274">
-                            <mat-card-content>
-                                <p class="mb-1">
-                                    {{ currentUserName }}
-                                </p>
-                                <p class="mb-1 fs-11">
-                                    {{ currentUserEmail }}
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
-                    </div> -->
-                    <!-- Fin Usuario -->
-    
-                    <div class="col-sm-12 col-lg-9">
-                        <!-- {{currentUserName}} -->
-                        <h1 class="mt-10 mb-10 ml-0 mr-10">¡Bienvenido!</h1>
-                        <br />
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.solicitudesEnPendientes.presente">
-                                <mat-card class="flotante active">
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            <h3>{{ contadoresSolicitudesMatrices.solicitudesEnPendientes.indicador }}</h3>
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content>
-                                        <div class="pt-8 info-box" layout="column" layout-align="center center" [ngClass]="{'pb-34': nuevaSolicitud, 'pb-70': !nuevaSolicitud}">
-                                            <div class="light-blue-fg font-size-72 line-height-72">
-                                                {{ contadoresSolicitudesMatrices.solicitudesEnPendientes.valor }}
-                                            </div>
-                                            <div class="h3 secondary-text font-weight-500">PENDIENTES</div>
-                                        </div>
-                                    </mat-card-content>
-                                    <mat-card-actions layout="row" align="start">
-                                        <div *ngIf="nuevaSolicitud" class="row m-0 p-0">
-                                            <div class="col-md-12 m-0 p-0">
-                                                <!-- (click)="irPaginaExterna('material-formulario-solicitud/-1', '', '')" -->
-                                                <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/enviar-solicitud']">
-                                                    <mat-icon>add</mat-icon>
-                                                    Crear nueva solicitud
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row m-0 p-0">
-                                            <div class="col-md-12 m-0 p-0">
-                                                <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')"  -->
-                                                <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/SN']">
-                                                    <mat-icon>link</mat-icon>
-                                                    Ir
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </mat-card-actions>
-                                </mat-card>
+                <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.solicitudesEnPendientes.presente">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>{{ contadoresSolicitudesMatrices.solicitudesEnPendientes.indicador }}</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 info-box" layout="column" layout-align="center center" [ngClass]="{'pb-34': nuevaSolicitud, 'pb-70': !nuevaSolicitud}">
+                                <div class="light-blue-fg font-size-72 line-height-72">
+                                    {{ contadoresSolicitudesMatrices.solicitudesEnPendientes.valor }}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">PENDIENTES</div>
                             </div>
-    
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.solicitudesFinalizadas.presente">
-                                <mat-card class="flotante active">
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            <h3>{{ contadoresSolicitudesMatrices.solicitudesFinalizadas.indicador }}</h3>
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content>
-                                        <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
-                                            <div class="light-blue-fg font-size-72 line-height-72">
-                                                {{ contadoresSolicitudesMatrices.solicitudesFinalizadas.valor }}
-                                            </div>
-                                            <div class="h3 secondary-text font-weight-500">FINALIZADAS</div>
-                                        </div>
-                                    </mat-card-content>
-                                    <mat-card-actions layout="row" align="start">
-                                        <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
-                                        <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/SA']">
-                                            <mat-icon>link</mat-icon>
-                                            Ir
-                                        </button>
-                                    </mat-card-actions>
-                                </mat-card>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <div *ngIf="nuevaSolicitud" class="row m-0 p-0">
+                                <div class="col-md-12 m-0 p-0">
+                                    <!-- (click)="irPaginaExterna('material-formulario-solicitud/-1', '', '')" -->
+                                    <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/enviar-solicitud']">
+                                        <mat-icon>add</mat-icon>
+                                        Crear nueva solicitud
+                                    </button>
+                                </div>
                             </div>
-    
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.matricesEnProceso.presente">
-                                <mat-card class="flotante active">
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            <h3>{{ contadoresSolicitudesMatrices.matricesEnProceso.indicador }}</h3>
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content>
-                                        <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
-                                            <div class="light-blue-fg font-size-72 line-height-72">
-                                                {{ contadoresSolicitudesMatrices.matricesEnProceso.valor }}
-                                            </div>
-                                            <div class="h3 secondary-text font-weight-500">EN PROCESO</div>
-                                        </div>
-                                    </mat-card-content>
-                                    <mat-card-actions layout="row" align="start">
-                                        <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
-                                        <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/MC']">
-                                            <mat-icon>link</mat-icon>
-                                            Ir
-                                        </button>
-                                    </mat-card-actions>
-                                </mat-card>
+                            <div class="row m-0 p-0">
+                                <div class="col-md-12 m-0 p-0">
+                                    <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')"  -->
+                                    <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/SN']">
+                                        <mat-icon>link</mat-icon>
+                                        Ir
+                                    </button>
+                                </div>
                             </div>
-    
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.matricesAprobadas.presente">
-                                <mat-card class="flotante active">
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            <h3>{{ contadoresSolicitudesMatrices.matricesAprobadas.indicador }}</h3>
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content>
-                                        <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
-                                            <div class="red-fg font-size-72 line-height-72">
-                                                {{contadoresSolicitudesMatrices.matricesAprobadas.valor}}
-                                            </div>
-                                            <div class="h3 secondary-text font-weight-500">APROBADAS</div>
-                                        </div>
-                                    </mat-card-content>
-                                    <mat-card-actions layout="row" align="start">
-                                        <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
-                                        <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/MC']">
-                                            <mat-icon>link</mat-icon>
-                                            Ir
-                                        </button>
-                                    </mat-card-actions>
-                                </mat-card>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.solicitudesFinalizadas.presente">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>{{ contadoresSolicitudesMatrices.solicitudesFinalizadas.indicador }}</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="light-blue-fg font-size-72 line-height-72">
+                                    {{ contadoresSolicitudesMatrices.solicitudesFinalizadas.valor }}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">FINALIZADAS</div>
                             </div>
-    
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.matricesEnEjecucion.presente">
-                                <mat-card class="flotante active">
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            <h3>{{ contadoresSolicitudesMatrices.matricesEnEjecucion.indicador }}</h3>
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content>
-                                        <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
-                                            <div class="red-fg font-size-72 line-height-72">
-                                                {{contadoresSolicitudesMatrices.matricesEnEjecucion.valor}}
-                                            </div>
-                                            <div class="h3 secondary-text font-weight-500">VENCIDAS</div>
-                                        </div>
-                                    </mat-card-content>
-                                    <mat-card-actions layout="row" align="start">
-                                        <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
-                                        <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/MC']">
-                                            <mat-icon>link</mat-icon>
-                                            Ir
-                                        </button>
-                                    </mat-card-actions>
-                                </mat-card>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
+                            <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/SA']">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.matricesEnProceso.presente">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>{{ contadoresSolicitudesMatrices.matricesEnProceso.indicador }}</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="light-blue-fg font-size-72 line-height-72">
+                                    {{ contadoresSolicitudesMatrices.matricesEnProceso.valor }}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">EN PROCESO</div>
                             </div>
-                        </div>
-                    </div>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
+                            <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/MC']">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.matricesAprobadas.presente">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>{{ contadoresSolicitudesMatrices.matricesAprobadas.indicador }}</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="red-fg font-size-72 line-height-72">
+                                    {{contadoresSolicitudesMatrices.matricesAprobadas.valor}}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">APROBADAS</div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
+                            <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/MC']">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" *ngIf="contadoresSolicitudesMatrices.matricesEnEjecucion.presente">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>{{ contadoresSolicitudesMatrices.matricesEnEjecucion.indicador }}</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="red-fg font-size-72 line-height-72">
+                                    {{contadoresSolicitudesMatrices.matricesEnEjecucion.valor}}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">VENCIDAS</div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" -->
+                            <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/MC']">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
                 </div>
             </div>
-    
-    
-            <!-- <mat-grid-list
-                cols="1"
-                rowHeight="3:1">
-            </mat-grid-list> -->
-    
-            <!-- <mat-grid-list
-                cols="3"
-                rowHeight="2:1"
-                gutterSize="100px">             -->
-                <!-- <mat-grid-tile class="tile"
-                    colspan="1"
-                    rowspan="2">
-                    <mat-grid-tile-footer>
-                        <div class="column-footer">
-                                <mat-grid-list-text>
-                                    <p>
-                                        Grupo Rocío
-                                    </p>
-                                </mat-grid-list-text>
-                                <mat-grid-list-text>
-                                    <p>
-                                        usuario@gruporocio.com.pe
-                                    </p>
-    
-                                </mat-grid-list-text>
-                        </div>
-                    </mat-grid-tile-footer>
-    
-                </mat-grid-tile> -->
-    
-                <!-- <mat-grid-list style="height: 100%;" cols="2" rowHeight="2:1"> -->
-    
-                    <!-- <mat-grid-tile>1</mat-grid-tile>
-                    <mat-grid-tile>2</mat-grid-tile>
-                    <mat-grid-tile>3</mat-grid-tile>
-                    <mat-grid-tile>4</mat-grid-tile> -->
-    
-                <!-- </mat-grid-list> -->
-    
-                <!-- <mat-grid-tile class="tile" *ngFor="let tile of items"
-                    [colspan]="tile.cols"
-                    [rowspan]="tile.rows">
-    
-                    <mat-grid-tile-header style="color:black;">{{tile.name}}
-                    </mat-grid-tile-header> -->
-                        <!-- <div class="column">
-                            <div class="row"> -->
-                                <!-- <p class="numbre-tile" [style]="tile.style">
-                                    {{tile.contador}}
-                                </p> -->
-                            <!-- </div>
-                            <div class="row">
-                                <p>
-                                    {{tile.description}}
-                                </p>
-                            </div>
-                        </div> -->
-                    <!-- <mat-grid-tile-footer>
-                        <a routerLink="/crisis-center" routerLinkActive="active">
-                            &rarr; IR
-                        </a>
-                    </mat-grid-tile-footer> -->
-    
-                <!-- </mat-grid-tile> -->
-            <!-- </mat-grid-list> -->
-        </mat-sidenav-content>
-    </mat-sidenav-container>
-    
+        </div>
+    </div>
+</div>
