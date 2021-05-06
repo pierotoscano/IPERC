@@ -413,18 +413,10 @@ mat-sidenav-content {
     background-color: #fff;
 }
 
-mat-toolbar.position-fixed {
-    position: fixed;
-    top: 0px;
-    z-index: 10;
-}
 
-mat-toolbar.position-relative {
-    position: relative;
-    top: 50px;
-    z-index: 10;
+.mat-button.mat-primary, .mat-icon-button.mat-primary, .mat-stroked-button.mat-primary{
+    color:white;
 }
-
 mat-sidenav-container.padding-top.position-relative {
     padding-top: 50px;
 }
