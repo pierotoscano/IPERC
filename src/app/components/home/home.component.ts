@@ -67,38 +67,118 @@ export class HomeComponent extends FormularioAT implements OnInit {
 
 
   dataSourceIndicadoresMatriz: any[] = [];
-  contadoresSolicitudesMatrices = {
-    solicitudesEnPendientes: {
+  cards: any[] = [
+    {
+      contador: 0,
+      indicador: "",
       id: 0,
-      valor: 0,
-      presente: false,
-      indicador: ""
+      show: false,
+      footer: "PENDIENTES"
     },
-    solicitudesFinalizadas: {
+    {
+      contador: 0,
+      indicador: "",
       id: 0,
-      valor: 0,
-      presente: false,
-      indicador: ""
+      show: false,
+      footer: "FINALIZADAS"
     },
-    matricesEnProceso: {
+    {
+      contador: 0,
+      indicador: "",
       id: 0,
-      valor: 0,
-      presente: false,
-      indicador: ""
+      show: false,
+      footer: "EN PROCESO"
     },
-    matricesAprobadas: {
+    {
+      contador: 0,
+      indicador: "",
       id: 0,
-      valor: 0,
-      presente: false,
-      indicador: ""
+      show: false,
+      footer: "APROBADAS"
     },
-    matricesEnEjecucion: {
+    {
+      contador: 0,
+      indicador: "",
       id: 0,
-      valor: 0,
-      presente: false,
-      indicador: ""
-    }
-  }
+      show: false,
+      footer: "PENDIENTES"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "EN PROCESO"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "PARA APROBACIÓN"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "APROBADAS"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "PENDIENTES"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "EN PROCESO"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "PARA APROBACIÓN"
+    },
+  ]
+
+  // contadoresSolicitudesMatrices = {
+  //   solicitudesEnPendientes: {
+  //     id: 0,
+  //     valor: 0,
+  //     presente: false,
+  //     indicador: ""
+  //   },
+  //   solicitudesFinalizadas: {
+  //     id: 0,
+  //     valor: 0,
+  //     presente: false,
+  //     indicador: ""
+  //   },
+  //   matricesEnProceso: {
+  //     id: 0,
+  //     valor: 0,
+  //     presente: false,
+  //     indicador: ""
+  //   },
+  //   matricesAprobadas: {
+  //     id: 0,
+  //     valor: 0,
+  //     presente: false,
+  //     indicador: ""
+  //   },
+  //   matricesEnEjecucion: {
+  //     id: 0,
+  //     valor: 0,
+  //     presente: false,
+  //     indicador: ""
+  //   }
+  // }
 
   // esMiembroId: boolean;
   // currentUserName: string = '';
@@ -221,7 +301,7 @@ export class HomeComponent extends FormularioAT implements OnInit {
 
     this.indicadoresService
       // .obtenerDashboardData("xternal", this.loggedUser.rol)
-      .obtenerDashboardData("xternal", "JA")
+      .obtenerDashboardData("xternal", "JS")
       .then((listSolicitudesMatriz) => {
         this.dataSourceIndicadoresMatriz = listSolicitudesMatriz
           ? listSolicitudesMatriz
@@ -229,32 +309,37 @@ export class HomeComponent extends FormularioAT implements OnInit {
 
         this.dataSourceIndicadoresMatriz.forEach(
           (element, number, array) => {
-            if(element.id === 4 || element.id === 8){
-              this.contadoresSolicitudesMatrices.matricesAprobadas.id = element.id;
-              this.contadoresSolicitudesMatrices.matricesAprobadas.indicador = element.indicador;
-              this.contadoresSolicitudesMatrices.matricesAprobadas.valor = element.valor;
-              this.contadoresSolicitudesMatrices.matricesAprobadas.presente = true;
-            } else if(element.id === 10 || element.id === 3 || element.id === 6){
-              this.contadoresSolicitudesMatrices.matricesEnProceso.id = element.id;
-              this.contadoresSolicitudesMatrices.matricesEnProceso.valor = element.valor;
-              this.contadoresSolicitudesMatrices.matricesEnProceso.indicador = element.indicador;
-              this.contadoresSolicitudesMatrices.matricesEnProceso.presente = true;
-            } else if(element.id === 2){
-              this.contadoresSolicitudesMatrices.solicitudesFinalizadas.id = element.id;
-              this.contadoresSolicitudesMatrices.solicitudesFinalizadas.valor = element.valor;
-              this.contadoresSolicitudesMatrices.solicitudesFinalizadas.indicador = element.indicador;
-              this.contadoresSolicitudesMatrices.solicitudesFinalizadas.presente = true;
-            } else if(element.id === 9 || element.id === 1 || element.id === 5){
-              this.contadoresSolicitudesMatrices.solicitudesEnPendientes.id = element.id;
-              this.contadoresSolicitudesMatrices.solicitudesEnPendientes.valor = element.valor;
-              this.contadoresSolicitudesMatrices.solicitudesEnPendientes.indicador = element.indicador;
-              this.contadoresSolicitudesMatrices.solicitudesEnPendientes.presente = true;
-            } else if(element.id === 11 || element.id === 7){
-              this.contadoresSolicitudesMatrices.matricesEnEjecucion.id = element.id;
-              this.contadoresSolicitudesMatrices.matricesEnEjecucion.valor = element.valor;
-              this.contadoresSolicitudesMatrices.matricesEnEjecucion.indicador = element.indicador;
-              this.contadoresSolicitudesMatrices.matricesEnEjecucion.presente = true;
-            }
+            this.cards[element.id - 1].id = element.id;
+            this.cards[element.id - 1].indicador = element.indicador;
+            this.cards[element.id - 1].contador = element.valor;
+            this.cards[element.id - 1].show = true;
+
+            // if(element.id === 4 || element.id === 8){
+            //   this.contadoresSolicitudesMatrices.matricesAprobadas.id = element.id;
+            //   this.contadoresSolicitudesMatrices.matricesAprobadas.indicador = element.indicador;
+            //   this.contadoresSolicitudesMatrices.matricesAprobadas.valor = element.valor;
+            //   this.contadoresSolicitudesMatrices.matricesAprobadas.presente = true;
+            // } else if(element.id === 10 || element.id === 3 || element.id === 6){
+            //   this.contadoresSolicitudesMatrices.matricesEnProceso.id = element.id;
+            //   this.contadoresSolicitudesMatrices.matricesEnProceso.valor = element.valor;
+            //   this.contadoresSolicitudesMatrices.matricesEnProceso.indicador = element.indicador;
+            //   this.contadoresSolicitudesMatrices.matricesEnProceso.presente = true;
+            // } else if(element.id === 2){
+            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.id = element.id;
+            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.valor = element.valor;
+            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.indicador = element.indicador;
+            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.presente = true;
+            // } else if(element.id === 9 || element.id === 1 || element.id === 5){
+            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.id = element.id;
+            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.valor = element.valor;
+            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.indicador = element.indicador;
+            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.presente = true;
+            // } else if(element.id === 11 || element.id === 7){
+            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.id = element.id;
+            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.valor = element.valor;
+            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.indicador = element.indicador;
+            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.presente = true;
+            // }
           }
         )
       });
