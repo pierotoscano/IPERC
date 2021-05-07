@@ -59,7 +59,7 @@
       <button class="btn" type="button" mat-raised-button color="primary" (click)="openVerParticipante(i)">
         <span>Ver</span>
       </button>
-      <button type="btn" mat-raised-button color="primary" (click)="openAsignarParticipante(i)">
+      <button type="btn" mat-raised-button color="primary" (click)="openAsignarParticipante(i)" [disabled]="visitaDetails.visita.idVisita != ''">
         <span>Agregar</span>
       </button>
     </td>

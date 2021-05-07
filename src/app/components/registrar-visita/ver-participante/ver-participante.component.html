@@ -28,7 +28,7 @@
     </ng-template>
   </ng-template>
   <ng-template #tableForCheckData>
-    <table *ngIf="data.listParticipantes.length > 0; else message2" mat-table [dataSource]="data.listParticipantes"
+    <table *ngIf="data.listParticipantes.length > 0" mat-table [dataSource]="data.listParticipantes"
       class="mat-elevation-z8">
 
       <ng-container matColumnDef="idParticipante">
@@ -49,9 +49,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumnsCheck"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumnsCheck;"></tr>
     </table>
-    <ng-template #message2>
-      <p>No hay participantes para esta visita</p>
-    </ng-template>
   </ng-template>
 
 </div>

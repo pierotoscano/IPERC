@@ -223,7 +223,6 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
           listSolicitudesMatriz.forEach((solicitudMatriz) => {
             if (solicitudMatriz.id === this.idSolicitudMatrizSelected) {
               this.solicitudMatrizSelected = solicitudMatriz;
-              console.log(this.solicitudMatrizSelected);
 
               this.formCabeceraSolicitud.controls['idsolicitud'].setValue(
                 this.solicitudMatrizSelected.id
