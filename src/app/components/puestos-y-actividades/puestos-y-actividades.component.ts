@@ -8,6 +8,7 @@ import { MatrizActividad } from 'src/app/shared/models/fisics/MatrizActividad';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AgregarPuestoComponent } from './pop-up/agregar-puesto/agregar-puesto.component';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+
 import { AgregarActividadComponent } from './pop-up/agregar-actividad/agregar-actividad.component';
 import { Matriz } from 'src/app/shared/models/fisics/Matriz';
 import { MatTable } from '@angular/material/table';
