@@ -1,5 +1,7 @@
 import {
+  AfterContentInit,
   Component,
+  DoCheck,
   EventEmitter,
   Input,
   OnChanges,
@@ -46,7 +48,7 @@ import { AlertComponent } from '../alert/alert.component';
 })
 export class AsignarSupervisorComponent implements OnInit, OnChanges {
   @Input() solicitudMatriz: SolicitudMatriz;
-  @Input() matriz: Matriz;
+  @Input() matriz: Matriz = null;
   @Input() usuario: Usuario;
   @Output() solicitudMatrizEmitter = new EventEmitter<SolicitudMatriz>();
   @Output() matrizEmitter = new EventEmitter<Matriz>();
@@ -56,7 +58,6 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
   matcher: MyErrorStateMatcher;
   idMatrizSaved: number;
   matrizSaved: Matriz;
-  matrizExists: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,28 +73,52 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
     this.matcher = new MyErrorStateMatcher();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    let matrizCurrent: Matriz = changes.matriz
+      ? changes.matriz.currentValue
+        ? changes.matriz.currentValue.id
+          ? (changes.matriz.currentValue as Matriz)
+          : null
+        : null
+      : null;
+    let solicitudMatrizCurrent: SolicitudMatriz = changes.solicitudMatriz
+      ? changes.solicitudMatriz.currentValue
+        ? changes.solicitudMatriz.currentValue.id
+          ? (changes.solicitudMatriz.currentValue as SolicitudMatriz)
+          : null
+        : null
+      : null;
+
+    this.matriz = matrizCurrent;
+    this.solicitudMatriz = solicitudMatrizCurrent;
+
+    if (this.matriz) {
+      this.setSupervisor();
+    }
+    if (this.solicitudMatriz) {
+      this.setProceso();
+    }
+  }
+
   ngOnInit(): void {
     this.formDatosAsignarSupervisor = this.formBuilder.group({
       proceso: new FormControl('', [Validators.required]),
       supervisor: new FormControl('', [Validators.required]),
     });
+    this.obtenerProcesos();
+    this.obtenerSupervisores();
+  }
+
+  obtenerProcesos() {
     this.procesoService.obtenerProceso().then((procesos) => {
       this.listProcesos = procesos ? procesos : [];
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes.matriz.currentValue)
-    if (changes.matriz.currentValue) {
-      this.matrizExists = true;
-      this.formDatosAsignarSupervisor.controls['supervisor'].setValue(
-        this.matriz.idSupervisor
-      );
-    }
-    if (changes.solicitudMatriz.currentValue.id !== null) {
-      this.asignarSupervisor();
-      this.setProceso();
-    }
+  obtenerSupervisores() {
+    this.supervisorService.obtenerUsuariosPorRol('SS').then((usuarios) => {
+      this.listSupervisores = usuarios ? usuarios : [];
+    });
   }
 
   setProceso() {
@@ -109,18 +134,20 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
       });
   }
 
+  setSupervisor() {
+    this.formDatosAsignarSupervisor.controls['supervisor'].setValue(
+      this.matriz.idSupervisor
+    );
+  }
+
   asignarSupervisor() {
     if (this.formDatosAsignarSupervisor.valid) {
       //Emplear la solicitud desde el componente padre
       const idSupervisorSelected = this.formDatosAsignarSupervisor.value
         .supervisor;
-      const idProcesoSelected = this.formDatosAsignarSupervisor.value.proceso;
 
       let supervisorSelected = this.listSupervisores.find(
         (s) => s.idUsuario == idSupervisorSelected
-      );
-      let procesoSelected = this.listProcesos.find(
-        (p) => p.idProceso == idProcesoSelected
       );
 
       //Asignar supervisor
@@ -153,70 +180,6 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
                   'Éxito al asignar supervisor y generar matriz'
                 );
                 this.route.navigate([Variables.path.bandejaSolicitudMaterial]);
-                //Enviar email y evento para el solicitante y supervisor
-                /*
-                let emailSolicitante: IEmailProperties = {
-                  To: ['xternal@gruporocio.onmicrosoft.com'],
-                  Subject: `Supervisor asignado`,
-                  Body: `<p style="margin: 0; font-size: 13px;">Estimado ${this.solicitudMatriz.solicitante}</p>
-                  <br>
-                  <p style="margin: 0; font-size: 13px;">Se le ha asignado el supervisor ${supervisorSelected.apellidoPaterno} ${supervisorSelected.apellidoMaterno}, ${supervisorSelected.nombres}.</p>
-                  <br>
-                  <p style="margin: 0; font-size: 13px;">Por favor comuníquese con él (ella) para realizar la coordinación de visita a la planta.</p>`,
-                  AdditionalHeaders: {
-                    'content-type': 'text/html',
-                  },
-                };
-
-                this.masterService.enviarCorreo(emailSolicitante).then(
-                  (resp) => console.log('Correo enviado al solicitante'),
-                  (err) =>
-                    console.error('Error al enviar correo al solicitante')
-                );
-
-                //Enviar email para el supervisor asignado
-                let emailSupervisor: IEmailProperties = {
-                  To: [supervisorSelected.email],
-                  Subject: `Asignación Matriz Riesgo`,
-                  Body: `<p style="margin: 0; font-size: 13px;">Estimado ${supervisorSelected.apellidoPaterno} ${supervisorSelected.apellidoMaterno}, ${supervisorSelected.nombres}</p>
-                  <br>
-                  <p style="margin: 0; font-size: 13px;">Ha sido asignado para ejecutar el proceso de ${procesoSelected.proceso} .</p>`,
-                };
-
-                this.masterService.enviarCorreo(emailSupervisor).then(
-                  (resp) => console.log('Correo enviado al supervisor'),
-                  (err) => console.error('Error al enviar correo al supervisor')
-                );
-                */
-
-                //Obtener la solicitud actualizada
-                /*
-                this.solicitudMatrizService
-                  .obtenerSolicitudMatriz()
-                  .then((solicitudesMatriz) => {
-                    let listSolicitudesMatriz = solicitudesMatriz
-                      ? solicitudesMatriz
-                      : [];
-                    listSolicitudesMatriz.forEach((solicitudMatriz) => {
-                      if (solicitudMatriz.id == this.solicitudMatriz.id) {
-                        this.solicitudMatriz = solicitudMatriz;
-                        this.solicitudMatrizEmitter.emit(this.solicitudMatriz);
-                      }
-                    });
-                  });
-                  */
-
-                //Obtener la matriz registrada
-                /*
-                this.matrizService.obtenerMatriz().then((matrices) => {
-                  let listMatrices = matrices ? matrices : [];
-                  listMatrices.forEach((matriz) => {
-                    if (matriz.id == this.idMatrizSaved.toString()) {
-                      this.matrizSaved = matriz;
-                      return false;
-                    }
-                  });
-                });*/
               }
             });
           }

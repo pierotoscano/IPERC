@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Injectable,
   OnChanges,
@@ -75,7 +76,7 @@ export type Proceso = {
   templateUrl: './enviar-solicitud.component.html',
   styleUrls: ['./enviar-solicitud.component.scss'],
 })
-export class EnviarSolicitudComponent implements OnInit,OnChanges {
+export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
   empresas: Empresa[] = [];
   alcances: Alcance[] = [];
   procesos: Proceso[] = [];
@@ -155,7 +156,7 @@ export class EnviarSolicitudComponent implements OnInit,OnChanges {
     private solicitudMatrizService: SolicitudMatrizService,
     private loginService: LoginService,
     private route: ActivatedRoute,
-    private roudter: Router,
+    private router: Router,
     private formBuilder: FormBuilder,
     private dialog: MatDialog
   ) {
@@ -200,30 +201,13 @@ export class EnviarSolicitudComponent implements OnInit,OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.matrizSelected)
-  }
-
-  // handleScroll = (scrolled: boolean) => {
-  //   // console.timeEnd('lastScrolled');
-  //   scrolled ? this.getData() : _noop();
-  //   // console.time('lastScrolled');
-  // }
-
-  // getData() {
-  //   const data: Element[] = this.dataSource
-  //     ? [...this.dataSource.data, ...this.actividades]
-  //     : [];
-  //   this.dataSource = new MatTableDataSource(data);
-  //   // this.dataSource.sort = this.sort;
-  // }
-
-  // hasMore = () => !this.dataSource || this.dataSource.data.length < this.limit;
-
   ngOnInit(): void {
     this.obtenerCombos();
     this.obtenerCascadeCombos();
     //Obtener datos de la solicitud
+  }
+
+  ngAfterViewInit(): void {
     if (this.idSolicitudMatrizSelected) {
       this.solicitudMatrizService
         .obtenerSolicitudMatriz(
@@ -268,11 +252,6 @@ export class EnviarSolicitudComponent implements OnInit,OnChanges {
               this.formGuardarSolicitudMatriz.controls['motivo'].setValue(
                 this.solicitudMatrizSelected.motivo
               );
-
-              this.matrizSelected = new Matriz(
-                this.solicitudMatrizSelected.idMatriz
-              );
-              this.matrizSelected.idArea = this.solicitudMatrizSelected.idArea;
               this.setCombosValue();
               return false;
             }
@@ -568,23 +547,7 @@ export class EnviarSolicitudComponent implements OnInit,OnChanges {
           this.showMessage(
             'Éxito al registrar la solicitud: ' + idSolicitudMatrizInserted
           );
-          this.roudter.navigate([Variables.path.bandejaSolicitudMaterial]);
-          /*
-          //Obtener la solicitudMatriz guardada
-          this.solicitudMatrizService
-            .obtenerSolicitudMatriz()
-            .then((solicitudesMatriz) => {
-              let listSolicitudesMatriz = solicitudesMatriz
-                ? solicitudesMatriz
-                : [];
-              listSolicitudesMatriz.forEach((solicitudMatriz) => {
-                if (solicitudMatriz.id == this.idSolicitudMatrizSelected) {
-                  this.solicitudMatrizSelected = solicitudMatriz;
-                  return false;
-                }
-              });
-            });
-            */
+          this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
         }
       });
   }
@@ -624,12 +587,4 @@ export class EnviarSolicitudComponent implements OnInit,OnChanges {
       data: { mensaje: text },
     });
   }
-  // obtenerListaDesplegablesPorTipo(tipo:string): MaestroDesplegables[]{
-  //   let listaDesplegables = [];
-  //   if(this.datosMaestros != null){
-  //     listaDesplegables = new List<MaestroDesplegables>(this.datosMaestros.maestroDesplegables).Where(x => {
-  //       return x.TipoText == tipo}).OrderBy(x => x.Title).ToArray();
-  //   }
-  //   return listaDesplegables;
-  // }
 }

@@ -1,60 +1,38 @@
-<!-- <mat-card>
-  <div class="container">
-    <span mat-card-title>Asignar Supervisor</span>
-    <div fxLayout="row" fxLayoutAlign="center"> -->
-      <form [formGroup]="formDatosAsignarSupervisor" (submit)="asignarSupervisor()" novalidate style="width: 90%;">
-      <!--   <div fxLayout="row">
-          <div fxFlex="50%"> -->
 
-            <div class="col-lg-6 col-md-6 col-sm-6">
-            <mat-form-field appearance="outline">
-              <mat-label>Proceso</mat-label>
-              <!-- disabled="true" -->
-              <mat-select formControlName="proceso" >
-                <mat-select-search placeholderLabel="Seleccione un proceso"></mat-select-search>
-                <mat-option *ngFor="let proceso of listProcesos" [value]="proceso.idProceso">{{proceso.proceso}}
-                </mat-option>
-                <!-- <mat-option *ngFor="let desplegable of listaTipoMaterialFilter" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
-              </mat-select>
-              <!-- <mat-error>
-                      {{ errors.IdTipoMaterial }}
-                  </mat-error> -->
-            </mat-form-field>
-            </div>
-          <!-- </div> -->
+<form [formGroup]="formDatosAsignarSupervisor" (submit)="asignarSupervisor()" novalidate style="width: 90%;">
 
-          <!-- <div fxFlex="50%"> -->
-            <div class="col-lg-6 col-md-6 col-sm-6">
-            <mat-form-field appearance="outline">
-              <mat-label>Supervisor</mat-label>
-              <mat-select formControlName="supervisor" [errorStateMatcher]="matcher" [disabled]="matrizExists">
-                <mat-option *ngFor="let supervisor of listSupervisores" [value]="supervisor.idUsuario">
-                  {{supervisor.usuario}}</mat-option>
-                <!-- <mat-option *ngFor="let desplegable of listaTipoMaterialFilter" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
-              </mat-select>
-              <!-- <mat-error>
-                                  {{ errors.IdTipoMaterial }}
-                              </mat-error> -->
-            </mat-form-field>
-            </div>
-          <!-- </div> -->
-        <!-- </div> -->
-
-        <!-- <br> -->
-        <div>
-          <button type="submit" mat-raised-button color="primary" style="float: right; margin: 3px;">
-            <mat-icon>save</mat-icon>
-            <span>Guardar</span>
-          </button>
-
-          <button (click)="registrarCorreo()" type="button" mat-raised-button mat-raised-button style="float: right; margin: 3px;">
-            <mat-icon>cancel</mat-icon>
-            <span>Probar</span>
-          </button>
-
-        </div>
-
-      </form>
-    <!-- </div>
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <mat-form-field appearance="outline">
+      <mat-label>Proceso</mat-label>
+      <!-- disabled="true" -->
+      <mat-select formControlName="proceso" [disabled]="true">
+        <mat-select-search placeholderLabel="Seleccione un proceso"></mat-select-search>
+        <mat-option *ngFor="let proceso of listProcesos" [value]="proceso.idProceso">{{proceso.proceso}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
-</mat-card> -->
+
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <mat-form-field appearance="outline">
+      <mat-label>Supervisor</mat-label>
+      <mat-select formControlName="supervisor" [errorStateMatcher]="matcher" [disabled]="matriz">
+        <mat-option *ngFor="let supervisor of listSupervisores" [value]="supervisor.idUsuario">
+          {{supervisor.usuario}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <button type="submit" mat-raised-button color="primary" style="float: right; margin: 3px;">
+      <mat-icon>save</mat-icon>
+      <span>Guardar</span>
+    </button>
+
+    <button (click)="registrarCorreo()" type="button" mat-raised-button mat-raised-button
+      style="float: right; margin: 3px;">
+      <mat-icon>cancel</mat-icon>
+      <span>Probar</span>
+    </button>
+
+  </div>
+</form>

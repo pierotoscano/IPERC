@@ -5,7 +5,7 @@ import { ParticipanteData } from 'src/app/shared/models/fisics/ParticipanteData'
 
 export type DialogData = {
   listParticipantes: ParticipanteData[] | ISiteUserInfo[];
-  dialogGuardarVisita: boolean;
+  dialogForSave: boolean;
 };
 
 @Component({
@@ -14,7 +14,7 @@ export type DialogData = {
   styleUrls: ['./ver-participante.component.scss'],
 })
 export class VerParticipanteComponent implements OnInit {
-  dialogGuardarVisita: boolean;
+  public dialogValid: boolean = true;
   displayedColumns = ['Id', 'Title', 'Email'];
   displayedColumnsCheck = ['idParticipante', 'usuario', 'email'];
 
@@ -22,7 +22,7 @@ export class VerParticipanteComponent implements OnInit {
     public dialogRef: MatDialogRef<VerParticipanteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
-    this.dialogGuardarVisita = data.dialogGuardarVisita;
+    this.dialogValid = data.dialogForSave;
   }
 
   ngOnInit(): void {}

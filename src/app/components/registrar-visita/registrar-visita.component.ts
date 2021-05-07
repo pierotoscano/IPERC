@@ -49,7 +49,7 @@ export class RegistrarVisitaComponent implements OnInit {
   fechaInicioControl: FormControl;
   fechaFinControl: FormControl;
 
-  visitasGuardadas: boolean = false;
+  verParticipantesToSave: boolean = true;
 
   listVisitas: Visita[] = [];
   displayedColumns: string[] = [
@@ -114,7 +114,7 @@ export class RegistrarVisitaComponent implements OnInit {
                   visitaDetail.participantes = listParticipantes;
                 })
                 .then(() => {
-                  this.visitasGuardadas = true;
+                  this.verParticipantesToSave = false;
                   this.solicitudData.visitas = new MatTableDataSource<VisitaDetails>(
                     visitaDetailsAux
                   );
@@ -182,7 +182,7 @@ export class RegistrarVisitaComponent implements OnInit {
       .participantes;
     const dialogRef = this.dialog.open(VerParticipanteComponent, {
       autoFocus: false,
-      data: { listParticipantes, dialogGuardarVisita: !this.visitasGuardadas },
+      data: { listParticipantes, dialogForSave: this.verParticipantesToSave },
     });
   }
 

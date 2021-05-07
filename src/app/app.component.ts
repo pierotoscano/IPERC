@@ -1,17 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
+import { Location, SlicePipe } from '@angular/common';
+import { slideInAnimation } from './route-animations';
+//import * as $ from 'jquery';
+import { Configuration } from './shared/models/fisics/Configuration';
+import { Deferred } from 'ts-deferred';
+import {
+  NavigationEnd,
+  Router,
+  NavigationStart,
+  RoutesRecognized,
+  ActivationStart,
+} from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { Variables } from './shared/variables';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Spinkit } from 'ng-http-loader'; // <============
 declare var $:any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  animations: [slideInAnimation], // register the animation
 })
-export class AppComponent {
-  // esMiembroDocumentOwnersGroup: boolean;
-  // esMiembroGrupoAdministradores: boolean;
-  // title = 'aplicacion';
-  // history = [];
-  // public spinkit = Spinkit;
-/*
+export class AppComponent implements OnInit {
+  esMiembroDocumentOwnersGroup: boolean;
+  esMiembroGrupoAdministradores: boolean;
+  title = 'aplicacion';
+  history = [];
+  public spinkit = Spinkit; 
+
   @ViewChild('sidenav') sidenav: MatSidenav;
   isExpanded = false;
   showSubmenu: boolean = false;
@@ -29,17 +46,18 @@ export class AppComponent {
       this.isShowing = false;
     }
   }
-
+  
   constructor(private _location: Location, public router: Router) {
     this.esMiembroDocumentOwnersGroup = true;
     this.esMiembroGrupoAdministradores = true;
+  
   }
-*/
+
   ngOnInit(): void {
-    // this.loadRouting();
+    this.loadRouting();
     //jquery("#body").val('');
   }
-/*
+
   obtenerMaestrosYDatos(): Promise<boolean> {
     const d: Deferred<boolean> = new Deferred<boolean>();
 
@@ -61,6 +79,27 @@ export class AppComponent {
     //this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
     //this.router.navigate([url]));
     window.location.reload();
+  }
+
+  toggleExpand() {
+    if ($('mat-sidenav-container').hasClass('position-fixed')) {
+      //$("#suiteBarDelta").removeClass("topbar-hide");
+      $('#suiteBarDelta').addClass('topbar-show');
+      $('mat-toolbar.main-toolbar').removeClass('position-fixed');
+      $('mat-toolbar.main-toolbar').addClass('position-relative');
+      $('mat-sidenav-container').removeClass('position-fixed');
+      $('mat-sidenav-container').addClass('position-relative');
+      // $('main').removeClass('paddingtop70');
+    } else {
+      //$("#suiteBarDelta").slideToggle();
+      //$("#suiteBarDelta").addClass("topbar-hide");
+      $('#suiteBarDelta').removeClass('topbar-show');
+      $('mat-toolbar.main-toolbar').addClass('position-fixed');
+      $('mat-toolbar.main-toolbar').removeClass('position-relative');
+      $('mat-sidenav-container').addClass('position-fixed');
+      $('mat-sidenav-container').removeClass('position-relative');
+      // $('main').addClass('paddingtop70');
+    }
   }
 
   public loadRouting(): void {
@@ -103,5 +142,4 @@ export class AppComponent {
     }
     sessionStorage.setItem('history', JSON.stringify(this.history));
   }
-  */
 }
