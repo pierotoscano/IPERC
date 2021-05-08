@@ -1,4 +1,3 @@
-
 <form [formGroup]="formDatosAsignarSupervisor" (submit)="asignarSupervisor()" novalidate style="width: 90%;">
 
   <div class="col-lg-6 col-md-6 col-sm-6">
@@ -36,3 +35,47 @@
 
   </div>
 </form>
+
+<div>
+  <button (click)="testNotificarSolicitudMatriz()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar NotificarSolicitudMatriz</span>
+  </button>
+
+  <button (click)="testGuardarAsignacion()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar GuardarAsignacion</span>
+  </button>
+
+  <button (click)="testGuardarEvidencia()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar GuardarEvidencia</span>
+  </button>
+
+  <button (click)="testGuardarVisita()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar GuardarVisita</span>
+  </button>
+
+  <button (click)="testAsignarSupervisor()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar AsignarSupervisor</span>
+  </button>
+
+  <button (click)="testSolicitarAprobacion()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar SolicitarAprobacion</span>
+  </button>
+
+  <button (click)="testFinalizarAsignacion()" type="button" mat-raised-button mat-raised-button
+    style="float: right; margin: 3px;">
+    <mat-icon>cancel</mat-icon>
+    <span>Probar FinalizarAsignacion</span>
+  </button>
+</div>

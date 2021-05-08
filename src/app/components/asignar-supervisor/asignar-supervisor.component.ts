@@ -229,7 +229,7 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
         NombresApellidosSupervisor: 'Piero Toscano', // nombresApellidosSupervisor
         AsuntoSupervisor: 'Asignación de supervisor',
         Area: 'Producción',
-        CorreoSolicitante: 'xternal@gruporocio.com', // Obtener email del solicitante
+        CorreoSolicitante: 'xternal2@gruporocio.com', // Obtener email del solicitante
         AsuntoSolicitante: 'Supervisor Asignado',
         NombresApellidosSolicitante: 'Juan Perez',
       });
@@ -240,5 +240,127 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
       width: '250px',
       data: { mensaje: text },
     });
+  }
+
+  //Tester para PowerAutomate
+  async testNotificarSolicitudMatriz() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaNotificarSolicitudMatriz')
+      .items.add({
+        Title: 'Title',
+        Correo: 'xternal2@gruporocio.com',
+        Asunto: 'Notificar Solicitud Matriz TEST',
+        Area: 'Producción',
+        Motivo: 'Motivo nuevo',
+        Plazo: '2 días',
+        Link:
+          'https://gruporocio.sharepoint.com/sites/CatalogoGR/SitePages/Inicio.aspx',
+      });
+
+    console.log(iar);
+  }
+
+  async testGuardarAsignacion() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaGuardarAsignacion')
+      .items.add({
+        Title: 'Title',
+        AsuntoCalendario: 'Guardar Asignación TEST',
+        FechaInicio: new Date(),
+        FechaFin: new Date(),
+        Tarea: 'Tarea',
+        CorreoSupervisor: 'xternal2@gruporocio.com',
+        AsuntoSupervisor: 'Asunto Supervisor TEST',
+        NombresSupervisor: 'xternal',
+        CorreoResponsable: 'xternal2@gruporocio.com',
+        AsuntoResponsable: 'Asunto responsable TEST',
+        NombresResponsable: 'xternal2',
+      });
+
+    console.log(iar);
+  }
+
+  async testGuardarEvidencia() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaGuardarEvidencia')
+      .items.add({
+        Title: 'Title',
+        Correo: 'xternal2@gruporocio.com',
+        Asunto: 'Asunto Guardar Evidencia TEST',
+        UserNameDestinatario: 'xternal',
+        UserNameEvidencia: 'xternal2',
+        Link:
+          'ttps://gruporocio.sharepoint.com/sites/CatalogoGR/SitePages/Inicio.aspx',
+      });
+
+    console.log(iar);
+  }
+
+  async testGuardarVisita() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaGuardarVisita')
+      .items.add({
+        Title: 'Title',
+        FechaInicio: new Date(),
+        FechaFin: new Date(),
+        Correo: 'xternal2@gruporocio.com',
+        Asunto: 'Asunto Guardar Visita TEST',
+        Cuerpo: 'Contenido del correo',
+        Lugar: 'Lima',
+      });
+
+    console.log(iar);
+  }
+
+  async testAsignarSupervisor() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaAsignarSupervisor')
+      .items.add({
+        Title: 'Title',
+        CorreoSupervisor: 'xternal2@gruporocio.com',
+        AsuntoSupervisor: 'Asignación de supervisor TEST',
+        NombreSupervisor: 'xternal',
+        Area: 'Producción',
+        CorreoSolicitante: 'xternal2@gruporocio.com',
+        AsuntoSolicitante: 'Supervisor Asignado TEST',
+        NombreSolicitante: 'xternal2',
+        FechaInicio: new Date(),
+        FechaFin: new Date(),
+      });
+
+    console.log(iar);
+  }
+
+  async testSolicitarAprobacion() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaSolicitarAprobacion')
+      .items.add({
+        Title: 'Title',
+        Correo: 'xternal2@gruporocio.com',
+        Asunto: 'Solicitar aprobación TEST',
+        UserNameDestinatario: 'xternal',
+        Matriz: '21000021',
+        Plazo: '2 días',
+        Link:
+          'https://gruporocio.sharepoint.com/sites/CatalogoGR/SitePages/Inicio.aspx',
+      });
+
+    console.log(iar);
+  }
+
+  async testFinalizarAsignacion() {
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaFinalizarAsignacion')
+      .items.add({
+        Title: 'Title',
+        Correo: 'xternal2@gruporocio.com',
+        Asunto: 'Finalizar aprobación TEST',
+        UserNameDestinatario: 'xternal',
+        Observaciones: 'Observación',
+        Link:
+          'https://gruporocio.sharepoint.com/sites/CatalogoGR/SitePages/Inicio.aspx',
+      });
+
+    console.log(iar);
   }
 }
