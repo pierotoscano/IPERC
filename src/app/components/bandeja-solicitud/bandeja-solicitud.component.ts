@@ -41,6 +41,8 @@ import { TipoMotivo } from 'src/app/shared/models/fisics/TipoMotivo';
 import { MotivoService } from 'src/app/shared/services/motivo.service';
 import { SolicitudMatrizService } from 'src/app/shared/services/solicitudmatriz.service';
 import { MatTable } from '@angular/material/table';
+import { Usuario } from 'src/app/shared/models/fisics/Usuario';
+import { LoginService } from 'src/app/shared/services/login.service';
 
 declare var $: any;
 @Component({
@@ -82,7 +84,8 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
     'Supervisor',
     'TipoMotivo',
     'Motivo',
-    'Estado'
+    'Estado',
+    'Visita'
   ];
 
   resultsLength = 15;
@@ -90,7 +93,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
   isRateLimitReached = false;
   isFilterApplied = false;
   formBuscarSolicitudes: FormGroup;
-  estadoSolicitudMatriz: string;
+  estadoSolicitudMatriz: number;
   _etapa: string;
 
   // userAdministrator = false;
@@ -98,6 +101,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('sidenavfiltros', { static: true }) public myNav: MatSidenav;
+  usuarioLogged: Usuario;
 
   constructor(
     public applicationRef: ApplicationRef,
@@ -127,10 +131,35 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
 
     // this.loggedUser = this.loginService.getUserLogged();
     this.esMiembroId = false;
-    this.estadoSolicitudMatriz = route.snapshot.params['etapa'];
+    this.estadoSolicitudMatriz = parseInt(route.snapshot.params['etapa']);
+    // this.loggedUser = this.loginService.getUserLogged();
     // console.log(this.estadoSolicitudMatriz)
   }
-
+  
+  getUserLogged() {
+    let usuarioFromSession = JSON.parse(
+      sessionStorage.getItem('usuarioLogged')
+    );
+    this.usuarioLogged = new Usuario();
+    this.usuarioLogged.apellidoMaterno = usuarioFromSession._apellidoMaterno;
+    this.usuarioLogged.apellidoMaterno = usuarioFromSession._apellidoMaterno;
+    this.usuarioLogged.apellidoPaterno = usuarioFromSession._apellidoPaterno;
+    this.usuarioLogged.email = usuarioFromSession._email;
+    this.usuarioLogged.estado = usuarioFromSession._estado;
+    this.usuarioLogged.fechaModifica = usuarioFromSession._fechaModifica;
+    this.usuarioLogged.fechaRegistro = usuarioFromSession._fechaRegistro;
+    this.usuarioLogged.idLogin = usuarioFromSession._idLogin;
+    this.usuarioLogged.idUbicacion = usuarioFromSession._idUbicacion;
+    this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
+    this.usuarioLogged.key = usuarioFromSession._key;
+    this.usuarioLogged.nombres = usuarioFromSession._nombres;
+    this.usuarioLogged.rol = usuarioFromSession._rol;
+    this.usuarioLogged.selected = usuarioFromSession._selected;
+    this.usuarioLogged.tipo = usuarioFromSession._tipo;
+    this.usuarioLogged.usuario = usuarioFromSession._usuario;
+    this.usuarioLogged.usuarioModifica = usuarioFromSession._usuarioModifica;
+    this.usuarioLogged.usuarioRegistro = usuarioFromSession._usuarioRegistro;
+  }
   
   buscarSolicitudes() {
     const fechaInicio: Date = this.formBuscarSolicitudes.value.fechaInicio;
@@ -187,6 +216,9 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
   }  
 
   ngOnInit() {
+    this.getUserLogged();
+    // this.usuarioLogged
+    // this.estadoSolicitudMatriz
     this.formBuscarSolicitudes = this.formBuilder.group({
       idSolicitud: new FormControl(null),
       idMatriz: new FormControl(null),
@@ -195,6 +227,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
       idSolicitante: new FormControl(null),
       idEstado: new FormControl(null),
       supervisor: new FormControl(null),
+      estadoMatriz: new FormControl(null),
       fechaInicio: new FormControl(new Date(), [Validators.required]),
       fechaFin: new FormControl(new Date(), [Validators.required]),
     });
@@ -221,7 +254,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
   }
 
   getSolicitudesMatriz(): void {
-    if(this.estadoSolicitudMatriz === undefined){
+    if(isNaN(this.estadoSolicitudMatriz)){
       this.solicitudMatrizService
       .obtenerSolicitudMatriz(
         true,
@@ -242,8 +275,8 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
       })
       .finally(() => this._spinner.hide());
     } else {
-      let estadoSolicitud = this.estadoSolicitudMatriz.slice(0,1) === "S" ? this.estadoSolicitudMatriz : "SA";
-      let estadoMatriz = this.estadoSolicitudMatriz.slice(0,1) === "S" ? undefined : this.estadoSolicitudMatriz;
+      // let estadoSolicitud = this.estadoSolicitudMatriz.slice(0,1) === "S" ? this.estadoSolicitudMatriz : "SA";
+      // let estadoMatriz = this.estadoSolicitudMatriz.slice(0,1) === "S" ? undefined : this.estadoSolicitudMatriz;
       this.solicitudMatrizService
       .obtenerSolicitudMatriz(
         true,
@@ -255,13 +288,45 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
         undefined,
         undefined,
         undefined,
-        estadoSolicitud,
-        estadoMatriz
+        undefined,
+        undefined,
+        // estadoSolicitud,
+        // estadoMatriz
       )
       .then((listSolicitudesMatriz) => {
-        this.dataSourceSolicitudesMatriz = listSolicitudesMatriz
+        let solmatAux = listSolicitudesMatriz
           ? listSolicitudesMatriz
           : [];
+
+        this.dataSourceSolicitudesMatriz = solmatAux.filter(
+          e => {
+            if (this.estadoSolicitudMatriz === 0){
+              return ((e.estado === "SN") && (e.solicitante === this.usuarioLogged.email));
+            } else if (this.estadoSolicitudMatriz === 1){
+              return ((e.estado === "SF") && (e.solicitante === this.usuarioLogged.email));
+            } else if (this.estadoSolicitudMatriz === 2){
+              // return ((e.estadoMatriz !== "MA") && (e.solicitante === this.usuarioLogged.email));
+              return ((e.estadoMatriz !== "MA") && (e.solicitante === this.usuarioLogged.email));
+            } else if (this.estadoSolicitudMatriz === 3){
+              return ((e.estadoMatriz === "MA") && (e.solicitante === this.usuarioLogged.email));
+            } else if (this.estadoSolicitudMatriz === 4){
+              return ((e.estadoMatriz === "MC") && (e.supervisor === this.usuarioLogged.email) && (e.visita === "NO"));
+            } else if (this.estadoSolicitudMatriz === 5){
+              return ((e.estadoMatriz === "MC") && (e.supervisor === this.usuarioLogged.email) && (e.visita === "SI"));
+            } else if (this.estadoSolicitudMatriz === 6){
+              // return (((e.estadoMatriz === "JS") || (e.estadoMatriz === "MO") || (e.estadoMatriz === "GA") || (e.estadoMatriz === "MA")) && (e.supervisor === this.usuarioLogged.email));
+              return (((e.estadoMatriz === "JS") || (e.estadoMatriz === "MO") || (e.estadoMatriz === "GA") || (e.estadoMatriz === "MA")) && (e.supervisor === this.usuarioLogged.email));
+            } else if (this.estadoSolicitudMatriz === 7){
+              // return ((e.estadoMatriz === "MA") && (e.supervisor === this.usuarioLogged.email));
+              return ((e.estadoMatriz === "MP") && (e.supervisor === this.usuarioLogged.email));
+            } else if (this.estadoSolicitudMatriz === 8){
+              return e.estado === "SN";
+            } else if (this.estadoSolicitudMatriz === 9){
+              return ((e.estadoMatriz === "MC") || (e.estadoMatriz === "JS"));
+            } else if (this.estadoSolicitudMatriz === 10){
+              return ((e.estadoMatriz === "MO") || (e.estadoMatriz === "GA"));
+            }
+        })
       })
       .finally(() => this._spinner.hide());
     }
