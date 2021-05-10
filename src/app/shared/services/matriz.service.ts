@@ -363,7 +363,7 @@ export class MatrizService {
     return response;
   }
 
-  
+
   public async eliminarActividadMatriz(matrizActividad: MatrizActividad) {
     const body = {
       Id_Matriz: matrizActividad.idMatriz,

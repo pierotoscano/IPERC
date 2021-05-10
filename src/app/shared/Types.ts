@@ -231,3 +231,38 @@ export type UsuarioLoginBody = {
   UsuarioModifica: string;
   FechaModifica: string;
 };
+
+export type EmpresaFilter = {
+  idEmpresa: number;
+  empresa: string;
+};
+
+export type CentroFilter = {
+  idCentro: number;
+  centro: string;
+  idEmpresa: number;
+};
+
+export type AreaFilter = {
+  idArea: number;
+  area: string;
+  idCentro: number;
+  idEmpresa: number;
+};
+
+export type AlcanceFilter = {
+  idAlcance: number;
+  alcance: string;
+  idArea: number;
+  idCentro: number;
+  idEmpresa: number;
+};
+
+export type ProcesoFilter = {
+  idProceso: number;
+  proceso: string;
+  idAlcance: number;
+  idArea: number;
+  idCentro: number;
+  idEmpresa: number;
+};

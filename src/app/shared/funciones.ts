@@ -125,4 +125,12 @@ export const Funciones = {
 
     return value;
   },
+
+  validDate: (date: Date): Date => {
+    if (isNaN(date.getTime())) {
+      return new Date(date);
+    } else {
+      return date;
+    }
+  },
 };

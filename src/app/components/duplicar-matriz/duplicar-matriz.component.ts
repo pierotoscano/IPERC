@@ -20,18 +20,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PagedItemCollection } from '@pnp/sp/items';
 import { SpinnerVisibilityService } from 'ng-http-loader';
 import { Funciones } from 'src/app/shared/funciones';
+import { AreaFilter } from 'src/app/shared/Types';
 import { IStatistics } from 'src/app/shared/models/fisics/IStatistics';
 import { MaestroMaterial } from 'src/app/shared/models/fisics/MaestroMaterial';
 import { MaestroMaterialFilter } from 'src/app/shared/models/fisics/MaestroMaterialFilter';
 import { Matriz } from 'src/app/shared/models/fisics/Matriz';
 import { SolicitudMatriz } from 'src/app/shared/models/fisics/SolicitudMatriz';
+import { TipoMotivo } from 'src/app/shared/models/fisics/TipoMotivo';
 import { MasterLogic } from 'src/app/shared/models/logics/MasterLogic';
 import { FormularioAT } from 'src/app/shared/pages/formularioAT';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import { MasterService } from 'src/app/shared/services/master.service';
 import { MatrizService } from 'src/app/shared/services/matriz.service';
+import { MotivoService } from 'src/app/shared/services/motivo.service';
 import { SolicitudMatrizService } from 'src/app/shared/services/solicitudmatriz.service';
+import { UbicacionService } from 'src/app/shared/services/ubicacion.service';
 import { environment } from 'src/environments/environment';
+import { AlertComponent } from '../alert/alert.component';
 
 declare var $: any;
 @Component({
@@ -41,6 +46,13 @@ declare var $: any;
 })
 export class DuplicarMatrizComponent extends FormularioAT implements OnInit {
   @ViewChild(MatTable) tableSolicitudesMatriz: MatTable<SolicitudMatriz>;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('sidenavfiltros', { static: true }) public myNav: MatSidenav;
+
+  listAreas: AreaFilter[] = [];
+  listTiposMotivos: TipoMotivo[] = [];
+
   esMiembroId: boolean;
   currentUserName: string = '';
   statistics: IStatistics;
@@ -86,10 +98,6 @@ export class DuplicarMatrizComponent extends FormularioAT implements OnInit {
 
   // userAdministrator = false;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild('sidenavfiltros', { static: true }) public myNav: MatSidenav;
-
   constructor(
     public applicationRef: ApplicationRef,
     public dialog: MatDialog,
@@ -100,6 +108,8 @@ export class DuplicarMatrizComponent extends FormularioAT implements OnInit {
     public _spinner: SpinnerVisibilityService,
     public matrizService: MatrizService,
     public solicitudMatrizService: SolicitudMatrizService,
+    private motivoservice: MotivoService,
+    private ubicacionService: UbicacionService,
     public excelService: ExcelService,
     public formBuilder: FormBuilder
   ) {
@@ -128,12 +138,8 @@ export class DuplicarMatrizComponent extends FormularioAT implements OnInit {
       fechaInicio: new FormControl(new Date(), [Validators.required]),
       fechaFin: new FormControl(new Date(), [Validators.required]),
     });
-    // debugger;
-    // this.mostrarProgreso();
-
-    //Obtener datos de las solicitudes
-    //this.getSolicitudesMatriz();
-    // console.log("material-bandeja-solicitud")
+    this.getAreas();
+    this.getTipoMotivos();
   }
 
   getSolicitudesMatriz() {
@@ -145,6 +151,33 @@ export class DuplicarMatrizComponent extends FormularioAT implements OnInit {
           : [];
       })
       .finally(() => this._spinner.hide());
+  }
+
+  getAreas() {
+    this.ubicacionService.obtenerUbicaciones().then((ubicaciones) => {
+      const listUbicaciones = ubicaciones ? ubicaciones : [];
+
+      let listAreas: AreaFilter[] = listUbicaciones.map((u) => {
+        return {
+          idArea: u.idArea,
+          area: u.area,
+          idCentro: u.idCentro,
+          idEmpresa: u.idEmpresa,
+        };
+      });
+      this.listAreas = listAreas.filter(
+        (area, index, list) =>
+          list.findIndex(
+            (a) => a.idArea == area.idArea && a.area == area.area
+          ) == index
+      );
+    });
+  }
+
+  getTipoMotivos(): void {
+    this.motivoservice.obtenerTipoMotivo().then((tipomotivos) => {
+      this.listTiposMotivos = tipomotivos ? tipomotivos : [];
+    });
   }
 
   public irPaginaExterna(
@@ -245,22 +278,40 @@ export class DuplicarMatrizComponent extends FormularioAT implements OnInit {
   }
 
   async duplicarMatriz(idSolicitud) {
-    const solicitudMatriz = this.dataSourceSolicitudesMatriz.find(
-      (solicitud) => solicitud.id == idSolicitud
-    );
-    const matriz = new Matriz();
-    matriz.id = solicitudMatriz.idMatriz;
-    matriz.solicitante = solicitudMatriz.solicitante;
-    matriz.idArea = solicitudMatriz.idArea;
-    matriz.idSupervisor = solicitudMatriz.idSupervisor;
-    matriz.usuarioRegistro = solicitudMatriz.usuarioRegistro;
-    matriz.fechaRegistro = solicitudMatriz.fechaRegistro;
-    let lastId = await this.matrizService.generarMatriz(matriz);
-    if (lastId && lastId > 0) {
-      console.log('Éxito al clonar');
-    } else {
-      console.log('Error al clonar');
+    try {
+      const solicitudMatriz = this.dataSourceSolicitudesMatriz.find(
+        (solicitud) => solicitud.id == idSolicitud
+      );
+      // const matrices = await this.matrizService.obtenerMatriz();
+      // const listMatrices = matrices ? matrices : [];
+      // const matriz = listMatrices.find((m) => m.id == solicitudMatriz.idMatriz);
+
+      const matriz = new Matriz();
+      matriz.id = solicitudMatriz.idMatriz;
+      matriz.idSolicitante = solicitudMatriz.idSolicitante;
+      matriz.idArea = solicitudMatriz.idArea;
+      matriz.idSupervisor = solicitudMatriz.idSupervisor;
+      matriz.usuarioRegistro = solicitudMatriz.usuarioRegistro
+        ? solicitudMatriz.usuarioRegistro
+        : '';
+      matriz.fechaRegistro = new Date();
+
+      let lastId = await this.matrizService.generarMatriz(matriz);
+      if (lastId && lastId > 0) {
+        this.showMessage(`Éxito al clonar la matriz ${matriz.id}`);
+      } else {
+        this.showMessage(`No se puede clonar la matriz`);
+      }
+    } catch {
+      this.showMessage(`Ocurrió un error al clonar la matriz`);
     }
+  }
+
+  showMessage(text: string) {
+    const alertRef = this.dialog.open(AlertComponent, {
+      width: '250px',
+      data: { mensaje: text },
+    });
   }
   /*
   exportarExcel() {

@@ -45,61 +45,34 @@ import '@pnp/sp/webs';
 import '@pnp/sp/lists';
 import '@pnp/sp/items';
 import { IItemAddResult } from '@pnp/sp/items';
+import {
+  AlcanceFilter,
+  AreaFilter,
+  CentroFilter,
+  EmpresaFilter,
+  ProcesoFilter,
+} from 'src/app/shared/Types';
 
-export type Empresa = {
-  idEmpresa: number;
-  empresa: string;
-};
-
-export type Centro = {
-  idCentro: number;
-  centro: string;
-  idEmpresa: number;
-};
-
-export type Area = {
-  idArea: number;
-  area: string;
-  idCentro: number;
-  idEmpresa: number;
-};
-
-export type Alcance = {
-  idAlcance: number;
-  alcance: string;
-  idArea: number;
-  idCentro: number;
-  idEmpresa: number;
-};
-
-export type Proceso = {
-  idProceso: number;
-  proceso: string;
-  idAlcance: number;
-  idArea: number;
-  idCentro: number;
-  idEmpresa: number;
-};
 @Component({
   selector: 'app-enviar-solicitud',
   templateUrl: './enviar-solicitud.component.html',
   styleUrls: ['./enviar-solicitud.component.scss'],
 })
 export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
-  empresas: Empresa[] = [];
-  alcances: Alcance[] = [];
-  procesos: Proceso[] = [];
-  centros: Centro[] = [];
-  areas: Area[] = [];
+  empresas: EmpresaFilter[] = [];
+  alcances: AlcanceFilter[] = [];
+  procesos: ProcesoFilter[] = [];
+  centros: CentroFilter[] = [];
+  areas: AreaFilter[] = [];
   supervisores: Usuario[] = [];
   tipomotivos: TipoMotivo[] = [];
   usuarioLogged: Usuario;
 
-  listEmpresas: Empresa[] = [];
-  listCentros: Centro[] = [];
-  listAreas: Area[] = [];
-  listAlcances: Alcance[] = [];
-  listProcesos: Proceso[] = [];
+  listEmpresas: EmpresaFilter[] = [];
+  listCentros: CentroFilter[] = [];
+  listAreas: AreaFilter[] = [];
+  listAlcances: AlcanceFilter[] = [];
+  listProcesos: ProcesoFilter[] = [];
   listUbicaciones: Ubicacion[] = [];
 
   datosMaestros = {
@@ -132,11 +105,11 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     ],
   };
   ubicaciones: Ubicacion[] = [];
-  empresascombo: Empresa[] = [];
-  alcancescombo: Alcance[] = [];
-  procesoscombo: Proceso[] = [];
-  centroscombo: Centro[] = [];
-  areascombo: Area[] = [];
+  empresascombo: EmpresaFilter[] = [];
+  alcancescombo: AlcanceFilter[] = [];
+  procesoscombo: ProcesoFilter[] = [];
+  centroscombo: CentroFilter[] = [];
+  areascombo: AreaFilter[] = [];
   // @ViewChild(MatSort) sort: MatSort;
   // dataSource: MatTableDataSource<MatrizActividad>;
   // limit: number = 1000;
@@ -263,7 +236,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
               );
               this.setCombosValue();
 
-              if(solicitudMatriz.estado === "SN"){
+              if (solicitudMatriz.estado === 'SN') {
                 this.maestroFlujoEtapaActual.Id = 2;
               }
               return false;
@@ -283,7 +256,10 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 (m) => m.id == this.solicitudMatrizSelected.idMatriz
               );
               console.log(this.matrizSelected);
-              if(this.matrizSelected.estado === "MC" && this.matrizSelected.idSupervisor !== ""){
+              if (
+                this.matrizSelected.estado === 'MC' &&
+                this.matrizSelected.idSupervisor !== ''
+              ) {
                 this.maestroFlujoEtapaActual.Id = 3;
               }
             });
@@ -304,7 +280,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     this.ubicacionService.obtenerUbicaciones().then((ubicaciones) => {
       this.listUbicaciones = ubicaciones ? ubicaciones : [];
 
-      let listProcesos: Proceso[] = this.listUbicaciones.map((u) => {
+      let listProcesos: ProcesoFilter[] = this.listUbicaciones.map((u) => {
         return {
           idProceso: u.idProceso,
           proceso: u.proceso,
@@ -327,7 +303,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
           ) == index
       );
 
-      let listAlcances: Alcance[] = this.listUbicaciones.map((u) => {
+      let listAlcances: AlcanceFilter[] = this.listUbicaciones.map((u) => {
         return {
           idAlcance: u.idAlcance,
           alcance: u.alcance,
@@ -348,7 +324,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
           ) == index
       );
 
-      let listAreas: Area[] = this.listUbicaciones.map((u) => {
+      let listAreas: AreaFilter[] = this.listUbicaciones.map((u) => {
         return {
           idArea: u.idArea,
           area: u.area,
