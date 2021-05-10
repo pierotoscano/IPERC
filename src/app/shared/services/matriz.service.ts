@@ -363,6 +363,38 @@ export class MatrizService {
     return response;
   }
 
+  
+  public async eliminarActividadMatriz(matrizActividad: MatrizActividad) {
+    const body = {
+      Id_Matriz: matrizActividad.idMatriz,
+      Id_Actividad: matrizActividad.idMatrizActividad,
+      // Id_Area: matrizActividad.idArea,
+      UsuarioRegistro: matrizActividad.usuarioRegistro,
+      FechaRegistro: Funciones.dateFormatMMDDYY(new Date(matrizActividad.fechaRegistro)),
+      // Puesto: puesto.puesto,
+      // Observacion: puesto.observacion,
+      // Estado: puesto.estado,
+      // UsuarioModifica: puesto.usuarioModifica,
+      // FechaModifica: Funciones.dateFormatDDMMYY(puesto.fechaModifica),
+    };
+
+    let request = fetch(Variables.ipercApis.EliminarActividad, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    }).then((resp) => resp.json());
+
+    let response = await request
+      .then((resp) => resp.data as number)
+      .catch((error) => {
+        console.error('Error found: ' + error);
+      });
+
+    return response;
+  }
+
   public async guardarListActividadesMatriz(
     listMatricesActividad: MatrizActividad[]
   ) {

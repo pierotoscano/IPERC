@@ -14,6 +14,12 @@ import { Matriz } from 'src/app/shared/models/fisics/Matriz';
 import { MatTable } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
+import { ActividadesComponent } from '../peligros-y-riesgos/actividades/actividades.component';
+
+export type Operacion = {
+  ejecucion: {(s: Puesto | MatrizActividad) : Promise<number>};
+  parametro: Puesto | MatrizActividad;
+};
 
 @Component({
   selector: 'app-puestos-y-actividades',
@@ -108,19 +114,34 @@ export class PuestosYActividadesComponent implements OnInit {
     }
   }
 
-  listDeletedPuestos: Puesto[] = []
+  listaOperaciones: Operacion[] = [];
+
+  // listDeletedPuestos: Puesto[] = [];
   public eliminarPuesto() {
     if(this.puertoForm.valid && this.actividades.length === 0){
       this.puestos.forEach((elem, index) => {
         if(elem.idPuesto === this.puertoForm.value.idPuesto){
-          this.listDeletedPuestos.push(elem);
+          //this.listDeletedPuestos.push(elem);
+          if(elem.idPuesto > 0){
+            this.listaOperaciones.push({
+              ejecucion: this.deletePuestoFromDB,
+              parametro: elem
+            })
+          } else {
+            this.listaOperaciones.forEach((elemO, indexO) => {
+              if(elemO.parametro.idPuesto === elem.idPuesto){
+                this.listaOperaciones.splice(indexO, 1);
+                return 0;
+              }
+            })
+          }
           this.puestos.splice(index, 1);
           return 0;
         }
       })
     }
   }
-
+/*
   private deletePuestoFromDB(){
     this.listDeletedPuestos.forEach(async element => {
       if(element.idPuesto !== 0){
@@ -131,12 +152,38 @@ export class PuestosYActividadesComponent implements OnInit {
       // }
       // return null;
     });
+  }*/
+
+  private async deletePuestoFromDB(puesto: Puesto){
+    let data = await this.puestoservice.eliminarPuesto(puesto);
+    if (data && data > 0) {
+      return data;
+    }
+    return -1;
+  };
+
+  public async guardarPuestoToDB(puesto: Puesto){
+    // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
+    let data = await this.puestoservice.guardarPuesto(puesto);
+    if (data && data > 0) {
+      return data;
+    }
+    return null;
+    // let resp = null;
+    // this.puestos.forEach((elem, i) => {
+    //   if(elem.idPuesto === 0){
+    //     resp = this.puestoservice.guardarPuesto(elem);
+    //   }
+    // })
+    // return resp;
   }
 
+  contPuestoAdded: number = 0;
+  // puestosAdded: Puesto[] = [];
   openAgregarPuesto(): void {
     const dialogConfig = new MatDialogConfig();
     let novoPuesto = new Puesto();
-    novoPuesto.idPuesto = 0;
+    novoPuesto.idPuesto = --this.contPuestoAdded;
     novoPuesto.idMatriz = this.matriz.id;
     novoPuesto.idArea = this.matriz.idArea;
     novoPuesto.usuarioModifica = this.usuario.idUsuario;
@@ -150,9 +197,72 @@ export class PuestosYActividadesComponent implements OnInit {
       // console.log(`Dialog result: ${result.novoPuesto}`);
       // this.puestoSelected = result.novoPuesto;
       this.puestos.push(result.nuevoPuesto);
+      this.listaOperaciones.push({
+        ejecucion: this.guardarPuestoToDB,
+        parametro: result.nuevoPuesto
+      })
     });
   }
 
+  public eliminarActividad() {
+    if(this.puertoForm.valid && this.actividades.length === 0){
+      this.puestos.forEach((elem, index) => {
+        if(elem.idPuesto === this.puertoForm.value.idPuesto){
+          //this.listDeletedPuestos.push(elem);
+          if(elem.idPuesto > 0){
+            this.listaOperaciones.push({
+              ejecucion: this.deletePuestoFromDB,
+              parametro: elem
+            })
+          } else {
+            this.listaOperaciones.forEach((elemO, indexO) => {
+              if(elemO.parametro.idPuesto === elem.idPuesto){
+                this.listaOperaciones.splice(indexO, 1);
+                return 0;
+              }
+            })
+          }
+          return 0;
+        }
+      })
+    }
+  }
+/*
+  private deletePuestoFromDB(){
+    this.listDeletedPuestos.forEach(async element => {
+      if(element.idPuesto !== 0){
+        let data = await this.puestoservice.eliminarPuesto(element);
+      }      
+      // if (data && data > 0) {
+      //   return data;
+      // }
+      // return null;
+    });
+  }*/
+
+  private async deleteActividadFromDB(actividad: MatrizActividad){
+    let data = await this.matrizservice.eliminarActividadMatriz(actividad);
+    if (data && data > 0) {
+      return data;
+    }
+    return -1;
+  };
+
+  public async guardarActividadToDB(actividad: MatrizActividad){
+    // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
+    let data = await this.matrizservice.guardarActividadMatriz(actividad);
+    if (data && data > 0) {
+      return data;
+    }
+    return null;
+    // let resp = null;
+    // this.puestos.forEach((elem, i) => {
+    //   if(elem.idPuesto === 0){
+    //     resp = this.puestoservice.guardarPuesto(elem);
+    //   }
+    // })
+    // return resp;
+  }
   openAgregarActividad(): void {
     if (this.puertoForm.valid){
       const dialogConfig = new MatDialogConfig();
@@ -191,38 +301,19 @@ export class PuestosYActividadesComponent implements OnInit {
     //   }
     // });
 
-    this.deletePuestoFromDB()
-    this.guardarPuesto();
-    this.guardarActividadMatriz()
+    console.log(this.listaOperaciones)
+    let data = 0;
+    this.listaOperaciones.forEach(async (element, index) => {
+      data = await element.ejecucion.bind(this)(element.parametro);
+    })
+    // this.deletePuestoFromDB();
+    // this.guardarPuesto();
+    // this.guardarActividadMatriz()
   }
 
-  public guardarPuesto() {
-    // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
-    // let data = await this.puestoservice.guardarPuesto(this.puertoForm.value);
-    // if (data && data > 0) {
-    //   return data;
-    // }
-    // return null;
-    let resp = null;
-    this.puestos.forEach((elem, i) => {
-      if(elem.idPuesto === 0){
-        resp = this.puestoservice.guardarPuesto(elem);
-      }
-    })
-    return resp;
-  }
+  // this.listaOperaciones.push({
+  //   ejecucion: this.guardarPuestoToDB,
+  //   parametro: result.nuevoPuesto
+  // })
 
-  public guardarActividadMatriz() {
-    let listData = [];
-    // for (let i = 0; i < this.actividades.length; i++) {
-    this.actividades.forEach(async (elem, i) => {
-      let actividad = this.actividades[i];
-      let data = await this.matrizservice.guardarActividadMatriz(actividad);
-      if (data && data > 0) {
-        listData.push(data);
-      }
-    })
-    // }
-    return listData;
-  }
 }
