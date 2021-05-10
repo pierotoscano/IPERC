@@ -18,7 +18,8 @@ import { ActividadesComponent } from '../peligros-y-riesgos/actividades/activida
 
 export type Operacion = {
   ejecucion: {(s: Puesto | MatrizActividad) : Promise<number>};
-  parametro: Puesto | MatrizActividad;
+  parametro:MatrizActividad | Puesto;
+  nameop: string
 };
 
 @Component({
@@ -107,6 +108,20 @@ export class PuestosYActividadesComponent implements OnInit {
         .then((actividades) => {
           actividades = actividades ? actividades : [];
           actividades = actividades.filter(actividad => actividad.idPuesto === value.idPuesto);
+          this.listaOperaciones.forEach((element, index) => {
+            if(element.nameop === "ADD" && element.parametro.constructor.name === "MatrizActividad" && element.parametro.idPuesto === value.idPuesto){
+              console.log(element);
+              (<MatrizActividad[]>actividades).push(<MatrizActividad>element.parametro);
+              return 0;
+            } 
+            (<MatrizActividad[]>actividades).forEach((element1, index1) => {
+              if (element.nameop === "DELETE" && element.parametro.constructor.name === "MatrizActividad" && element.parametro.idPuesto === element1.idPuesto){
+                console.log(element);
+                (<MatrizActividad[]>actividades).splice(index1, 1);
+                return 0;
+              }
+            });
+          });
           this.actividades = actividades;
       });
     } else {
@@ -125,11 +140,12 @@ export class PuestosYActividadesComponent implements OnInit {
           if(elem.idPuesto > 0){
             this.listaOperaciones.push({
               ejecucion: this.deletePuestoFromDB,
-              parametro: elem
+              parametro: elem,
+              nameop: "DELETE"
             })
           } else {
             this.listaOperaciones.forEach((elemO, indexO) => {
-              if(elemO.parametro.idPuesto === elem.idPuesto){
+              if(elemO.parametro.constructor.name === elem.constructor.name && elemO.parametro.idPuesto === elem.idPuesto){
                 this.listaOperaciones.splice(indexO, 1);
                 return 0;
               }
@@ -140,42 +156,6 @@ export class PuestosYActividadesComponent implements OnInit {
         }
       })
     }
-  }
-/*
-  private deletePuestoFromDB(){
-    this.listDeletedPuestos.forEach(async element => {
-      if(element.idPuesto !== 0){
-        let data = await this.puestoservice.eliminarPuesto(element);
-      }      
-      // if (data && data > 0) {
-      //   return data;
-      // }
-      // return null;
-    });
-  }*/
-
-  private async deletePuestoFromDB(puesto: Puesto){
-    let data = await this.puestoservice.eliminarPuesto(puesto);
-    if (data && data > 0) {
-      return data;
-    }
-    return -1;
-  };
-
-  public async guardarPuestoToDB(puesto: Puesto){
-    // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
-    let data = await this.puestoservice.guardarPuesto(puesto);
-    if (data && data > 0) {
-      return data;
-    }
-    return null;
-    // let resp = null;
-    // this.puestos.forEach((elem, i) => {
-    //   if(elem.idPuesto === 0){
-    //     resp = this.puestoservice.guardarPuesto(elem);
-    //   }
-    // })
-    // return resp;
   }
 
   contPuestoAdded: number = 0;
@@ -199,34 +179,12 @@ export class PuestosYActividadesComponent implements OnInit {
       this.puestos.push(result.nuevoPuesto);
       this.listaOperaciones.push({
         ejecucion: this.guardarPuestoToDB,
-        parametro: result.nuevoPuesto
+        parametro: result.nuevoPuesto,
+        nameop: "ADD"
       })
     });
   }
 
-  public eliminarActividad() {
-    if(this.puertoForm.valid && this.actividades.length === 0){
-      this.puestos.forEach((elem, index) => {
-        if(elem.idPuesto === this.puertoForm.value.idPuesto){
-          //this.listDeletedPuestos.push(elem);
-          if(elem.idPuesto > 0){
-            this.listaOperaciones.push({
-              ejecucion: this.deletePuestoFromDB,
-              parametro: elem
-            })
-          } else {
-            this.listaOperaciones.forEach((elemO, indexO) => {
-              if(elemO.parametro.idPuesto === elem.idPuesto){
-                this.listaOperaciones.splice(indexO, 1);
-                return 0;
-              }
-            })
-          }
-          return 0;
-        }
-      })
-    }
-  }
 /*
   private deletePuestoFromDB(){
     this.listDeletedPuestos.forEach(async element => {
@@ -240,17 +198,18 @@ export class PuestosYActividadesComponent implements OnInit {
     });
   }*/
 
-  private async deleteActividadFromDB(actividad: MatrizActividad){
-    let data = await this.matrizservice.eliminarActividadMatriz(actividad);
+  private async deletePuestoFromDB(puesto: Puesto){
+    let data = await this.puestoservice.eliminarPuesto(puesto);
     if (data && data > 0) {
       return data;
     }
     return -1;
   };
 
-  public async guardarActividadToDB(actividad: MatrizActividad){
+  public async guardarPuestoToDB(puesto: Puesto){
     // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
-    let data = await this.matrizservice.guardarActividadMatriz(actividad);
+    puesto.idPuesto = 0;
+    let data = await this.puestoservice.guardarPuesto(puesto);
     if (data && data > 0) {
       return data;
     }
@@ -263,16 +222,19 @@ export class PuestosYActividadesComponent implements OnInit {
     // })
     // return resp;
   }
+
+  contActividadAdded: number = 0;
   openAgregarActividad(): void {
     if (this.puertoForm.valid){
       const dialogConfig = new MatDialogConfig();
       let novaActividad = new MatrizActividad();
-      // novaActividad.idMatriz = this.matrizId;
       novaActividad.idMatriz = this.matriz.id;
       novaActividad.idArea = this.matriz.idArea; //this.idArea;
       novaActividad.puesto = this.puestoNombre;
+      novaActividad.idPuesto = this.puertoForm.value.idPuesto;
       novaActividad.usuarioModifica = this.usuario.idUsuario;
       novaActividad.usuarioRegistro = this.usuario.idUsuario;
+      novaActividad.idActividad = --this.contActividadAdded;
       dialogConfig.data = {
         autoFocus: false,
         nuevaActividad: novaActividad
@@ -283,29 +245,69 @@ export class PuestosYActividadesComponent implements OnInit {
         // console.log(`Dialog result: ${result.nuevaActividad}`);
         if (result !== null) {
           this.actividades.push(result.nuevaActividad);
+          this.listaOperaciones.push({
+            ejecucion: this.guardarActividadToDB,
+            parametro: result.nuevaActividad,
+            nameop: "ADD"
+          })
           this.tableActividades.renderRows();
         }
       });
     }
   }
 
-  guardarPuestoAndActividad() {
-    // this.guardarPuesto().then((dataGuardarPuesto) => {
-    //   if (dataGuardarPuesto && dataGuardarPuesto > 0) {
-    //     console.log('Puesto creado');
-    //     this.guardarActividadMatriz().then((listDataGuardarActividades) => {
-    //       if (listDataGuardarActividades.length > 0) {
-    //         console.log('Actividades guardadas');
-    //       }
-    //     });
-    //   }
-    // });
+  // actividadesDeleted: MatrizActividad[];
+  public eliminarActividad(actividadDeleted: MatrizActividad) {
+    // this.actividadesDeleted.push(this.actividades[i]);
+    // this.actividades.splice(i, 1);
+    this.actividades.forEach((elem, index) => {
+      if(elem.idActividad === actividadDeleted.idActividad){
+        if(elem.idActividad > 0){
+          this.listaOperaciones.push({
+            ejecucion: this.deleteActividadFromDB,
+            parametro: elem,
+            nameop: "DELETE"
+          })
+        } else {
+          this.listaOperaciones.forEach((elemO, indexO) => {
+            if(elemO.parametro.constructor.name === elem.constructor.name && (<MatrizActividad>elemO.parametro).idActividad === elem.idActividad){
+              this.listaOperaciones.splice(indexO, 1);
+              return 0;
+            }
+          })
+        }
+        this.actividades.splice(index, 1);
+        this.tableActividades.renderRows();
+        return 0;
+      }
+    })
+  }
+  
+  private async deleteActividadFromDB(actividad: MatrizActividad){
+    let data = await this.matrizservice.eliminarActividadMatriz(actividad);
+    if (data && data > 0) {
+      return data;
+    }
+    return -1;
+  };
 
+  public async guardarActividadToDB(actividad: MatrizActividad){
+    // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
+    actividad.idActividad = 0;
+    let data = await this.matrizservice.guardarActividadMatriz(actividad);
+    if (data && data > 0) {
+      return data;
+    }
+    return -1;
+  }
+
+  guardarPuestoAndActividad() {
     console.log(this.listaOperaciones)
     let data = 0;
     this.listaOperaciones.forEach(async (element, index) => {
       data = await element.ejecucion.bind(this)(element.parametro);
     })
+    this.listaOperaciones = [];
     // this.deletePuestoFromDB();
     // this.guardarPuesto();
     // this.guardarActividadMatriz()

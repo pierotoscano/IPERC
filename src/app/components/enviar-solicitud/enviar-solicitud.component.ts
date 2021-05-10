@@ -262,6 +262,10 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 this.solicitudMatrizSelected.motivo
               );
               this.setCombosValue();
+
+              if(solicitudMatriz.estado === "SN"){
+                this.maestroFlujoEtapaActual.Id = 2;
+              }
               return false;
             }
           });
@@ -279,6 +283,9 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 (m) => m.id == this.solicitudMatrizSelected.idMatriz
               );
               console.log(this.matrizSelected);
+              if(this.matrizSelected.estado === "MC" && this.matrizSelected.idSupervisor !== ""){
+                this.maestroFlujoEtapaActual.Id = 3;
+              }
             });
           }
         });

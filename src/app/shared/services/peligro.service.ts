@@ -52,7 +52,8 @@ export class PeligroService {
     return responseData;
   }
 
-  public async obtenerMatrizPeligroByIdMatriz(idMatriz: string) {
+  public async obtenerMatrizPeligroByIdMatriz(
+    idMatriz: string) {
     let request = fetch(
       `${Variables.ipercApis.ObtenerMatrizPeligroByIdMatriz}?Id_Matriz=${idMatriz}&PAGE=0&ROWS=0`
     )

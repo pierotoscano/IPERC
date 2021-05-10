@@ -55,10 +55,11 @@ export class RiesgoService {
   }
 
   public async obtenerMatrizRiesgoByIdMatriz(
-    idMatriz: string
+    idMatriz: string,
+    idPeligro: number
   ): Promise<ListaRiesgoMatriz[] | void> {
     let request = fetch(
-      `${Variables.ipercApis.ObtenerMatrizRiesgoByIdMatriz}?Id_Matriz=${idMatriz}&PAGE=0&ROWS=0`
+      `${Variables.ipercApis.ObtenerMatrizRiesgoByIdMatriz}?Id_Matriz=${idMatriz}?Id_Peligro=${idPeligro}&PAGE=0&ROWS=0`
     )
       .then((resp) => resp.json())
       .then((resp) => resp.data as any[]);
@@ -188,10 +189,11 @@ export class RiesgoService {
   }
 
   public async obtenerMCERiesgo(
-    idMatriz?: string
+    idMatriz?: string,
+    idRiesgo?: number
   ): Promise<MCERiesgo[] | void> {
     let url = `${Variables.ipercApis.ObtenerMCERiesgo}${
-      idMatriz ? `?Id_Matriz=${idMatriz}&PAGE=0&ROWS=0` : ''
+      idMatriz ? `?Id_Matriz=${idMatriz}&Id_Riesgo=${idRiesgo}&PAGE=0&ROWS=0` : ''
     }`;
     let request = fetch(url)
       .then((resp) => resp.json())
@@ -251,10 +253,11 @@ export class RiesgoService {
   }
 
   public async obtenerMCPRiesgo(
-    idMatriz?: string
+    idMatriz?: string,
+    idRiesgo?: number
   ): Promise<MCPRiesgo[] | void> {
     let url: string = `${Variables.ipercApis.ObtenerMCPRiesgo}${
-      idMatriz ? `?Id_Matriz=${idMatriz}&PAGE=0&ROWS=0` : ''
+      idMatriz ? `?Id_Matriz=${idMatriz}&Id_Riesgo=${idRiesgo}&PAGE=0&ROWS=0` : ''
     }`;
     let request = fetch(url)
       .then((resp) => resp.json())

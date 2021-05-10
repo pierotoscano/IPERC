@@ -26,7 +26,7 @@ export class AgregarPeligroComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.data.peligroMatriz = new PeligroMatriz();
-    this.data.peligroMatriz.idPeligro = 0;
+    // this.data.peligroMatriz.idPeligro = 0;
   }
 
   ngOnInit(): void {
@@ -37,7 +37,7 @@ export class AgregarPeligroComponent implements OnInit {
 
   addNewPeligro() {
     if (this.formAddPeligro.valid) {
-      this.data.peligroMatriz.peligro = this.formAddPeligro.value.peligroData;
+      this.data.peligroMatriz.peligro = this.formAddPeligro.value.peligroData.trim();
       // this.data.peligroMatriz.fechaModifica = new Date();
       this.data.peligroMatriz.fechaModifica = new Date();
       this.data.peligroMatriz.fechaRegistro = new Date();

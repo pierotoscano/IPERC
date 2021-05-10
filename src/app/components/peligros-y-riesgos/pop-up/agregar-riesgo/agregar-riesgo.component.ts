@@ -27,7 +27,7 @@ export class AgregarRiesgoComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.data.riesgoMatriz = new ListaRiesgoMatriz();
-    this.data.riesgoMatriz.idRiesgo = 0;
+    // this.data.riesgoMatriz.idRiesgo = 0;
   }
 
   ngOnInit(): void {
