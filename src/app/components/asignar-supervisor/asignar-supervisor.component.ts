@@ -29,6 +29,7 @@ import { SolicitudMatriz } from 'src/app/shared/models/fisics/SolicitudMatriz';
 import { Funciones } from 'src/app/shared/funciones';
 import { MasterService } from 'src/app/shared/services/master.service';
 import { MatrizService } from 'src/app/shared/services/matriz.service';
+import { ConstanteService } from 'src/app/shared/services/constante.service';
 
 import { sp } from '@pnp/sp';
 import '@pnp/sp/webs';
@@ -67,6 +68,7 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
     private matrizService: MatrizService,
     private masterService: MasterService,
     private ubicacionService: UbicacionService,
+    private constanteService: ConstanteService,
     private route: Router,
     private dialog: MatDialog
   ) {
@@ -140,9 +142,8 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
     );
   }
 
-  asignarSupervisor() {
+  async asignarSupervisor() {
     if (this.formDatosAsignarSupervisor.valid) {
-      //Emplear la solicitud desde el componente padre
       const idSupervisorSelected = this.formDatosAsignarSupervisor.value
         .supervisor;
 
@@ -150,89 +151,75 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
         (s) => s.idUsuario == idSupervisorSelected
       );
 
-      //Asignar supervisor
-      this.supervisorService
-        .asignarSupervisor(
+      try {
+        const resultAsignacion = await this.supervisorService.asignarSupervisor(
           supervisorSelected,
           this.usuario,
           this.solicitudMatriz
-        )
-        .then((data) => {
-          if (data && data > 0) {
-            //Generar matriz y guardar
-            const idArea = this.solicitudMatriz.idArea;
-            const idSupervisor = supervisorSelected.idUsuario;
-            const usuarioRegistro = this.usuario.idUsuario;
-            const fechaRegistro = new Date();
+        );
 
-            let matriz = new Matriz();
-            matriz.id = '';
-            matriz.idSolicitante = this.solicitudMatriz.idSolicitante;
-            matriz.idArea = idArea;
-            matriz.idSupervisor = idSupervisor;
-            matriz.usuarioRegistro = usuarioRegistro;
-            matriz.fechaRegistro = fechaRegistro;
-
-            this.matrizService.generarMatriz(matriz).then((data) => {
-              if (data && data > 0) {
-                this.idMatrizSaved = data;
-                this.showMessage(
-                  'Éxito al asignar supervisor y generar matriz'
-                );
-                this.route.navigate([Variables.path.bandejaSolicitudMaterial]);
-              }
-            });
+        if (resultAsignacion && resultAsignacion > 0) {
+          const resultGeneracion = await this.generarMatriz(supervisorSelected);
+          if (resultGeneracion && resultGeneracion > 0) {
+            const resultAsignarSupervisorSP = await this.asignarSupervisorSP(
+              supervisorSelected
+            );
+            if (resultAsignarSupervisorSP) {
+              this.showMessage(
+                `Éxito al asignar supervisor y generar matriz: ${resultGeneracion}`
+              );
+              this.route.navigate([Variables.path.bandejaSolicitudMaterial]);
+            }
           }
-        });
+        }
+      } catch {
+        this.showMessage('Ocurrió un error durante la grabación.');
+      }
     }
   }
 
-  async registrarCorreo() {
-    //ListaCorreosCalendario
-    // add an item to the list const iar:
-    let today = new Date();
-    /*
-    Formato de id de calendario:
-    aaaammdddhhmmss-idSupervisor
-    */
-    /*
-    const idSupervisorSelected = this.formDatosAsignarSupervisor.value
-      .supervisor;
-    let supervisorSelected = this.listSupervisores.find(
-      (s) => s.idUsuario == idSupervisorSelected
+  async generarMatriz(supervisorSelected: Usuario) {
+    const idArea = this.solicitudMatriz.idArea;
+    const idSupervisor = supervisorSelected.idUsuario;
+    const usuarioRegistro = this.usuario.idUsuario;
+    const fechaRegistro = new Date();
+
+    let matriz = new Matriz();
+    matriz.id = '';
+    matriz.idSolicitante = this.solicitudMatriz.idSolicitante;
+    matriz.idArea = idArea;
+    matriz.idSupervisor = idSupervisor;
+    matriz.usuarioRegistro = usuarioRegistro;
+    matriz.fechaRegistro = fechaRegistro;
+
+    return this.matrizService.generarMatriz(matriz);
+  }
+
+  async asignarSupervisorSP(supervisorSelected: Usuario) {
+    const constantes = await this.constanteService.obtenerConstante();
+    let listConstantes = constantes ? constantes : [];
+
+    const asuSupervisorAsignado = listConstantes.find(
+      (c) => c.id == 'AsuSupervisorAsignado'
+    );
+    const asuAsigMatrizRiesgo = listConstantes.find(
+      (c) => c.id == 'AsuAsigMatrizRiesgo'
     );
 
-    const dia = today.getDate() >= 10 ? today.getDate() : `0${today.getDate()}`;
-    const mes =
-      today.getMonth() + 1 >= 10
-        ? today.getMonth() + 1
-        : `0${today.getMonth() + 1}`;
-    const anho = today.getFullYear();
-    const hora =
-      today.getHours() >= 10 ? today.getHours() : `0${today.getHours()}`;
-    const minutos =
-      today.getMinutes() >= 10 ? today.getMinutes() : `0${today.getMinutes()}`;
-    const segundos =
-      today.getSeconds() >= 10 ? today.getSeconds() : `0${today.getSeconds()}`;
-    const idCalendario = `${anho}${mes}${dia}${hora}${minutos}${segundos}${supervisorSelected.idUsuario}`;
-    const nombresApellidosSupervisor = `${supervisorSelected.apellidoPaterno} ${supervisorSelected.apellidoMaterno}, ${supervisorSelected.nombres}`;
-    */
-
     const iar: IItemAddResult = await sp.web.lists
-      .getByTitle('ListaCorreosCalendario')
+      .getByTitle('ListaAsignarSupervisor')
       .items.add({
-        Title: 'Title',
-        IdCalendario: 'idCalendario', // idCalendario
-        CorreoSupervisor: 'xternal2@gruporocio.com', // supervisorSelected.email
-        FechaInicio: new Date(),
-        FechaFin: new Date(),
-        NombresApellidosSupervisor: 'Piero Toscano', // nombresApellidosSupervisor
-        AsuntoSupervisor: 'Asignación de supervisor',
-        Area: 'Producción',
-        CorreoSolicitante: 'xternal2@gruporocio.com', // Obtener email del solicitante
-        AsuntoSolicitante: 'Supervisor Asignado',
-        NombresApellidosSolicitante: 'Juan Perez',
+        Title: asuSupervisorAsignado.valor1,
+        CorreoSupervisor: supervisorSelected.email,
+        AsuntoSupervisor: asuSupervisorAsignado.valor1,
+        NombreSupervisor: supervisorSelected.nombres,
+        Area: this.solicitudMatriz.area,
+        CorreoSolicitante: this.solicitudMatriz.emailSupervisor,
+        AsuntoSolicitante: asuAsigMatrizRiesgo.valor1,
+        NombreSolicitante: this.solicitudMatriz.solicitante,
       });
+
+    return iar;
   }
 
   showMessage(text: string) {
@@ -305,27 +292,7 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
         FechaFin: new Date(),
         Correo: 'xternal2@gruporocio.com',
         Asunto: 'Asunto Guardar Visita TEST',
-        Cuerpo: 'Contenido del correo',
         Lugar: 'Lima',
-      });
-
-    console.log(iar);
-  }
-
-  async testAsignarSupervisor() {
-    const iar: IItemAddResult = await sp.web.lists
-      .getByTitle('ListaAsignarSupervisor')
-      .items.add({
-        Title: 'Title',
-        CorreoSupervisor: 'xternal2@gruporocio.com',
-        AsuntoSupervisor: 'Asignación de supervisor TEST',
-        NombreSupervisor: 'xternal',
-        Area: 'Producción',
-        CorreoSolicitante: 'xternal2@gruporocio.com',
-        AsuntoSolicitante: 'Supervisor Asignado TEST',
-        NombreSolicitante: 'xternal2',
-        FechaInicio: new Date(),
-        FechaFin: new Date(),
       });
 
     console.log(iar);

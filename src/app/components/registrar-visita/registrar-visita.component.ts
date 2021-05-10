@@ -14,6 +14,7 @@ import { SolicitudMatrizService } from 'src/app/shared/services/solicitudmatriz.
 import { ParticipanteService } from 'src/app/shared/services/participante.service';
 import { Visita } from '../../shared/models/fisics/Visita';
 import { VisitaService } from '../../shared/services/visita.service';
+import { ConstanteService } from 'src/app/shared/services/constante.service';
 import { AsignarParticipanteComponent } from './asignar-participante/asignar-participante.component';
 import { VerParticipanteComponent } from './ver-participante/ver-participante.component';
 import { ParticipanteValue } from 'src/app/shared/Types';
@@ -23,6 +24,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
 import { AlertComponent } from '../alert/alert.component';
 import { Variables } from 'src/app/shared/variables';
+
+import { sp } from '@pnp/sp';
+import '@pnp/sp/webs';
+import '@pnp/sp/lists';
+import '@pnp/sp/items';
+import { IItemAddResult } from '@pnp/sp/items';
+import { Constante } from 'src/app/shared/models/fisics/Constante';
 
 export type VisitaDetails = {
   visita: Visita;
@@ -70,6 +78,7 @@ export class RegistrarVisitaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private participanteService: ParticipanteService,
     private visitaService: VisitaService,
+    private constanteService: ConstanteService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
@@ -191,61 +200,116 @@ export class RegistrarVisitaComponent implements OnInit {
   }
 
   async grabarSolicitud() {
-    let promisesSaveVisita = [];
+    let saveState = true;
 
-    this.solicitudData.visitas.data.forEach((visitaDetails) => {
-      promisesSaveVisita.push(
-        this.visitaService
-          .guardarVisita(visitaDetails.visita)
-          .then((idVisitaSaved) => {
-            if (idVisitaSaved && idVisitaSaved > 0) {
-              //Guardar los participantes de la visita registrada
-              return this.participanteService
-                .guardarListParticipantes(
-                  idVisitaSaved.toString(),
-                  visitaDetails.participantes as ISiteUserInfo[]
-                )
-                .then((data) => {
-                  if (data == 0) {
-                    return idVisitaSaved;
-                  }
+    const constantes = await this.constanteService.obtenerConstante();
+    let listConstantes = constantes ? constantes : [];
 
-                  // if (data && data > 0) {}
-                });
+    const asuVisitaCoordinada = listConstantes.find(
+      (c) => c.id == 'AsuVisitaCoordinada'
+    );
+
+    const listResults = await Promise.all(
+      this.solicitudData.visitas.data.map(async (visitaDetails) => {
+        try {
+          const idVisitaSaved = await this.visitaService.guardarVisita(
+            visitaDetails.visita
+          );
+
+          if (idVisitaSaved && idVisitaSaved > 0) {
+            const resultGuardarParticipantes = await this.participanteService.guardarListParticipantes(
+              idVisitaSaved.toString(),
+              visitaDetails.participantes as ISiteUserInfo[]
+            );
+
+            if (resultGuardarParticipantes == 0) {
+              const fechaInicio = visitaDetails.visita.inicioVisita;
+              const fechaFin = visitaDetails.visita.finVisita;
+
+              //Enviar correo a participantes:
+              let stateFlujo: boolean = true;
+              const listParticipantes: ISiteUserInfo[] = [];
+              visitaDetails.participantes.forEach((participante) => {
+                if (this.isISiteUserInfo(participante)) {
+                  listParticipantes.push(participante);
+                }
+              });
+
+              const listResultsGuardarVisitaSP = await Promise.all(
+                listParticipantes.map(async (participante) => {
+                  const resultGuardarVisitaSP = await this.guardarVisitaSP(
+                    asuVisitaCoordinada,
+                    fechaInicio,
+                    fechaFin,
+                    participante
+                  );
+
+                  return resultGuardarVisitaSP ? resultGuardarVisitaSP : null;
+                })
+              );
+
+              listResultsGuardarVisitaSP.every((result) => {
+                if (!result) {
+                  stateFlujo = false;
+                  return false;
+                }
+              });
+
+              if (stateFlujo) {
+                return idVisitaSaved;
+              } else {
+                return 0;
+              }
             } else {
               return 0;
             }
-          })
-          .catch(() => {
-            return -1;
-          })
-      );
-    });
-
-    Promise.all(promisesSaveVisita).then((results) => {
-      let saveState = true;
-      results.every((r) => {
-        if (r <= 0) {
-          saveState = false;
-          return false;
+          } else {
+            return 0;
+          }
+        } catch {
+          return -1;
         }
-      });
+      })
+    );
 
-      if (saveState) {
-        this.showMessage('Éxito al guardar la visita y sus participantes.');
-        this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
-      } else {
-        this.showMessage('Error al guardar la visita y sus participantes.');
+    listResults.every((r) => {
+      if (r <= 0) {
+        saveState = false;
+        return false;
       }
     });
 
-    /*
-    if (numListParticipantesSaved > 0 && numVisitasSaved > 0) {
+    if (saveState) {
       this.showMessage('Éxito al guardar la visita y sus participantes.');
       this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
     } else {
-      this.showMessage('Error al guardar la visita y sus participantes.');
-    }*/
+      this.showMessage(
+        'Ocurrió un error al guardar la visita y sus participantes.'
+      );
+    }
+  }
+
+  async guardarVisitaSP(
+    asuVisitaCoordinada: Constante,
+    fechaInicio: Date,
+    fechaFin: Date,
+    participante: ISiteUserInfo
+  ) {
+    const iar = await sp.web.lists
+      .getByTitle('ListaGuardarVisita')
+      .items.add({
+        Title: asuVisitaCoordinada.valor1,
+        FechaInicio: fechaInicio,
+        FechaFin: fechaFin,
+        Correo: participante.Email,
+        Asunto: asuVisitaCoordinada.valor1,
+        Lugar: this.solicitudMatriz.centro,
+      })
+      .catch((error) => {
+        console.error('Error: ' + error);
+      });
+
+    return iar;
   }
 
   showMessage(text: string) {
@@ -253,5 +317,11 @@ export class RegistrarVisitaComponent implements OnInit {
       width: '250px',
       data: { mensaje: text },
     });
+  }
+
+  isISiteUserInfo(
+    participante: ISiteUserInfo | ParticipanteData
+  ): participante is ISiteUserInfo {
+    return (participante as ISiteUserInfo).Title != undefined;
   }
 }

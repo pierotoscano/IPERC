@@ -110,7 +110,7 @@ export class SolicitudMatrizService {
 
   public async guardarSolicitudMatriz(
     solicitudMatriz: SolicitudMatriz
-  ): Promise<any | void> {
+  ): Promise<number | void> {
     const body: SolicitudMatrizBody = {
       Id_Solicitud_Matriz: solicitudMatriz.id,
       Id_Solicitante: solicitudMatriz.idSolicitante,
@@ -135,7 +135,7 @@ export class SolicitudMatrizService {
     }).then((resp) => resp.json());
 
     let response = await request
-      .then((resp) => resp.data)
+      .then((resp) => resp.data as number)
       .catch((error) => {
         console.error('Error found: ' + error);
       });

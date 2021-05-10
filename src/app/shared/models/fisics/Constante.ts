@@ -1,5 +1,5 @@
 export class Constante {
-  private _id: number;
+  private _id: string;
   private _valor1: string;
   private _valor2: string;
   private _valor3: string;
@@ -7,7 +7,7 @@ export class Constante {
   private _estado: string;
 
   constructor(
-    id: number,
+    id: string,
     valor1: string,
     valor2: string,
     valor3: string,
@@ -24,9 +24,9 @@ export class Constante {
 
   /**
    * Getter id
-   * @return {number}
+   * @return {string}
    */
-  public get id(): number {
+  public get id(): string {
     return this._id;
   }
 
@@ -72,9 +72,9 @@ export class Constante {
 
   /**
    * Setter id
-   * @param {number} value
+   * @param {string} value
    */
-  public set id(value: number) {
+  public set id(value: string) {
     this._id = value;
   }
 

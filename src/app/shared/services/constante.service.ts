@@ -15,7 +15,7 @@ export class ConstanteService {
       .then((data) => {
         let listConstantes: Constante[] = [];
         data.forEach((item) => {
-          const id: number = item['Id_Constante'];
+          const id: string = item['Id_Constante'];
           const valor1: string = item['Valor1'];
           const valor2: string = item['Valor2'];
           const valor3: string = item['Valor3'];

@@ -23,6 +23,9 @@ import { MatrizService } from '../../shared/services/matriz.service';
 
 import { SolicitudMatrizService } from 'src/app/shared/services/solicitudmatriz.service';
 
+import { ConstanteService } from 'src/app/shared/services/constante.service';
+import { Constante } from 'src/app/shared/models/fisics/Constante';
+
 import {
   FormBuilder,
   FormControl,
@@ -36,6 +39,12 @@ import { LoginService } from 'src/app/shared/services/login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from '../alert/alert.component';
 import { Ubicacion } from 'src/app/shared/models/fisics/Ubicacion';
+
+import { sp } from '@pnp/sp';
+import '@pnp/sp/webs';
+import '@pnp/sp/lists';
+import '@pnp/sp/items';
+import { IItemAddResult } from '@pnp/sp/items';
 
 export type Empresa = {
   idEmpresa: number;
@@ -154,6 +163,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     private ubicacionService: UbicacionService,
     private matrizservice: MatrizService,
     private solicitudMatrizService: SolicitudMatrizService,
+    private constanteService: ConstanteService,
     private loginService: LoginService,
     private route: ActivatedRoute,
     private router: Router,
@@ -490,7 +500,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     });
   }
 
-  guardarSolicitudMatriz(): void {
+  async guardarSolicitudMatriz() {
     const estado = 'SN';
     const fechaModifica = new Date();
     const fechaRegistro = new Date();
@@ -530,25 +540,36 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     solicitudMatriz.tipo = tipo;
     solicitudMatriz.usuarioModifica = usuarioModifica;
     solicitudMatriz.usuarioRegistro = usuarioRegistro;
-    this.solicitudMatrizService
-      .guardarSolicitudMatriz(solicitudMatriz)
-      .then((data) => {
-        let idSolicitudMatrizInserted = data;
-        if (idSolicitudMatrizInserted == 2) {
-          this.showMessage(
-            'Ya existe una solicitud en proceso para el area seleccionada.'
-          );
-        } else if (idSolicitudMatrizInserted == 0) {
-          this.showMessage(
-            'Ya existe una solicitud y matriz en proceso para el area seleccionada.'
-          );
-        } else {
-          this.showMessage(
-            'Éxito al registrar la solicitud: ' + idSolicitudMatrizInserted
-          );
-          this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
+
+    try {
+      let dataResultSave = await this.solicitudMatrizService.guardarSolicitudMatriz(
+        solicitudMatriz
+      );
+      if (dataResultSave) {
+        switch (dataResultSave) {
+          case 0:
+            this.showMessage(
+              'Ya existe una solicitud y matriz en proceso para el area seleccionada.'
+            );
+            break;
+          case 2:
+            this.showMessage(
+              'Ya existe una solicitud en proceso para el area seleccionada.'
+            );
+            break;
+          default:
+            const resultNotificarSolicitudMatrizSP = await this.notificarSolicitudMatrizSP();
+            if (resultNotificarSolicitudMatrizSP) {
+              this.showMessage(
+                'Éxito al registrar la solicitud: ' + dataResultSave
+              );
+              this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
+            }
         }
-      });
+      }
+    } catch {
+      this.showMessage('Ocurrió un error durante la grabación.');
+    }
   }
 
   updateSolicitudMatriz(solicitudMatrizUpdated) {
@@ -585,5 +606,36 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
       width: '250px',
       data: { mensaje: text },
     });
+  }
+
+  async notificarSolicitudMatrizSP() {
+    const constantes = await this.constanteService.obtenerConstante();
+    let listConstantes = constantes ? constantes : [];
+
+    const asigSuperSigma = listConstantes.find(
+      (c) => c.id == 'AsuAsigSuperSigma'
+    );
+    const emailJefeSigma = listConstantes.find((c) => c.id == 'EmailJefeSigma');
+    const intRespSol = listConstantes.find((c) => c.id == 'IntRespSol');
+    const linkAppDev = listConstantes.find((c) => c.id == 'LinkAppDev');
+
+    const area = this.listAreas.find(
+      (a) => a.idArea == this.formGuardarSolicitudMatriz.value.area
+    );
+    const motivo = this.formGuardarSolicitudMatriz.value.motivo;
+
+    const iar: IItemAddResult = await sp.web.lists
+      .getByTitle('ListaNotificarSolicitudMatriz')
+      .items.add({
+        Title: asigSuperSigma.valor1,
+        Correo: emailJefeSigma.valor1,
+        Asunto: asigSuperSigma.valor1,
+        Area: area.area,
+        Motivo: motivo,
+        Plazo: intRespSol.valor1,
+        Link: linkAppDev.valor1,
+      });
+
+    return iar;
   }
 }
