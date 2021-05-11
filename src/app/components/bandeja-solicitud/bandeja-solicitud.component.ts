@@ -45,6 +45,8 @@ import { Usuario } from 'src/app/shared/models/fisics/Usuario';
 import { LoginService } from 'src/app/shared/services/login.service';
 
 declare var $: any;
+
+
 @Component({
   selector: 'app-bandeja-solicitud',
   templateUrl: './bandeja-solicitud.component.html',
@@ -102,6 +104,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('sidenavfiltros', { static: true }) public myNav: MatSidenav;
   usuarioLogged: Usuario;
+
 
   constructor(
     public applicationRef: ApplicationRef,
