@@ -4,46 +4,35 @@
             <!-- {{currentUserName}} -->
             <h1 class="mt-10 mb-10 ml-0 mr-10">¡Bienvenido!</h1>
             <br />
-            <div class="row">
-                <!-- <li >
-                    {{i}}/{{users.length}}. {{user}} <span *ngIf="isFirst">default</span>
-                     -->
-                    <!-- *ngIf="contadoresSolicitudesMatrices.solicitudesEnPendientes.presente"> -->
-                <div *ngFor="let card of cards; index as i; first as isFirst">
-                <div *ngIf="card.show">
-                <div class="col-xs-12 col-sm-6 col-md-4 mb-16 pl-2 pr-2" >
+            <div class="row" >
+                <!-- Mis Solicitudes Pendientes -->
+                <div *ngIf="mostrarSeccionSolictPend" class="col-xs-12 col-sm-6 col-md-3 mb-16 pl-2 pr-2">
                     <mat-card class="flotante active">
                         <mat-card-header>
                             <mat-card-title>
-                                <!-- <h3>{{ contadoresSolicitudesMatrices.solicitudesEnPendientes.indicador }}</h3> -->
-                                <h3>{{ card.indicador }}</h3>
+                                <h3>Mis Solicitudes Pendientes</h3>
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-                            <div class="pt-8 info-box" layout="column" layout-align="center center" [ngClass]="{'pb-34': nuevaSolicitud, 'pb-70': !nuevaSolicitud}">
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center" [ngClass]="{'pb-45': nuevaSolicitud, 'pb-70': !nuevaSolicitud}">
                                 <div class="light-blue-fg font-size-72 line-height-72">
-                                    <!-- {{ contadoresSolicitudesMatrices.solicitudesEnPendientes.valor }} -->
-                                    {{ card.contador }}
+                                    3
                                 </div>
-                                <!-- <div class="h3 secondary-text font-weight-500">PENDIENTES</div> -->
-                                <div class="h3 secondary-text font-weight-500">{{ card.footer }}</div>
+                                <div class="h3 secondary-text font-weight-500">PENDIENTES</div>
                             </div>
                         </mat-card-content>
                         <mat-card-actions layout="row" align="start">
-                            <div *ngIf="isFirst" class="row m-0 p-0">
+                            <div *ngIf="nuevaSolicitud" class="row m-0 p-0">
                                 <div class="col-md-12 m-0 p-0">
-                                    <!-- (click)="irPaginaExterna('material-formulario-solicitud/-1', '', '')" -->
-                                    <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/enviar-solicitud']">
+                                    <button type="button" class="fs-12 m-0 p-0 text-left" (click)="irPaginaExterna('material-formulario-solicitud/-1', '', '')" mat-button aria-label="Go">
                                         <mat-icon>add</mat-icon>
                                         Crear nueva solicitud
                                     </button>
                                 </div>
-                                
-                            </div>
+                            </div> 
                             <div class="row m-0 p-0">
                                 <div class="col-md-12 m-0 p-0">
-                                    <!-- (click)="irPaginaExterna('material-bandeja-solicitud', '', '')"  -->
-                                    <button type="button" class="fs-12 m-0 p-0 text-left" mat-button aria-label="Go" [routerLink]="['/material-bandeja-solicitud/'+i]">
+                                    <button type="button" class="fs-12 m-0 p-0 text-left" (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" mat-button aria-label="Go">
                                         <mat-icon>link</mat-icon>
                                         Ir
                                     </button>
@@ -52,8 +41,79 @@
                         </mat-card-actions>
                     </mat-card>
                 </div>
+                
+                <div *ngIf="mostrarSeccionSolictEnProces" class="col-xs-12 col-sm-6 col-md-3 mb-16 pl-2 pr-2">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>Mis Solicitudes en Proceso</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="light-blue-fg font-size-72 line-height-72">
+                                    7
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">EN PROCESO</div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <button type="button" class="fs-12" mat-button (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" aria-label="Go">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
                 </div>
+
+                <div *ngIf="mostrarSeccionSolictCerradas" class="col-xs-12 col-sm-6 col-md-3 mb-16 pl-2 pr-2">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>Mis Solicitudes Cerradas</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="light-blue-fg font-size-72 line-height-72">
+                                    {{ 3 || 0 }}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">CERRADAS</div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <button type="button" class="fs-12" mat-button (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" aria-label="Go">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
                 </div>
+    
+                <div *ngIf="mostrarSeccionSolictVencidas"class="col-xs-12 col-sm-6 col-md-3 mb-16 pl-2 pr-2">
+                    <mat-card class="flotante active">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h3>Mis Solicitudes Vencidas</h3>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="pt-8 pb-70 info-box" layout="column" layout-align="center center">
+                                <div class="red-fg font-size-72 line-height-72">
+                                    {{ 9 || 0 }}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">VENCIDAS</div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions layout="row" align="start">
+                            <button type="button" class="fs-12" mat-button (click)="irPaginaExterna('material-bandeja-solicitud', '', '')" aria-label="Go">
+                                <mat-icon>link</mat-icon>
+                                Ir
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+               
             </div>
         </div>
     </div>

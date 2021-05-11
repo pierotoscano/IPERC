@@ -265,6 +265,13 @@ export class HomeComponent extends FormularioAT implements OnInit {
     }
   }
 */
+  
+  /* @author: EPO */
+  mostrarSeccionSolictPend = true;
+  mostrarSeccionSolictEnProces = true;
+  mostrarSeccionSolictCerradas= true;
+  mostrarSeccionSolictVencidas = true;
+
   constructor(
     public applicationRef: ApplicationRef,
     public dialog: MatDialog,
