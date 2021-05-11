@@ -135,7 +135,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
     // this.loggedUser = this.loginService.getUserLogged();
     // console.log(this.estadoSolicitudMatriz)
   }
-  
+
   getUserLogged() {
     let usuarioFromSession = JSON.parse(
       sessionStorage.getItem('usuarioLogged')
@@ -160,7 +160,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
     this.usuarioLogged.usuarioModifica = usuarioFromSession._usuarioModifica;
     this.usuarioLogged.usuarioRegistro = usuarioFromSession._usuarioRegistro;
   }
-  
+
   buscarSolicitudes() {
     const fechaInicio: Date = this.formBuscarSolicitudes.value.fechaInicio;
     const fechaFin: Date = this.formBuscarSolicitudes.value.fechaFin;
@@ -186,12 +186,12 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
       ? this.formBuscarSolicitudes.value.supervisor
       : undefined;
     const estadoSolicitud = estado;
-    const estadoMatriz = undefined;
+    const estadoMatriz = this.formBuscarSolicitudes.value.estadoMatriz;
     const page = 0;
     const rows = 0;
 
     this.solicitudMatrizService
-      .obtenerSolicitudMatriz(
+      .obtenerSolicitudMatrizByListEstadosMatriz(
         true,
         fechaInicio,
         fechaFin,
@@ -213,7 +213,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
         this.tableSolicitudesMatriz.renderRows();
       })
       .finally(() => this._spinner.hide());
-  }  
+  }
 
   ngOnInit() {
     this.getUserLogged();
@@ -238,7 +238,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
     this.getSolicitudesMatriz();
     // console.log("material-bandeja-solicitud")
   }
-  
+
   tipomotivos: TipoMotivo[];
   areas: Area[] = [];
   getAreas(): void {
