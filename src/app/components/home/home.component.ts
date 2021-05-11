@@ -69,22 +69,22 @@ export class HomeComponent extends FormularioAT implements OnInit {
   dataSourceIndicadoresMatriz: any[] = [];
   cards: any[] = [
     {
-      contador: 0,
-      indicador: "",
+      contador: 7,
+      indicador: "Mis solicitudes Pendientes",
       id: 0,
       show: false,
       footer: "PENDIENTES"
     },
     {
-      contador: 0,
-      indicador: "",
+      contador: 5,
+      indicador: "Mis solicitudes finalizadas",
       id: 0,
       show: false,
       footer: "FINALIZADAS"
     },
     {
-      contador: 0,
-      indicador: "",
+      contador: 10,
+      indicador: "Mis solicitudes en proceso",
       id: 0,
       show: false,
       footer: "EN PROCESO"
@@ -266,12 +266,6 @@ export class HomeComponent extends FormularioAT implements OnInit {
   }
 */
   
-  /* @author: EPO */
-  mostrarSeccionSolictPend = true;
-  mostrarSeccionSolictEnProces = true;
-  mostrarSeccionSolictCerradas= true;
-  mostrarSeccionSolictVencidas = true;
-
   constructor(
     public applicationRef: ApplicationRef,
     public dialog: MatDialog,
