@@ -235,10 +235,11 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 this.solicitudMatrizSelected.motivo
               );
               this.setCombosValue();
+              this.maestroFlujoEtapaActual.Id = parseInt(this.solicitudMatrizSelected.etapa.slice(-1));
 
-              if (solicitudMatriz.estado === 'SN') {
-                this.maestroFlujoEtapaActual.Id = 2;
-              }
+              // if(solicitudMatriz.estado === "SN"){
+              //   this.maestroFlujoEtapaActual.Id = 2;
+              // }
               return false;
             }
           });
@@ -256,12 +257,9 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 (m) => m.id == this.solicitudMatrizSelected.idMatriz
               );
               console.log(this.matrizSelected);
-              if (
-                this.matrizSelected.estado === 'MC' &&
-                this.matrizSelected.idSupervisor !== ''
-              ) {
-                this.maestroFlujoEtapaActual.Id = 3;
-              }
+              // if(this.matrizSelected.estado === "MC" && this.matrizSelected.idSupervisor !== ""){
+              //   this.maestroFlujoEtapaActual.Id = 3;
+              // }
             });
           }
         });
@@ -576,7 +574,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
     this.usuarioLogged.key = usuarioFromSession._key;
     this.usuarioLogged.nombres = usuarioFromSession._nombres;
-    this.usuarioLogged.rol = usuarioFromSession._rol;
+    this.usuarioLogged.rol = "JA";//usuarioFromSession._rol;
     this.usuarioLogged.selected = usuarioFromSession._selected;
     this.usuarioLogged.tipo = usuarioFromSession._tipo;
     this.usuarioLogged.usuario = usuarioFromSession._usuario;

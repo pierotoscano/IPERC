@@ -59,7 +59,7 @@ export class RiesgoService {
     idPeligro: number
   ): Promise<ListaRiesgoMatriz[] | void> {
     let request = fetch(
-      `${Variables.ipercApis.ObtenerMatrizRiesgoByIdMatriz}?Id_Matriz=${idMatriz}?Id_Peligro=${idPeligro}&PAGE=0&ROWS=0`
+      `${Variables.ipercApis.ObtenerMatrizRiesgoByIdMatriz}?Id_Matriz=${idMatriz}&Id_Peligro=${idPeligro}&PAGE=0&ROWS=0`
     )
       .then((resp) => resp.json())
       .then((resp) => resp.data as any[]);
@@ -205,6 +205,7 @@ export class RiesgoService {
         data.forEach((item) => {
           const idRiesgoMCE: number = item['Id_Riesgo_MCE'];
           const idMatrizRiesgo: string = item['Id_Matriz_Riesgo'];
+          const idMatriz: string = item['Id_Matriz'];
           const idRiesgo: string = item['Id_Riesgo'];
           const idMCE: number = item['Id_MCE'];
           const idArea: number = item['Id_Area'];
@@ -225,6 +226,7 @@ export class RiesgoService {
             idRiesgoMCE,
             idMatrizRiesgo,
             idRiesgo,
+            idMatriz,
             idMCE,
             idArea,
             idTipo,
@@ -269,6 +271,7 @@ export class RiesgoService {
         data.forEach((item) => {
           const idRiesgoMCP: number = item['Id_Riesgo_MCP'];
           const idMatrizRiesgo: string = item['Id_Matriz_Riesgo'];
+          const idMatriz: string = item['Id_Matriz'];
           const idRiesgo: string = item['Id_Riesgo'];
           const idMCP: number = item['Id_MCP'];
           const idArea: number = item['Id_Area'];
@@ -289,6 +292,7 @@ export class RiesgoService {
             idRiesgoMCP,
             idMatrizRiesgo,
             idRiesgo,
+            idMatriz,
             idMCP,
             idArea,
             idResponsable,
@@ -366,15 +370,16 @@ export class RiesgoService {
 
   public async guardarMCERiesgo(mceRiesgo: MCERiesgo): Promise<any | void> {
     const body: MCERiesgoBody = {
-      Id_Riesgo_MCE: mceRiesgo.idRiesgoMCE,
+      Id_Riesgo_MCE: mceRiesgo.idMCE,
       Id_Matriz_Riesgo: mceRiesgo.idMatrizRiesgo,
       Id_Area: mceRiesgo.idArea,
-      Id_Riesgo: mceRiesgo.idRiesgo,
       MC: mceRiesgo.mC,
       Id_Tipo: mceRiesgo.idTipo,
       Id_Responsable: mceRiesgo.idResponsable,
       Estado: mceRiesgo.estado,
       Observacion: mceRiesgo.observacion,
+      Id_Riesgo: mceRiesgo.idRiesgo,
+      UsuarioRegistro: mceRiesgo.usuarioRegistro,
       FechaRegistro: Funciones.dateFormatMMDDYY(mceRiesgo.fechaRegistro),
       UsuarioModifica: mceRiesgo.usuarioModifica,
       FechaModifica: Funciones.dateFormatMMDDYY(mceRiesgo.fechaModifica),
@@ -400,7 +405,7 @@ export class RiesgoService {
   public async guardarMCPRiesgo(mcpRiesgo: MCPRiesgo): Promise<any | void> {
     const body: MCPRiesgoBody = {
       Id_Riesgo_MCP: mcpRiesgo.idRiesgoMCP,
-      Id_Matriz_Riesgo: mcpRiesgo.idMatrizRiesgo,
+      Id_Matriz_Riesgo: mcpRiesgo.idMatriz,
       Id_Area: mcpRiesgo.idArea,
       Id_Riesgo: mcpRiesgo.idRiesgo,
       MC: mcpRiesgo.mC,
@@ -444,7 +449,7 @@ export class RiesgoService {
       // Estado: mceRiesgo.estado,
       // Observacion: mceRiesgo.observacion,
       UsuarioRegistro: mceRiesgo.usuarioRegistro,
-      FechaRegistro: Funciones.dateFormatMMDDYY(mceRiesgo.fechaRegistro),
+      FechaRegistro: Funciones.dateFormatMMDDYY(new Date(mceRiesgo.fechaRegistro)),
       // UsuarioModifica: mceRiesgo.usuarioModifica,
       // FechaModifica: Funciones.dateFormatDDMMYY(mceRiesgo.fechaModifica),
     };
@@ -479,7 +484,7 @@ export class RiesgoService {
       // Estado: mceRiesgo.estado,
       // Observacion: mceRiesgo.observacion,
       UsuarioRegistro: mceRiesgo.usuarioRegistro,
-      FechaRegistro: Funciones.dateFormatMMDDYY(mceRiesgo.fechaRegistro),
+      FechaRegistro: Funciones.dateFormatMMDDYY(new Date(mceRiesgo.fechaRegistro)),
       // UsuarioModifica: mceRiesgo.usuarioModifica,
       // FechaModifica: Funciones.dateFormatDDMMYY(mceRiesgo.fechaModifica),
     };

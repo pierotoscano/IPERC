@@ -102,6 +102,7 @@ export type MCERiesgoBody = {
   Id_Responsable: number;
   Estado: string;
   Observacion: string;
+  UsuarioRegistro: string;
   FechaRegistro: string;
   UsuarioModifica: string;
   FechaModifica: string;

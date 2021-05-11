@@ -1,6 +1,7 @@
 export class MCERiesgo {
   private _idRiesgoMCE: number;
   private _idMatrizRiesgo: string;
+  private _idMatriz: string;
   private _idRiesgo: string;
   private _idMCE: number;
   private _idArea: number;
@@ -21,6 +22,7 @@ export class MCERiesgo {
     idRiesgoMCE?: number,
     idMatrizRiesgo?: string,
     idRiesgo?: string,
+    idMatriz?: string,
     idMCE?: number,
     idArea?: number,
     idTipo?: string,
@@ -40,6 +42,7 @@ export class MCERiesgo {
     this._idMatrizRiesgo = idMatrizRiesgo;
     this._idArea = idArea;
     this._idRiesgo = idRiesgo;
+    this._idMatriz = idMatriz;
     this._mC = mC;
     this._idTipo = idTipo;
     this._idResponsable = idResponsable;
@@ -53,6 +56,13 @@ export class MCERiesgo {
     this._tipoMC = tipoMC;
     this._estadoDesc = estadoDesc;
     this._Responsable = Responsable;
+  }
+  
+  public get idMatriz(): string {
+    return this._idMatriz;
+  }
+  public set idMatriz(value: string) {
+    this._idMatriz = value;
   }
 
   /**

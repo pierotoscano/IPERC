@@ -67,6 +67,8 @@ export class AgregarMceComponent implements OnInit {
       mceRiesgo.idResponsable = idResponsable;
       mceRiesgo.tipoMC = tipo.tipoMC;
       mceRiesgo.Responsable = responsable.responsable;
+      mceRiesgo.fechaModifica = new Date();
+      mceRiesgo.fechaRegistro = new Date();
 
       this.data.mceRiesgo = mceRiesgo;
     }

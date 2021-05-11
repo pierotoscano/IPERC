@@ -6,7 +6,7 @@ import { PeligroService } from '../../shared/services/peligro.service';
 import { PeligroMatriz } from 'src/app/shared/models/fisics/PeligroMatriz';
 
 import { RiesgoService } from '../../shared/services/riesgo.service';
-import { RiesgoMatriz } from 'src/app/shared/models/fisics/RiesgoMatriz';
+// import { RiesgoMatriz } from 'src/app/shared/models/fisics/RiesgoMatriz';
 
 import { MatrizService } from '../../shared/services/matriz.service';
 import { MatrizActividad } from '../../shared/models/fisics/MatrizActividad';
@@ -45,7 +45,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
   @ViewChild(MatTable) tblMCE: MatTable<MCERiesgo>;
   private _matriz = new BehaviorSubject<Matriz>(null);
   peligroSelected: PeligroMatriz;
-  riesgoSelected: RiesgoMatriz;
+  riesgoSelected: ListaRiesgoMatriz;
   listaOperaciones: Operacion[] = [];
   @Input()
   set matriz(value){
@@ -85,6 +85,15 @@ export class PeligrosYRiesgosComponent implements OnInit {
   private mcpEliminados: MCPRiesgo[];
   private listPeligroDeleted: PeligroMatriz[];
   private listRiesgoDeleted: ListaRiesgoMatriz[];
+
+  private _etapa = new BehaviorSubject<number>(null);
+  @Input()
+  set etapa(value){
+    this._etapa.next(value);
+  }
+  get etapa(){
+    return this._etapa.getValue();
+  }
 
   // peligroMatrizSelected: PeligroMatriz = null;
   // riesgoMatrizSelected: RiesgoMatriz = null;
@@ -288,9 +297,10 @@ export class PeligrosYRiesgosComponent implements OnInit {
   //   console.log(this.listRiesgosMatriz);
   // }
 
-  changeRiesgo(value: RiesgoMatriz): void {
+  changeRiesgo(value: ListaRiesgoMatriz): void {
     this.riesgoSelected = value;
     if (this.riesgoSelected !== undefined){
+      console.log(value)
       // this.getMCEByRiesgoSelected();
       // this.getMCE();
       this.riesgoService
@@ -432,6 +442,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
         newRiesgoMatriz.idPeligro = this.peligroSelected.idPeligro;
         newRiesgoMatriz.usuarioModifica = this.usuario.idUsuario;
         newRiesgoMatriz.usuarioRegistro = this.usuario.idUsuario;
+        newRiesgoMatriz.idActividad = this.actividades[0].idActividad;
         newRiesgoMatriz.idRiesgo = --this.contRiesgoAdded;
         newRiesgoMatriz.observacion = '';
 
@@ -493,14 +504,18 @@ export class PeligrosYRiesgosComponent implements OnInit {
         if (result !== '') {
           let mceAux = result.mceRiesgo as MCERiesgo;
           mceAux.idMCE = --this.contMCEAdded;
-          mceAux.estado = this.riesgoSelected.estado;
-          mceAux.idRiesgo = `${this.riesgoSelected.idRiesgo}`;
-          
+          // mceAux.estado = this.riesgoSelected.estado;
+          mceAux.estado = this.matriz.estado;
+          mceAux.idMatrizRiesgo = `${this.riesgoSelected.idMatrizRiesgo}`;
+          mceAux.idMatriz = this.riesgoSelected.idMatrizRiesgo // this.matriz.id;
           mceAux.idArea = this.matriz.idArea;
+          mceAux.idRiesgo = `${this.riesgoSelected.idRiesgo}`;
           mceAux.usuarioModifica = this.usuario.idUsuario;
           mceAux.usuarioRegistro = this.usuario.idUsuario;
           mceAux.observacion = '';
           this.dataSourceMCE.data.push(mceAux);
+          this.dataSourceMCE.filter = "";
+          // this.tblMCE.renderRows();
           // this.getMCEByRiesgoSelected();
           // this.dataSourceMCE = new MatTableDataSource<MCERiesgo>(this.mces);
           this.listaOperaciones.push({
@@ -518,7 +533,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
   }
 
   public eliminarMCE(mceDeleted: MCERiesgo) {
-    this.dataSourceMCE.data.forEach((elem, index) => {
+    let datamce = this.dataSourceMCE.data
+    datamce.forEach((elem, index) => {
       if(elem.idMCE === mceDeleted.idMCE){
         if(elem.idMCE > 0){
           this.listaOperaciones.push({
@@ -534,7 +550,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
             }
           })
         }
-        this.dataSourceMCE.data.splice(index, 1);
+        datamce.splice(index, 1);
+        this.dataSourceMCE.data = datamce;
         // this.mces.splice(index, 1);
         // this.tblMCE.renderRows();
         return 0;
@@ -545,16 +562,17 @@ export class PeligrosYRiesgosComponent implements OnInit {
   contMCPAdded: number = 0;
   openAgregarMCP(): void {
     if( this.riesgoSelected !== undefined ){
-      const dialogRef = this.dialog.open(AgregarMceComponent, {
+      const dialogRef = this.dialog.open(AgregarMcpComponent, {
         data: { mceRiesgo: {} },
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result !== '') {
           let mcpAux = result.mcpRiesgo as MCPRiesgo;
           mcpAux.idMCP = --this.contMCPAdded;
-          mcpAux.estado = this.riesgoSelected.estado;
+          // mcpAux.estado = this.riesgoSelected.estado;
+          mcpAux.estado = this.matriz.estado;
           mcpAux.idRiesgo = `${this.riesgoSelected.idRiesgo}`;
-          
+          mcpAux.idMatrizRiesgo = this.riesgoSelected.idMatrizRiesgo; // this.matriz.id;
           mcpAux.idArea = this.matriz.idArea;
           mcpAux.usuarioModifica = this.usuario.idUsuario;
           mcpAux.usuarioRegistro = this.usuario.idUsuario;
@@ -577,7 +595,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
   }
 
   public eliminarMCP(mcpDeleted: MCPRiesgo) {
-    this.dataSourceMCP.data.forEach((elem, index) => {
+    let datamcp = this.dataSourceMCP.data
+    datamcp.forEach((elem, index) => {
       if(elem.idMCP === mcpDeleted.idMCP){
         if(elem.idMCP > 0){
           this.listaOperaciones.push({
@@ -593,7 +612,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
             }
           })
         }
-        this.dataSourceMCP.data.splice(index, 1);
+        datamcp.splice(index, 1);
+        this.dataSourceMCP.data = datamcp;
         // this.mces.splice(index, 1);
         // this.tblMCE.renderRows();
         return 0;

@@ -1,6 +1,7 @@
 export class MCPRiesgo {
   private _idRiesgoMCP: number;
   private _idMatrizRiesgo: string;
+  private _idMatriz: string;
   private _idRiesgo: string;
   private _idMCP: number;
   private _idArea: number;
@@ -21,6 +22,7 @@ export class MCPRiesgo {
     idRiesgoMCP?: number,
     idMatrizRiesgo?: string,
     idRiesgo?: string,
+    idMatriz?: string,
     idMCP?: number,
     idArea?: number,
     idResponsable?: number,
@@ -40,6 +42,7 @@ export class MCPRiesgo {
     this._idMatrizRiesgo = idMatrizRiesgo;
     this._idArea = idArea;
     this._idRiesgo = idRiesgo;
+    this._idMatriz = idMatriz;
     this._mC = mC;
     this._idTipo = idTipo;
     this._idResponsable = idResponsable;
@@ -54,6 +57,14 @@ export class MCPRiesgo {
     this._estadoDesc = estadoDesc;
     this._Responsable = Responsable;
   }
+  
+  public get idMatriz(): string {
+    return this._idMatriz;
+  }
+  public set idMatriz(value: string) {
+    this._idMatriz = value;
+  }
+
 
   /**
    * Getter idRiesgoMCP

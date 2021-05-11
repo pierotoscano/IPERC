@@ -31,6 +31,7 @@ import '@pnp/sp/lists';
 import '@pnp/sp/items';
 import { IItemAddResult } from '@pnp/sp/items';
 import { Constante } from 'src/app/shared/models/fisics/Constante';
+import { BehaviorSubject } from 'rxjs';
 
 export type VisitaDetails = {
   visita: Visita;
@@ -73,6 +74,15 @@ export class RegistrarVisitaComponent implements OnInit {
 
   listParticipantes = [];
   idSolicitudMatrizSelected: string;
+
+  private _etapa = new BehaviorSubject<number>(null);
+  @Input()
+  set etapa(value){
+    this._etapa.next(value);
+  }
+  get etapa(){
+    return this._etapa.getValue();
+  }
 
   constructor(
     private formBuilder: FormBuilder,

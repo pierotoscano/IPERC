@@ -60,6 +60,10 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
   idMatrizSaved: number;
   matrizSaved: Matriz;
 
+  maestroFlujoEtapaActual = {
+    Id: 1,
+  };
+
   constructor(
     private formBuilder: FormBuilder,
     private procesoService: ProcesoService,
@@ -98,6 +102,7 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
       this.setSupervisor();
     }
     if (this.solicitudMatriz) {
+      this.maestroFlujoEtapaActual.Id = parseInt(this.solicitudMatriz.etapa.slice(-1));
       this.setProceso();
     }
   }

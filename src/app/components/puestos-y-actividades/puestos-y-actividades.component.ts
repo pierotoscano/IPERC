@@ -48,6 +48,15 @@ export class PuestosYActividadesComponent implements OnInit {
     return this._usuario.getValue();
   }
 
+  private _etapa = new BehaviorSubject<number>(null);
+  @Input()
+  set etapa(value){
+    this._etapa.next(value);
+  }
+  get etapa(){
+    return this._etapa.getValue();
+  }
+
   puestos: Puesto[] = [];
   puestosSelected: Puesto[] = [];
   actividades: MatrizActividad[] = [];
@@ -83,6 +92,13 @@ export class PuestosYActividadesComponent implements OnInit {
           this.getPuestos();
         }
       })
+
+    // this._etapa
+    //   .subscribe(x => {
+    //     if(x !== undefined){
+    //       this.getPuestos();
+    //     }
+    //   })
   }
 
   getPuestos(): void {

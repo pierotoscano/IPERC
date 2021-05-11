@@ -1,265 +1,262 @@
 <div>
-        <mat-accordion multi>
-            <mat-expansion-panel [expanded]="false">
-                <mat-expansion-panel-header class="ht-44 bg-white border-0 border-bottom-red">
-                    <mat-panel-title>
-                        <h4 class="text-black">Filtros de busqueda</h4>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
+    <mat-accordion multi>
+        <mat-expansion-panel [expanded]="false">
+            <mat-expansion-panel-header class="ht-44 bg-white border-0 border-bottom-red">
+                <mat-panel-title>
+                    <h4 class="text-black">Filtros de busqueda</h4>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
 
-                <form [formGroup]="formBuscarSolicitudes" (ngSubmit)="buscarSolicitudes()">
-                    <div>
+            <form [formGroup]="formBuscarSolicitudes" (ngSubmit)="buscarSolicitudes()">
+                <div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>ID Solicitud</mat-label>
+                            <!-- onFocus="this.value=''"  -->
+                            <input type="text" formControlName="idSolicitud" class="right-align" matInput/>
+                            <mat-error>
+
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>ID Matriz</mat-label>
+                            <!-- onFocus="this.value=''" -->
+                            <input type="text" formControlName="idMatriz" class="right-align" matInput />
+                            <!-- <mat-error>
+                                {{ errors.CodigoSAPQS }}
+                            </mat-error> -->
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Área</mat-label>
+                            <!-- <input type="text" class="right-align" matInput onFocus="this.value=''" /> -->
+                            <mat-select formControlName="idArea">
+                                <mat-option>Seleccione</mat-option>
+                                <mat-option *ngFor="let item of areas" [value]="item.area">
+                                    {{item.area}}
+                                </mat-option>
+                                <!-- <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.EstPetBCP)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
+                            </mat-select>
+                            <!-- <input formControlName="PeriodoASS" matInput [matDatepicker]="fechaPeriodoASS" /> -->
+                            <!-- <mat-datepicker-toggle matSuffix [for]="fechaPeriodoASS"></mat-datepicker-toggle>
+                            <mat-datepicker #fechaPeriodoASS></mat-datepicker> -->
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tipo motivo</mat-label>
+                            <!-- <input type="text" class="right-align" matInput onFocus="this.value=''" /> -->
+                            <mat-select formControlName="idTipoMotivo">
+                                <mat-option>Seleccione</mat-option>
+                                <mat-option *ngFor="let item of tipomotivos" [value]="item.idTipoMotivo">
+                                    {{item.tipoMotivo}}
+                                </mat-option>
+                                <!-- <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.EstPetBCP)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
+                            </mat-select>
+                            <!-- <mat-select formControlName="ServicioASS">
+                                <mat-option [value]="-1">Seleccione</mat-option>
+                                <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
+                            </mat-select> -->
+                            <mat-error>
+
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Solicitante</mat-label>
+                            <input type="text" formControlName="idSolicitante" class="right-align" matInput onFocus="this.value=''" />
+                            <!-- <mat-select formControlName="ServicioASS">
+                                <mat-option [value]="-1">Seleccione</mat-option>
+                                <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
+                            </mat-select> -->
+                            <mat-error>
+
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Estado</mat-label>
+                            <!-- <input type="text" class="right-align" matInput onFocus="this.value=''" /> -->
+                            <mat-select formControlName="idEstado">
+                                <mat-option>Seleccione</mat-option>
+                                <mat-option value="SA">SUPERVISOR ASIGNADO</mat-option>
+                                <mat-option value="SN">SUPERVISOR NO ASIGNADO</mat-option>
+                                <!-- <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.EstPetBCP)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
+                            </mat-select>
+                            <!-- <mat-select formControlName="ServicioASS">
+                                <mat-option [value]="-1">Seleccione</mat-option>
+                                <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
+                            </mat-select> -->
+                            <mat-error>
+
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Supervisor</mat-label>
+                            <input type="text" formControlName="supervisor" class="right-align" matInput/>
+                            <!-- <mat-select formControlName="ServicioASS">
+                                <mat-option [value]="-1">Seleccione</mat-option>
+                                <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
+                            </mat-select> -->
+                            <mat-error>
+
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Estados Matriz</mat-label>
+                            <mat-select formControlName="estadoMatriz" multiple>
+                            <!-- <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option> -->
+                            <mat-option [value]="'MC'">MC</mat-option>
+                            <mat-option [value]="'JS'">JS</mat-option>
+                            <mat-option [value]="'MO'">MO</mat-option>
+                            <mat-option [value]="'GA'">GA</mat-option>
+                            <mat-option [value]="'MA'">MA</mat-option>
+                            <mat-option [value]="'MP'">MP</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="row col-lg-12 col-md-126 col-sm-12">
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <mat-form-field appearance="outline">
-                                <mat-label>ID Solicitud</mat-label>
-                                <!-- onFocus="this.value=''"  -->
-                                <input type="text" formControlName="idSolicitud" class="right-align" matInput/>
-                                <mat-error>
-
-                                </mat-error>
+                                <mat-label>Fecha de solicitud inicio</mat-label>
+                                <input matInput [matDatepicker]="pickerSolicitudInicio" formControlName="fechaInicio">
+                                <mat-datepicker-toggle matSuffix [for]="pickerSolicitudInicio"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerSolicitudInicio></mat-datepicker>
                             </mat-form-field>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <mat-form-field appearance="outline">
-                                <mat-label>ID Matriz</mat-label>
-                                <!-- onFocus="this.value=''" -->
-                                <input type="text" formControlName="idMatriz" class="right-align" matInput />
-                                <!-- <mat-error>
-                                    {{ errors.CodigoSAPQS }}
-                                </mat-error> -->
+                                <mat-label>Fecha de solicitud fin</mat-label>
+                                <input matInput [matDatepicker]="pickerSolicitudFin" formControlName="fechaFin">
+                                <mat-datepicker-toggle matSuffix [for]="pickerSolicitudFin"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerSolicitudFin></mat-datepicker>
                             </mat-form-field>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Área</mat-label>
-                                <!-- <input type="text" class="right-align" matInput onFocus="this.value=''" /> -->
-                                <mat-select formControlName="idArea">
-                                    <mat-option>Seleccione</mat-option>
-                                    <mat-option *ngFor="let item of areas" [value]="item.area">
-                                        {{item.area}}
-                                    </mat-option>
-                                    <!-- <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.EstPetBCP)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
-                                </mat-select>
-                                <!-- <input formControlName="PeriodoASS" matInput [matDatepicker]="fechaPeriodoASS" /> -->
-                                <!-- <mat-datepicker-toggle matSuffix [for]="fechaPeriodoASS"></mat-datepicker-toggle>
-                                <mat-datepicker #fechaPeriodoASS></mat-datepicker> -->
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Tipo motivo</mat-label>
-                                <!-- <input type="text" class="right-align" matInput onFocus="this.value=''" /> -->
-                                <mat-select formControlName="idTipoMotivo">
-                                    <mat-option>Seleccione</mat-option>
-                                    <mat-option *ngFor="let item of tipomotivos" [value]="item.idTipoMotivo">
-                                        {{item.tipoMotivo}}
-                                    </mat-option>
-                                    <!-- <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.EstPetBCP)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
-                                </mat-select>
-                                <!-- <mat-select formControlName="ServicioASS">
-                                    <mat-option [value]="-1">Seleccione</mat-option>
-                                    <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
-                                </mat-select> -->
-                                <mat-error>
-
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Solicitante</mat-label>
-                                <input type="text" formControlName="idSolicitante" class="right-align" matInput onFocus="this.value=''" />
-                                <!-- <mat-select formControlName="ServicioASS">
-                                    <mat-option [value]="-1">Seleccione</mat-option>
-                                    <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
-                                </mat-select> -->
-                                <mat-error>
-
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Estado</mat-label>
-                                <!-- <input type="text" class="right-align" matInput onFocus="this.value=''" /> -->
-                                <mat-select formControlName="idEstado">
-                                    <mat-option>Seleccione</mat-option>
-                                    <mat-option value="SA">SUPERVISOR ASIGNADO</mat-option>
-                                    <mat-option value="SN">SUPERVISOR NO ASIGNADO</mat-option>
-                                    <!-- <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.EstPetBCP)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option> -->
-                                </mat-select>
-                                <!-- <mat-select formControlName="ServicioASS">
-                                    <mat-option [value]="-1">Seleccione</mat-option>
-                                    <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
-                                </mat-select> -->
-                                <mat-error>
-
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Supervisor</mat-label>
-                                <input type="text" formControlName="supervisor" class="right-align" matInput/>
-                                <!-- <mat-select formControlName="ServicioASS">
-                                    <mat-option [value]="-1">Seleccione</mat-option>
-                                    <mat-option *ngFor="let desplegable of obtenerListaDesplegablesPorTipo(variables.ColumnasMaestroDesplegables.ServicioASS)" [value]="desplegable.Id">{{desplegable.Title}}</mat-option>
-                                </mat-select> -->
-                                <mat-error>
-
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <mat-form-field appearance="fill">
-                                <mat-label>Estados Matriz</mat-label>
-                                <mat-select formControlName="estadoMatriz" multiple>
-                                <!-- <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option> -->
-                                <mat-option [value]="'MC'">MC</mat-option>
-                                <mat-option [value]="'JS'">JS</mat-option>
-                                <mat-option [value]="'MO'">MO</mat-option>
-                                <mat-option [value]="'GA'">GA</mat-option>
-                                <mat-option [value]="'MA'">MA</mat-option>
-                                <mat-option [value]="'MP'">MP</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="row col-lg-12 col-md-126 col-sm-12">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Fecha de solicitud inicio</mat-label>
-                                    <input matInput [matDatepicker]="pickerSolicitudInicio" formControlName="fechaInicio">
-                                    <mat-datepicker-toggle matSuffix [for]="pickerSolicitudInicio"></mat-datepicker-toggle>
-                                    <mat-datepicker #pickerSolicitudInicio></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Fecha de solicitud fin</mat-label>
-                                    <input matInput [matDatepicker]="pickerSolicitudFin" formControlName="fechaFin">
-                                    <mat-datepicker-toggle matSuffix [for]="pickerSolicitudFin"></mat-datepicker-toggle>
-                                    <mat-datepicker #pickerSolicitudFin></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <button mat-raised-button color="primary">
-                                <mat-icon>search</mat-icon>
-                                Buscar
-                            </button>
                         </div>
                     </div>
-                </form>
-            </mat-expansion-panel>
-        </mat-accordion>
-        <mat-card class="col-xs-12">
-            <mat-toolbar class="row" color="primary">
-                <div class="mat-toolbar-tools font-white row col-xs-12">
-                    <div class="inline-buttons pull-left" flex>
-                        <h4>Solicitudes y Matriz</h4>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <button mat-raised-button color="primary">
+                            <mat-icon>search</mat-icon>
+                            Buscar
+                        </button>
                     </div>
-                    <!-- <div class="inline-buttons pull-right">
-                        <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="reload()">
-                            <mat-icon>refresh</mat-icon>
-                        </button>
-
-                        <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="openSidenavMenu()">
-                            <mat-icon>filter_list</mat-icon>
-                        </button>
-
-                        <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="irPaginaExterna('material-formulario-solicitud/-1', '', '')">
-                            <mat-icon>add</mat-icon>
-                        </button>
-
-                        <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="exportarExcel()">
-                            <mat-icon>cloud_download</mat-icon>
-                        </button>
-                    </div> -->
                 </div>
-            </mat-toolbar>
+            </form>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-card class="col-xs-12">
+        <mat-toolbar class="row" color="primary">
+            <div class="mat-toolbar-tools font-white row col-xs-12">
+                <div class="inline-buttons pull-left" flex>
+                    <h4>Solicitudes y Matriz</h4>
+                </div>
+                <!-- <div class="inline-buttons pull-right">
+                    <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="reload()">
+                        <mat-icon>refresh</mat-icon>
+                    </button>
 
+                    <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="openSidenavMenu()">
+                        <mat-icon>filter_list</mat-icon>
+                    </button>
 
-            <div>
-                <div class="example-container mat-elevation-z8">
-                    <div class="example-table-container">
-                        <table mat-table [dataSource]="dataSourceSolicitudesMatriz" class="mat-elevation-z8 table-custom tabla-projects" matSort matSortActive="Id" matSortDirection="desc">
-                            <ng-container matColumnDef="Solicitud">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Solicitud </th>
-                                <td mat-cell *matCellDef="let element"> {{element.id || "(Sin valor)"}} </td>
-                            </ng-container>
+                    <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="irPaginaExterna('material-formulario-solicitud/-1', '', '')">
+                        <mat-icon>add</mat-icon>
+                    </button>
 
-                            <ng-container matColumnDef="Matriz">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Matriz </th>
-                                <td mat-cell *matCellDef="let element"> {{element.idMatriz || "(Sin valor)"}} </td>
-                            </ng-container>
+                    <button type="button" mat-button class="mat-icon-button inline-buttons" (click)="exportarExcel()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </div> -->
+            </div>
+        </mat-toolbar>
+        <div>
+            <div class="example-container mat-elevation-z8">
+                <div class="example-table-container">
+                    <table mat-table [dataSource]="dataSourceSolicitudesMatriz" class="mat-elevation-z8 table-custom tabla-projects" matSort matSortActive="Id" matSortDirection="desc">
+                        <ng-container matColumnDef="Solicitud">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Solicitud </th>
+                            <td mat-cell *matCellDef="let element"> {{element.id || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Area">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Área </th>
-                                <td mat-cell *matCellDef="let element"> {{element.area || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Matriz">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Matriz </th>
+                            <td mat-cell *matCellDef="let element"> {{element.idMatriz || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Solicitante">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Solicitante </th>
-                                <td mat-cell *matCellDef="let element"> {{element.solicitante || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Area">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Área </th>
+                            <td mat-cell *matCellDef="let element"> {{element.area || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Supervisor">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Supervisor </th>
-                            <td mat-cell *matCellDef="let element"> {{element.supervisor || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Solicitante">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Solicitante </th>
+                            <td mat-cell *matCellDef="let element"> {{element.solicitante || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="TipoMotivo">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tipo Motivo</th>
-                                <td mat-cell *matCellDef="let element"> {{element.tipo || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Supervisor">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Supervisor </th>
+                        <td mat-cell *matCellDef="let element"> {{element.supervisor || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Motivo">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Motivo</th>
-                                <td mat-cell *matCellDef="let element"> {{element.motivo || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="TipoMotivo">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tipo Motivo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.tipo || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Estado">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Estado </th>
-                                <td mat-cell *matCellDef="let element"> {{element.descEstado || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Motivo">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Motivo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.motivo || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Visita">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Visita </th>
-                                <td mat-cell *matCellDef="let element"> {{element.visita || "(Sin valor)"}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Estado">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Estado </th>
+                            <td mat-cell *matCellDef="let element"> {{element.descEstado || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsProjects"></tr>
-                            <!-- [routerLink]="[Variables.path.bandejaSolicitudMateria, row.id]" -->
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsProjects;" [routerLink]="['/enviar-solicitud', row.id]"></tr>
-                        </table>
+                        <ng-container matColumnDef="Visita">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Visita </th>
+                            <td mat-cell *matCellDef="let element"> {{element.visita || "(Sin valor)"}} </td>
+                        </ng-container>
 
-                        <mat-paginator [pageSize]="resultsLength"></mat-paginator>
-                        <!-- <mat-paginator [length]="resultsLength" [pageSizeOptions]="[5, 25, 50, 100]"></mat-paginator> -->
-                        <!-- <button (click)="testGuardarSolMatriz()">TEST</button> -->
-                    </div>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsProjects"></tr>
+                        <!-- [routerLink]="[Variables.path.bandejaSolicitudMateria, row.id]" -->
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsProjects;" [routerLink]="['/enviar-solicitud', row.id]"></tr>
+                    </table>
 
-                    <div class="msg-filter-applied text-center" style="color:orange;height:35px;" *ngIf="isFilterApplied">
-                        <div class="mat-toolbar-tools row col-xs-12" style="height: auto; ">
-                            <button type="button" mat-button class="mat-icon-button inline-buttons" md-no-ink style="margin-top: -7px;">
-                                <mat-icon style="font-size:30px;">new_releases</mat-icon>
-                            </button>
-                            <div class="md-subhead inline-buttons" flex>
-                                &nbsp;<a target="_blank" (click)="openSidenavMenu()">La lista se encuentra filtrada.</a>
-                            </div>
+                    <mat-paginator [pageSize]="resultsLength"></mat-paginator>
+                    <!-- <mat-paginator [length]="resultsLength" [pageSizeOptions]="[5, 25, 50, 100]"></mat-paginator> -->
+                    <!-- <button (click)="testGuardarSolMatriz()">TEST</button> -->
+                </div>
+
+                <div class="msg-filter-applied text-center" style="color:orange;height:35px;" *ngIf="isFilterApplied">
+                    <div class="mat-toolbar-tools row col-xs-12" style="height: auto; ">
+                        <button type="button" mat-button class="mat-icon-button inline-buttons" md-no-ink style="margin-top: -7px;">
+                            <mat-icon style="font-size:30px;">new_releases</mat-icon>
+                        </button>
+                        <div class="md-subhead inline-buttons" flex>
+                            &nbsp;<a target="_blank" (click)="openSidenavMenu()">La lista se encuentra filtrada.</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </mat-card>
-
+        </div>
+    </mat-card>
 </div>
