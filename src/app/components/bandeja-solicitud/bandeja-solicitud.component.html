@@ -193,47 +193,47 @@
                     <table mat-table [dataSource]="dataSourceSolicitudesMatriz" class="mat-elevation-z8 table-custom tabla-projects" matSort matSortActive="Id" matSortDirection="desc">
                         <ng-container matColumnDef="Solicitud">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Solicitud </th>
-                            <td mat-cell *matCellDef="let element"> {{element.id || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.id || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Matriz">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Matriz </th>
-                            <td mat-cell *matCellDef="let element"> {{element.idMatriz || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.idMatriz || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Area">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Área </th>
-                            <td mat-cell *matCellDef="let element"> {{element.area || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.area || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Solicitante">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Solicitante </th>
-                            <td mat-cell *matCellDef="let element"> {{element.solicitante || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.solicitante || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Supervisor">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Supervisor </th>
-                        <td mat-cell *matCellDef="let element"> {{element.supervisor || "(Sin valor)"}} </td>
+                        <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.supervisor || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="TipoMotivo">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tipo Motivo</th>
-                            <td mat-cell *matCellDef="let element"> {{element.tipo || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.tipo || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Motivo">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Motivo</th>
-                            <td mat-cell *matCellDef="let element"> {{element.motivo || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.motivo || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Estado">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Estado </th>
-                            <td mat-cell *matCellDef="let element"> {{element.descEstado || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.descEstado || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Visita">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Visita </th>
-                            <td mat-cell *matCellDef="let element"> {{element.visita || "(Sin valor)"}} </td>
+                            <td mat-cell *matCellDef="let element" class="css_tam_col"> {{element.visita || "(Sin valor)"}} </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumnsProjects"></tr>
