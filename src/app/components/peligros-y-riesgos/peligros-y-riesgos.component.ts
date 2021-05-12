@@ -28,6 +28,8 @@ import { Matriz } from 'src/app/shared/models/fisics/Matriz';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
+import { AlertComponent } from '../alert/alert.component';
+import { Variables } from 'src/app/shared/variables';
 
 export type Operacion = {
   ejecucion: {(s: PeligroMatriz | ListaRiesgoMatriz | MCERiesgo | MCPRiesgo) : Promise<number> | number};
@@ -40,7 +42,7 @@ export type Operacion = {
   templateUrl: './peligros-y-riesgos.component.html',
   styleUrls: ['./peligros-y-riesgos.component.scss'],
 })
-export class PeligrosYRiesgosComponent implements OnInit {  
+export class PeligrosYRiesgosComponent implements OnInit {
   @ViewChild(MatTable) tblMCP: MatTable<MCPRiesgo>;
   @ViewChild(MatTable) tblMCE: MatTable<MCERiesgo>;
   private _matriz = new BehaviorSubject<Matriz>(null);
@@ -63,7 +65,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
   get usuario(){
     return this._usuario.getValue();
   }
-  
+
   puestos: Puesto[];
   actividades: MatrizActividad[];
   mces: MCERiesgo[];
@@ -153,7 +155,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
     this.listRiesgoDeleted = [];
     this.getPuestos();
   }
-  
+
   getPuestos(): void {
     this.puestoservice
       .obtenerMatrizPuestoTestByIdMatriz(this.matriz.id)
@@ -168,7 +170,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
     this.listPeligrosMatriz = [];
     this.listRiesgosMatriz = [];
     this.dataSourceMCE.data = [];
-    this.dataSourceMCP.data = []; 
+    this.dataSourceMCP.data = [];
   }
 
   changePeligro(value: PeligroMatriz): void {
@@ -188,7 +190,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
           // this.peligroService
           //   .obtenerMatrizPeligroByIdMatriz(this.matriz.id)
           //   .then((peligros) => {
-              // this.listPeligrosMatriz = peligros ? peligros : [];        
+              // this.listPeligrosMatriz = peligros ? peligros : [];
           this.listaOperaciones.forEach((element, index) => {
             if(element.nameop === "ADD" && element.parametro.constructor.name === "ListaRiesgoMatriz" && (<ListaRiesgoMatriz>element.parametro).idPeligro === this.peligroSelected.idPeligro){
               console.log(element);
@@ -256,7 +258,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
         newPeligroMatriz.usuarioRegistro = this.usuario.idUsuario;
         newPeligroMatriz.idPeligro = --this.contPeligroAdded;
         newPeligroMatriz.observacion = '';
-        
+
         this.listPeligrosMatriz.push(newPeligroMatriz);
         this.listaOperaciones.push({
           ejecucion: this.guardarPeligroToDB,
@@ -272,8 +274,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
         // console.log(result);
       });
     }
-  }  
-  
+  }
+
   eliminarPeligroFromList() {
     if(this.peligroFormControl.valid && this.listRiesgosMatriz.length === 0){
       this.listPeligrosMatriz.forEach((elem, index) => {
@@ -490,6 +492,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
   async guardarPeligrosAndRiesgos() {
     console.log(this.listaOperaciones)
     let data = 0;
+    let numElementosGuardados=0
     let index = 0;
     // this.listaOperaciones.forEach((element, index, arr) => {
     for ( const element of this.listaOperaciones ){
@@ -513,9 +516,16 @@ export class PeligrosYRiesgosComponent implements OnInit {
         }
       }
       console.log(data)
+      if(data>0){
+        numElementosGuardados++
+      }
       index++;
     }
     this.listaOperaciones = [];
+    if(numElementosGuardados>0){
+      this.showMessage("Éxito al guardar los peligros y riesgos")
+      this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
+    }
   }
 
   openSeleccionarActividad(): void {
@@ -539,7 +549,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
           this.peligroService
             .obtenerMatrizPeligroByIdMatriz(this.matriz.id)
             .then((peligros) => {
-              // this.listPeligrosMatriz = peligros ? peligros : [];        
+              // this.listPeligrosMatriz = peligros ? peligros : [];
               peligros = peligros ? peligros : [];
               peligros = peligros.filter(element => element.idActividad === this.actividades[0].idActividad);
               this.listaOperaciones.forEach((element, index) => {
@@ -566,7 +576,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
       });
     }
   }
-  
+
   private deletePeligroFromDB(peligro: PeligroMatriz){
     let data = this.peligroService.eliminarPeligro(peligro);
     if (data) {
@@ -583,7 +593,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
     }
     return Promise.reject(-1);
   }
-  
+
   private deleteRiesgoFromDB(riesgo: ListaRiesgoMatriz){
     let data = this.riesgoService.eliminarRiesgo(riesgo);
     if (data) {
@@ -600,7 +610,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
     }
     return Promise.reject(-1);
   }
-  
+
   private deleteMCEFromDB(mce: MCERiesgo){
     let data = this.riesgoService.eliminarMCERiesgo(mce);
     if (data) {
@@ -679,5 +689,12 @@ export class PeligrosYRiesgosComponent implements OnInit {
       return data;
     }
     return null;
+  }
+
+  showMessage(text: string) {
+    const alertRef = this.dialog.open(AlertComponent, {
+      width: '250px',
+      data: { mensaje: text },
+    });
   }
 }

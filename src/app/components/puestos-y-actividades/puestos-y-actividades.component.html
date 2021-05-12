@@ -9,14 +9,14 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="openAgregarPuesto()" *ngIf="((this.etapa === 3 || this.etapa === 4) && this.usuario.rol === 'JA') ? true : false">
+    <button mat-raised-button color="primary" (click)="openAgregarPuesto()" *ngIf="(this.etapasHabilitadas.includes(this.etapa) && this.usuario.rol === 'JA') ? true : false">
         <mat-icon>add</mat-icon>
     </button>
-    <button mat-raised-button color="primary" (click)="eliminarPuesto()" *ngIf="((this.etapa === 3 || this.etapa === 4) && this.usuario.rol === 'JA') ? true : false">
+    <button mat-raised-button color="primary" (click)="eliminarPuesto()" *ngIf="(this.etapasHabilitadas.includes(this.etapa) && this.usuario.rol === 'JA') ? true : false">
         <mat-icon>clear</mat-icon>
     </button>
 </div>
-    <button mat-raised-button color="primary" (click)="openAgregarActividad()" *ngIf="((this.etapa === 3 || this.etapa === 4) && this.usuario.rol === 'JA') ? true : false">
+    <button mat-raised-button color="primary" (click)="openAgregarActividad()" *ngIf="(this.etapasHabilitadas.includes(this.etapa) && this.usuario.rol === 'JA') ? true : false">
         Agregar Actividad
     </button>
 <div class="col-lg-12 col-md-12 col-sm-12 mat-form-field-wrapper full-width">
@@ -31,7 +31,7 @@
             <ng-container matColumnDef="eliminar">
             <th mat-header-cell *matHeaderCellDef> Eliminar </th>
             <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="warn" (click)="eliminarActividad(element)" *ngIf="((this.etapa === 3 || this.etapa === 4) && this.usuario.rol === 'JA') ? true : false">
+                <button mat-icon-button color="warn" (click)="eliminarActividad(element)" *ngIf="(this.etapasHabilitadas.includes(this.etapa) && this.usuario.rol === 'JA') ? true : false">
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>

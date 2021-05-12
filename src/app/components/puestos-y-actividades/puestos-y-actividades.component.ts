@@ -31,6 +31,8 @@ export type Operacion = {
 export class PuestosYActividadesComponent implements OnInit {
   @ViewChild(MatTable) tableActividades: MatTable<MatrizActividad>;
 
+  etapasHabilitadas:number[] = [3,4,5]
+
   private _matriz = new BehaviorSubject<Matriz>(null);
   @Input()
   set matriz(value){
