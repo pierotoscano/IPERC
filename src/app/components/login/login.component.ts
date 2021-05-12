@@ -8,7 +8,9 @@ import { UserService } from '../../shared/services/user.service';
 import { Variables } from 'src/app/shared/variables';
 import { Funciones } from 'src/app/shared/funciones';
 
-// // import { LoginAcceso } from '../../shared/models/fisics/LoginAcceso';
+import { sp } from '@pnp/sp';
+import '@pnp/sp/webs';
+import '@pnp/sp/site-users/web';
 
 export interface User {
   name: string;
@@ -53,7 +55,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(): void {
+  async login() {
     this.usuario.Usuario = this.user.get('username').value;
     this.usuario.Key = this.user.get('password').value;
     this.usuario.Id_Usuario = 'xternal';
@@ -61,26 +63,24 @@ export class LoginComponent implements OnInit {
     this.usuario.UsuarioRegistro = this.usuario.Usuario;
     this.usuario.UsuarioModifica = this.usuario.Usuario;
 
-    this.loginService.obtenerLogin(this.usuario).then((logins) => {
-      const resp = <number>logins > -1 ? <number>logins : -1;
-      // resp === 0 || resp === 1
-      if (resp === 1) {
-        this.noRegisteredUser = false;
-        this.userService.obtenerUsuario(this.usuario.Usuario).then((usuarios) => {
-          if (usuarios) {
-            let element = usuarios.find(
-              (element) => element.email === this.usuario.Usuario
-            );
-            if (element !== undefined) {
-              this.loginService.setUserLogged(element);
-              sessionStorage.setItem("usuarioLogged",JSON.stringify(element));
-              this.router.navigate([Variables.path.home]);
-            }
+    let user = await sp.web.currentUser();
+
+    if (user) {
+      this.noRegisteredUser = false;
+      this.userService.obtenerUsuario(this.usuario.Usuario).then((usuarios) => {
+        if (usuarios) {
+          let element = usuarios.find(
+            (element) => element.email === this.usuario.Usuario
+          );
+          if (element !== undefined) {
+            this.loginService.setUserLogged(element);
+            sessionStorage.setItem('usuarioLogged', JSON.stringify(element));
+            this.router.navigate([Variables.path.home]);
           }
-        });
-      } else {
-        this.noRegisteredUser = true;
-      }
-    });
+        }
+      });
+    } else {
+      this.noRegisteredUser = true;
+    }
   }
 }

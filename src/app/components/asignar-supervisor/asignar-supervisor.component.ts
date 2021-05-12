@@ -176,6 +176,8 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
               this.route.navigate([Variables.path.bandejaSolicitudMaterial]);
             }
           }
+        } else {
+          this.showMessage('Error al asignar supervisor y generar matriz');
         }
       } catch {
         this.showMessage('Ocurrió un error durante la grabación.');

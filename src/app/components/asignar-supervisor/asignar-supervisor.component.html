@@ -15,14 +15,14 @@
   <div class="col-lg-6 col-md-6 col-sm-6">
     <mat-form-field appearance="outline">
       <mat-label>Supervisor</mat-label>
-      <mat-select formControlName="supervisor" [errorStateMatcher]="matcher" [disabled]="(matriz || this.maestroFlujoEtapaActual.Id !== 1 || this.usuario.rol !== 'JS') ? true : false">
+      <mat-select formControlName="supervisor" [errorStateMatcher]="matcher" [disabled]="(matriz || this.maestroFlujoEtapaActual.Id !== 2 || this.usuario.rol !== 'JS') ? true : false">
         <mat-option *ngFor="let supervisor of listSupervisores" [value]="supervisor.idUsuario">
           {{supervisor.usuario}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
   <div>
-    <button type="submit" mat-raised-button color="primary" style="float: right; margin: 3px;" [disabled]="(matriz || this.maestroFlujoEtapaActual.Id !== 1 || this.usuario.rol !== 'JS') ? true : false">
+    <button type="submit" mat-raised-button color="primary" style="float: right; margin: 3px;" [disabled]="(matriz || this.maestroFlujoEtapaActual.Id !== 2 || this.usuario.rol !== 'JS') ? true : false">
       <mat-icon>save</mat-icon>
       <span>Guardar</span>
     </button>

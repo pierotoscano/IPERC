@@ -235,7 +235,9 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 this.solicitudMatrizSelected.motivo
               );
               this.setCombosValue();
-              this.maestroFlujoEtapaActual.Id = parseInt(this.solicitudMatrizSelected.etapa.slice(-1));
+              this.maestroFlujoEtapaActual.Id = parseInt(
+                this.solicitudMatrizSelected.etapa.slice(-1)
+              );
 
               // if(solicitudMatriz.estado === "SN"){
               //   this.maestroFlujoEtapaActual.Id = 2;
@@ -250,13 +252,10 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
           if (this.solicitudMatrizSelected.idMatriz) {
             //Obtener la matriz
             console.log('Existe matriz');
-            this.matrizservice.obtenerMatriz().then((matrices) => {
+            this.matrizservice.obtenerMatriz(this.solicitudMatrizSelected.idMatriz).then((matrices) => {
               let listMatrices = matrices ? matrices : [];
 
-              this.matrizSelected = listMatrices.find(
-                (m) => m.id == this.solicitudMatrizSelected.idMatriz
-              );
-              console.log(this.matrizSelected);
+              this.matrizSelected = listMatrices[0];
               // if(this.matrizSelected.estado === "MC" && this.matrizSelected.idSupervisor !== ""){
               //   this.maestroFlujoEtapaActual.Id = 3;
               // }
@@ -523,30 +522,31 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     solicitudMatriz.usuarioRegistro = usuarioRegistro;
 
     try {
-      let dataResultSave = await this.solicitudMatrizService.guardarSolicitudMatriz(
-        solicitudMatriz
-      );
-      if (dataResultSave) {
-        switch (dataResultSave) {
-          case 0:
+      let dataResultSave =
+        await this.solicitudMatrizService.guardarSolicitudMatriz(
+          solicitudMatriz
+        );
+
+      switch (dataResultSave) {
+        case 0:
+          this.showMessage(
+            'Ya existe una solicitud y matriz en proceso para el area seleccionada.'
+          );
+          break;
+        case 2:
+          this.showMessage(
+            'Ya existe una solicitud en proceso para el area seleccionada.'
+          );
+          break;
+        default:
+          const resultNotificarSolicitudMatrizSP =
+            await this.notificarSolicitudMatrizSP();
+          if (resultNotificarSolicitudMatrizSP) {
             this.showMessage(
-              'Ya existe una solicitud y matriz en proceso para el area seleccionada.'
+              'Éxito al registrar la solicitud: ' + dataResultSave
             );
-            break;
-          case 2:
-            this.showMessage(
-              'Ya existe una solicitud en proceso para el area seleccionada.'
-            );
-            break;
-          default:
-            const resultNotificarSolicitudMatrizSP = await this.notificarSolicitudMatrizSP();
-            if (resultNotificarSolicitudMatrizSP) {
-              this.showMessage(
-                'Éxito al registrar la solicitud: ' + dataResultSave
-              );
-              this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
-            }
-        }
+            this.router.navigate([Variables.path.bandejaSolicitudMaterial]);
+          }
       }
     } catch {
       this.showMessage('Ocurrió un error durante la grabación.');
@@ -574,7 +574,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
     this.usuarioLogged.key = usuarioFromSession._key;
     this.usuarioLogged.nombres = usuarioFromSession._nombres;
-    this.usuarioLogged.rol = "JA";//usuarioFromSession._rol;
+    this.usuarioLogged.rol = usuarioFromSession._rol; //usuarioFromSession._rol;
     this.usuarioLogged.selected = usuarioFromSession._selected;
     this.usuarioLogged.tipo = usuarioFromSession._tipo;
     this.usuarioLogged.usuario = usuarioFromSession._usuario;
