@@ -5,15 +5,15 @@
 
     <div *ngFor="let etapa of datosMaestros.maestroFLujoEtapa; let i = index;">
       <div class="w-92" [ngClass]="{
-                            'border-green bg-green': etapa.EtapaHabilitado && (etapa.Id < maestroFlujoEtapaActual.Id || maestroFlujoEtapaActual.Id === 6),
-                            'border-yellow bg-yellow': etapa.EtapaHabilitado && (etapa.Id === maestroFlujoEtapaActual.Id && maestroFlujoEtapaActual.Id !== 6),
+                            'border-grey bg-grey': etapa.EtapaHabilitado && (etapa.Id < maestroFlujoEtapaActual.Id || maestroFlujoEtapaActual.Id === 6),
+                            'border-green bg-green': etapa.EtapaHabilitado && (etapa.Id === maestroFlujoEtapaActual.Id && maestroFlujoEtapaActual.Id !== 6),
                             'border-blue bg-blue': etapa.EtapaHabilitado && (etapa.Id > maestroFlujoEtapaActual.Id && maestroFlujoEtapaActual.Id !== 6),
                             'border-lead bg-lead': !etapa.EtapaHabilitado
                         }">
         <div class="row m-0 p-0">
           <div class="width-10 float-left fs-1 pt-10 pb-10" [ngClass]="{
-                                    'bg-green': etapa.EtapaHabilitado && (etapa.Id < maestroFlujoEtapaActual.Id || maestroFlujoEtapaActual.Id === 6),
-                                    'bg-yellow': etapa.EtapaHabilitado && (etapa.Id === maestroFlujoEtapaActual.Id && maestroFlujoEtapaActual.Id !== 6),
+                                    'bg-grey': etapa.EtapaHabilitado && (etapa.Id < maestroFlujoEtapaActual.Id || maestroFlujoEtapaActual.Id === 6),
+                                    'bg-green': etapa.EtapaHabilitado && (etapa.Id === maestroFlujoEtapaActual.Id && maestroFlujoEtapaActual.Id !== 6),
                                     'bg-blue': etapa.EtapaHabilitado && (etapa.Id > maestroFlujoEtapaActual.Id && maestroFlujoEtapaActual.Id !== 6),
                                     'bg-lead': !etapa.EtapaHabilitado
                                 }">
@@ -154,7 +154,7 @@
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <button type="submit" mat-raised-button color="primary" [disabled]="(this.maestroFlujoEtapaActual.Id !== 1 || this.usuarioLogged.rol !== 'JA') ? true : false">
+                  <button type="submit" mat-raised-button color="primary" disabled="(this.maestroFlujoEtapaActual.Id !== 1 || this.usuarioLogged.rol !== 'JA') ? true : false">
                     <mat-icon>save</mat-icon>
                     Guardar
                   </button>

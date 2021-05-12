@@ -24,7 +24,7 @@
                                 </div>
                             </mat-card-content>
                             <mat-card-actions layout="row" align="start">
-                                <div *ngIf="card.footer==='PENDIENTES'" class="row m-0 p-0">
+                                <div *ngIf="card.footer==='PENDIENTES' && usuarioLogged.rol==='JA'" class="row m-0 p-0">
                                     <div class="col-md-12 m-0 p-0">
                                         <button type="button" class="fs-12 m-0 p-0 text-left" [routerLink]="['/enviar-solicitud']" mat-button aria-label="Go">
                                             <mat-icon>add</mat-icon>

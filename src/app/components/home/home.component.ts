@@ -47,6 +47,7 @@ import { IndicadoresService } from '../../shared/services/indicadores.service';
 import { Observable } from 'rxjs';
 import { LoginService } from 'src/app/shared/services/login.service';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
+import { Console } from 'console';
 
 // import { AccesoService } from '../../shared/services/user.service';
 // import { Puesto } from '../../shared/models/fisics/Puesto';
@@ -60,13 +61,11 @@ declare var $: any;
   animations: [slideInAnimation], // register the animation
 })
 export class HomeComponent extends FormularioAT implements OnInit {
-
-
-  
   @ViewChild('sidenav') sidenav: MatSidenav;
-
-
   dataSourceIndicadoresMatriz: any[] = [];
+  nuevaSolicitud: boolean = true;
+  // loggedUser: Usuario;
+  usuarioLogged: Usuario;
   cards: any[] = [
     {
       contador: 7,
@@ -203,8 +202,6 @@ export class HomeComponent extends FormularioAT implements OnInit {
   // solicitudesEnPendientes: number;
   // solicitudesCerradas: number;
   // solicitudesVencidas: number;
-  nuevaSolicitud: boolean = true;
-  loggedUser: Usuario;
 
   // barChartOptions: ChartOptions = {
   //   responsive: true,
@@ -295,17 +292,19 @@ export class HomeComponent extends FormularioAT implements OnInit {
   ) {
     super('Home', applicationRef, dialog, route, router, masterService, zone, _spinner);
     // console.log(JSON.stringify(this.loginService.getUserLogged()));
-    this.loggedUser = this.loginService.getUserLogged();
+    // this.loggedUser = this.loginService.getUserLogged();
+    this.getUserLogged()
     // this.esMiembroId = false;
     // this.formControlAnnio = new FormControl(0);
     // this.getScreenSize();
     this.getDashboardData();
+    console.log(this.usuarioLogged)
   }
 
   getDashboardData(): void{
     this.indicadoresService
-      // .obtenerDashboardData("xternal", this.loggedUser.rol)
-      .obtenerDashboardData("xternal", "JS")
+      .obtenerDashboardData(this.usuarioLogged.idUsuario, this.usuarioLogged.rol)
+      // .obtenerDashboardData("xternal", "JS")
       .then((listSolicitudesMatriz) => {
         this.dataSourceIndicadoresMatriz = listSolicitudesMatriz
           ? listSolicitudesMatriz
@@ -319,9 +318,32 @@ export class HomeComponent extends FormularioAT implements OnInit {
           }
         )
       }).finally(() => this._spinner.hide());
-
   }
 
+  getUserLogged() {
+    let usuarioFromSession = JSON.parse(
+      sessionStorage.getItem('usuarioLogged')
+    );
+    this.usuarioLogged = new Usuario();
+    this.usuarioLogged.apellidoMaterno = usuarioFromSession._apellidoMaterno;
+    this.usuarioLogged.apellidoMaterno = usuarioFromSession._apellidoMaterno;
+    this.usuarioLogged.apellidoPaterno = usuarioFromSession._apellidoPaterno;
+    this.usuarioLogged.email = usuarioFromSession._email;
+    this.usuarioLogged.estado = usuarioFromSession._estado;
+    this.usuarioLogged.fechaModifica = usuarioFromSession._fechaModifica;
+    this.usuarioLogged.fechaRegistro = usuarioFromSession._fechaRegistro;
+    this.usuarioLogged.idLogin = usuarioFromSession._idLogin;
+    this.usuarioLogged.idUbicacion = usuarioFromSession._idUbicacion;
+    this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
+    this.usuarioLogged.key = usuarioFromSession._key;
+    this.usuarioLogged.nombres = usuarioFromSession._nombres;
+    this.usuarioLogged.rol = usuarioFromSession._rol;
+    this.usuarioLogged.selected = usuarioFromSession._selected;
+    this.usuarioLogged.tipo = usuarioFromSession._tipo;
+    this.usuarioLogged.usuario = usuarioFromSession._usuario;
+    this.usuarioLogged.usuarioModifica = usuarioFromSession._usuarioModifica;
+    this.usuarioLogged.usuarioRegistro = usuarioFromSession._usuarioRegistro;
+  }
 
   // @HostListener('window:resize', ['$event'])
   // getScreenSize(event?): void {
