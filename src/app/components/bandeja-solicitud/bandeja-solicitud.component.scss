@@ -12,6 +12,21 @@
 /* @media screen and (max-width: 920px) {
 
 } */
+
+
+table {
+    width: 100%;
+    overflow-x: auto;
+    
+    margin-bottom: 0px !important;
+}
+.css_tam_col{
+    font-size: 12px;
+    color: rgb(56, 56, 56);
+}
+
+
+
 @media (max-width: 992px){
     .fechaIni{
         padding-right: 0px;
@@ -19,51 +34,40 @@
     .fechaFin{
         padding-left: 0px;
     }
-}
-
-table {
-    width: 100%;
-}
-.css_tam_col{
-    font-size: 12px;
-    color: rgb(56, 56, 56);
-}
-
-.mat-table {
-    overflow-x: scroll;
-  }
-
-.mat-cell,
-.mat-header-cell {
-  word-wrap: initial;
-  display: table-cell;
-  padding: 0px 10px;
-  line-break: unset;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  vertical-align: middle;
-}
-.mat-row,
-.mat-header-row {
-  display: table-row;
-}
-.mat-card {
-    min-width: 100% !important;
-    max-width: 100% !important;
-}
-.table {
-  display: block !important;
-  margin-bottom: 0px !important;
+    .table {
+        display: block !important;
+      } 
+      .mat-table {
+        overflow-x: auto;
+    }
+     .mat-cell,
+    .mat-header-cell {
+      word-wrap: initial;
+      display: table-cell;
+      padding: 0px 10px;
+      line-break: unset;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: middle;
+    } 
+    
+    
+     .mat-row,
+    .mat-header-row {
+      display: table-row;
+    }
+    .mat-card {
+        min-width: 100% !important;
+        max-width: 100% !important;
+    } 
 }
 
 
 /**************/
-p {
-    font-family: Lato;
-  }
+
   
-  
+ /* 
   .data {
       display: block;
       width: 95vw;
@@ -80,14 +84,14 @@ p {
           background-color: rgb(238, 238, 238);
       }
     
-      .row,
-      .header-row {
+      .mat-row,
+      .mat-header-row {
           display: table-row;
           min-height: 36px !important;
       }
   
-      .cell,
-      .header-cell {
+      .mat-cell,
+      .mat-header-cell {
           word-wrap: initial;
           display: table-cell;
           padding: 0px 5px;
@@ -99,8 +103,8 @@ p {
           text-align: center;
       }
   
-      .header-row,
-      .header-cell {
+      .mat-header-row,
+      .mat-header-cell {
           margin: 0 auto;
           min-height: 100px !important;
           text-align: center;
@@ -108,7 +112,7 @@ p {
           align-self: center;
       }
   
-      .sort-header {
+      .mat-sort-header {
           display: flex;
           align-content: center;
           text-align: center;
@@ -116,13 +120,13 @@ p {
           font-size: 12pt;
       }
   
-      .header-cell {
+      .mat-header-cell {
           font-weight: bold;
       }
   }
   
   .mat-card {
-      min-width: max-content;
-      max-width: max-content;
-  }
+      min-width: 100%;
+      max-width: 100%;
+  }  */
   
