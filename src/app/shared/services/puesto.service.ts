@@ -139,19 +139,19 @@ export class PuestoService {
       FechaModifica: Funciones.dateFormatMMDDYY(puesto.fechaModifica),
     };
 
-    let request = fetch(Variables.ipercApis.GuardarPuesto, {
+    let request = await fetch(Variables.ipercApis.GuardarPuesto, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    }).then((resp) => resp.json());
-
-    let response = await request
+    }).then((resp) => resp.json())
       .then((resp) => resp.data as number)
       .catch((error) => {
         console.error('Error found: ' + error);
-      });
+      });;
+
+    let response = request;
 
     return response;
   }

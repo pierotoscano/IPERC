@@ -103,9 +103,9 @@ export class PeligroService {
     return responseData;
   }
 
-  public async guardarPeligroMatriz(peligroMatriz: PeligroMatriz) {
+  public guardarPeligroMatriz(peligroMatriz: PeligroMatriz) {
     const body: PeligroMatrizBody = {
-      Id_Matriz_Peligro: peligroMatriz.idPeligro,
+      Id_Matriz_Peligro: (peligroMatriz.idPeligro <= 0 ? 0 : peligroMatriz.idPeligro),
       Id_Matriz: peligroMatriz.idMatriz,
       Id_Area: peligroMatriz.idArea,
       Id_Actividad: peligroMatriz.idActividad,
@@ -121,38 +121,38 @@ export class PeligroService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    }).then((resp) => resp.json());
-
-    let response = await request
+    }).then((resp) => resp.json())
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
-      });
+      });;
 
+    let response = request
     return response;
   }
 
-  public async eliminarPeligro(peligro: PeligroMatriz): Promise<any | void> {
+  public eliminarPeligro(peligro: PeligroMatriz): Promise<any | void> {
     const body = {
       Id_Matriz: peligro.idMatriz,
       Id_Actividad: peligro.idActividad,
       Id_Peligro: peligro.idPeligro,
       UsuarioRegistro: peligro.usuarioRegistro,
-      FechaRegistro: Funciones.dateFormatMMDDYY(peligro.fechaRegistro),
+      FechaRegistro: Funciones.dateFormatMMDDYY(new Date(peligro.fechaRegistro)),
     };
     let request = fetch(Variables.ipercApis.EliminarPeligro, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
-    }).then((resp) => resp.json());
-
-    let response = await request
+      body: JSON.stringify(body)
+    }).then((resp) => resp.json())
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
+
+    let response = request
+      ;
     return response;
   }
 }

@@ -204,9 +204,9 @@ export class RiesgoService {
         let listMCERiesgo: MCERiesgo[] = [];
         data.forEach((item) => {
           const idRiesgoMCE: number = item['Id_Riesgo_MCE'];
-          const idMatrizRiesgo: string = item['Id_Matriz_Riesgo'];
+          const idMatrizRiesgo: number = item['Id_Matriz_Riesgo'];
           const idMatriz: string = item['Id_Matriz'];
-          const idRiesgo: string = item['Id_Riesgo'];
+          const idRiesgo: number = item['Id_Riesgo'];
           const idMCE: number = item['Id_MCE'];
           const idArea: number = item['Id_Area'];
           const idTipo: string = item['Id_Tipo'];
@@ -270,9 +270,9 @@ export class RiesgoService {
         let listMCPRiesgo: MCPRiesgo[] = [];
         data.forEach((item) => {
           const idRiesgoMCP: number = item['Id_Riesgo_MCP'];
-          const idMatrizRiesgo: string = item['Id_Matriz_Riesgo'];
+          const idMatrizRiesgo: number = item['Id_Matriz_Riesgo'];
           const idMatriz: string = item['Id_Matriz'];
-          const idRiesgo: string = item['Id_Riesgo'];
+          const idRiesgo: number = item['Id_Riesgo'];
           const idMCP: number = item['Id_MCP'];
           const idArea: number = item['Id_Area'];
           const idTipo: string = item['Id_Tipo'];
@@ -320,7 +320,7 @@ export class RiesgoService {
     return responseData;
   }
 
-  public async guardarRiesgoMatriz(
+  public guardarRiesgoMatriz(
     listaRiesgoMatriz: ListaRiesgoMatriz
   ): Promise<any | void> {
     const body: RiesgoMatrizBody = {
@@ -357,34 +357,32 @@ export class RiesgoService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    }).then((resp) => resp.json());
-
-    let response = await request
+    })
+    .then((resp) => resp.json());
+    let response = request
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
-
     return response;
   }
 
-  public async guardarMCERiesgo(mceRiesgo: MCERiesgo): Promise<any | void> {
+  public guardarMCERiesgo(mceRiesgo: MCERiesgo): Promise<any | void> {
     const body: MCERiesgoBody = {
-      Id_Riesgo_MCE: mceRiesgo.idMCE,
-      Id_Matriz_Riesgo: mceRiesgo.idMatrizRiesgo,
-      Id_Area: mceRiesgo.idArea,
+      Id_Riesgo_MCE: `${mceRiesgo.idMCE}`,
+      Id_Matriz_Riesgo: `${mceRiesgo.idMatrizRiesgo}`,
+      Id_Area: `${mceRiesgo.idArea}`,
       MC: mceRiesgo.mC,
       Id_Tipo: mceRiesgo.idTipo,
-      Id_Responsable: mceRiesgo.idResponsable,
+      Id_Responsable: `${mceRiesgo.idResponsable}`,
       Estado: mceRiesgo.estado,
       Observacion: mceRiesgo.observacion,
-      Id_Riesgo: mceRiesgo.idRiesgo,
+      Id_Riesgo: `${mceRiesgo.idRiesgo}`,
       UsuarioRegistro: mceRiesgo.usuarioRegistro,
       FechaRegistro: Funciones.dateFormatMMDDYY(mceRiesgo.fechaRegistro),
       UsuarioModifica: mceRiesgo.usuarioModifica,
       FechaModifica: Funciones.dateFormatMMDDYY(mceRiesgo.fechaModifica),
     };
-
     let request = fetch(Variables.ipercApis.GuardarMCERiesgo, {
       method: 'POST',
       headers: {
@@ -392,25 +390,23 @@ export class RiesgoService {
       },
       body: JSON.stringify(body),
     }).then((resp) => resp.json());
-
-    let response = await request
+    let response = request
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
-
     return response;
   }
 
-  public async guardarMCPRiesgo(mcpRiesgo: MCPRiesgo): Promise<any | void> {
+  public guardarMCPRiesgo(mcpRiesgo: MCPRiesgo): Promise<any | void> {
     const body: MCPRiesgoBody = {
-      Id_Riesgo_MCP: mcpRiesgo.idRiesgoMCP,
-      Id_Matriz_Riesgo: mcpRiesgo.idMatriz,
-      Id_Area: mcpRiesgo.idArea,
-      Id_Riesgo: mcpRiesgo.idRiesgo,
+      Id_Riesgo_MCP: `${mcpRiesgo.idMCP}`,
+      Id_Matriz_Riesgo: `${mcpRiesgo.idMatrizRiesgo}`,
+      Id_Area: `${mcpRiesgo.idArea}`,
+      Id_Riesgo: `${mcpRiesgo.idRiesgo}`,
       MC: mcpRiesgo.mC,
       Id_Tipo: mcpRiesgo.idTipo,
-      Id_Responsable: mcpRiesgo.idResponsable,
+      Id_Responsable: `${mcpRiesgo.idResponsable}`,
       Estado: mcpRiesgo.estado,
       Observacion: mcpRiesgo.observacion,
       UsuarioRegistro: mcpRiesgo.usuarioRegistro,
@@ -418,7 +414,6 @@ export class RiesgoService {
       UsuarioModifica: mcpRiesgo.usuarioModifica,
       FechaModifica: Funciones.dateFormatMMDDYY(mcpRiesgo.fechaModifica),
     };
-
     let request = fetch(Variables.ipercApis.GuardarMCPRiesgo, {
       method: 'POST',
       headers: {
@@ -426,17 +421,15 @@ export class RiesgoService {
       },
       body: JSON.stringify(body),
     }).then((resp) => resp.json());
-
-    let response = await request
+    let response = request
       .then((resp) => resp.response)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
-
     return response;
   }
 
-  public async eliminarMCERiesgo(mceRiesgo: MCERiesgo): Promise<any | void> {
+  public eliminarMCERiesgo(mceRiesgo: MCERiesgo): Promise<any | void> {
     const body = {
       // Id_Riesgo_MCE: mceRiesgo.idRiesgoMCE,
       Id_MCE: mceRiesgo.idMCE,
@@ -461,17 +454,15 @@ export class RiesgoService {
       },
       body: JSON.stringify(body),
     }).then((resp) => resp.json());
-
-    let response = await request
+    let response = request
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
-
     return response;
   }
   
-  public async eliminarMCPRiesgo(mceRiesgo: MCPRiesgo): Promise<any | void> {
+  public eliminarMCPRiesgo(mceRiesgo: MCPRiesgo): Promise<any | void> {
     const body = {
       // Id_Riesgo_MCE: mceRiesgo.idRiesgoMCP,
       Id_MCP: mceRiesgo.idMCP,
@@ -496,21 +487,19 @@ export class RiesgoService {
       },
       body: JSON.stringify(body),
     }).then((resp) => resp.json());
-
-    let response = await request
+    let response = request
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
-
     return response;
   }
 
-  public async eliminarRiesgo(riesgo: ListaRiesgoMatriz): Promise<any | void> {
+  public eliminarRiesgo(riesgo: ListaRiesgoMatriz): Promise<any | void> {
     const body = {
       Id_Matriz_Riesgo: riesgo.idRiesgo,
       UsuarioRegistro: riesgo.usuarioRegistro,
-      FechaRegistro: Funciones.dateFormatMMDDYY(riesgo.fechaRegistro),
+      FechaRegistro: Funciones.dateFormatMMDDYY(new Date(riesgo.fechaRegistro)),
     };
 
     let request = fetch(Variables.ipercApis.EliminarRiesgo, {
@@ -520,13 +509,11 @@ export class RiesgoService {
       },
       body: JSON.stringify(body),
     }).then((resp) => resp.json());
-
-    let response = await request
+    let response = request
       .then((resp) => resp.data)
       .catch((error) => {
         console.error('Error found: ' + error);
       });
     return response;
-
   }
 }

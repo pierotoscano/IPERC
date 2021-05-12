@@ -156,10 +156,12 @@ export class MatrizService {
     return responseData;
   }
 
-  public async obtenerMatriz(idMatriz?: string): Promise<Matriz[] | void> {
-    let url = `${Variables.ipercApis.ObtenerMatriz}?Id_Matriz=${idMatriz? idMatriz : 'X'}&PAGE=0&ROWS=0`;
-
-    let request = fetch(url)
+  public async obtenerMatriz(idMatriz: string = "0"): Promise<Matriz[] | void> {
+    let params = "";
+    if(idMatriz){
+      params = `?Id_Matriz=${idMatriz}&PAGE=0&ROWS=0`
+    }
+    let request = fetch(`${Variables.ipercApis.ObtenerMatriz}${params}`)
       .then((resp) => resp.json())
       .then((resp) => resp.data as any[]);
 

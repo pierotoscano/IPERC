@@ -328,6 +328,10 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
               return ((e.estadoMatriz === "MC") || (e.estadoMatriz === "JS"));
             } else if (this.estadoSolicitudMatriz === 10){
               return ((e.estadoMatriz === "MO") || (e.estadoMatriz === "GA"));
+            } else if (this.estadoSolicitudMatriz === 11){
+              return (e.estadoMatriz === "MA");
+            } else if (this.estadoSolicitudMatriz === 12){
+              return (e.estadoMatriz === "MP");
             }
         })
       })

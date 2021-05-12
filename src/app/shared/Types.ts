@@ -93,13 +93,13 @@ export type ListaMatrizBody = {
 };
 
 export type MCERiesgoBody = {
-  Id_Riesgo_MCE: number;
+  Id_Riesgo_MCE: string;
   Id_Matriz_Riesgo: string;
-  Id_Area: number;
+  Id_Area: string;
   Id_Riesgo: string;
   MC: string;
   Id_Tipo: string;
-  Id_Responsable: number;
+  Id_Responsable: string;
   Estado: string;
   Observacion: string;
   UsuarioRegistro: string;
@@ -170,13 +170,13 @@ export type ParticipanteBody = {
 };
 
 export type MCPRiesgoBody = {
-  Id_Riesgo_MCP: number;
+  Id_Riesgo_MCP: string;
   Id_Matriz_Riesgo: string;
-  Id_Area: number;
+  Id_Area: string;
   Id_Riesgo: string;
   MC: string;
   Id_Tipo: string;
-  Id_Responsable: number;
+  Id_Responsable: string;
   Estado: string;
   Observacion: string;
   UsuarioRegistro: string;

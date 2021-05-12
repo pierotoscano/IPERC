@@ -64,7 +64,7 @@ export class PuestosYActividadesComponent implements OnInit {
 
   puestoNombre: string;
   idArea: number;
-  // matrizId: string = "21000002";
+  // matrizId: string = "21000023";
   // puestoSelected: Puesto = null;
 
   actividadesColumnas: string[] = [
@@ -92,25 +92,16 @@ export class PuestosYActividadesComponent implements OnInit {
           this.getPuestos();
         }
       })
-
-    // this._etapa
-    //   .subscribe(x => {
-    //     if(x !== undefined){
-    //       this.getPuestos();
-    //     }
-    //   })
   }
 
   getPuestos(): void {
-    // if (this.matriz !== undefined){
-      this.puestoservice
-        .obtenerMatrizPuestoTestByIdMatriz(this.matriz.id)
-        // .obtenerMatrizPuestoTestByIdMatriz(this.matrizId)
-        .then((puestos) => {
-          let puestosAux = puestos ? puestos : [];
-          this.puestos = puestosAux.filter( elem => elem.idArea === this.matriz.idArea)
-        });
-    // }
+    this.puestoservice
+      .obtenerMatrizPuestoTestByIdMatriz(this.matriz.id)
+      // .obtenerMatrizPuestoTestByIdMatriz(this.matrizId)
+      .then((puestos) => {
+        let puestosAux = puestos ? puestos : [];
+        this.puestos = puestosAux.filter( elem => elem.idArea === this.matriz.idArea)
+      });
   }
 
   // userName: string = 'xternal'
@@ -147,7 +138,6 @@ export class PuestosYActividadesComponent implements OnInit {
 
   listaOperaciones: Operacion[] = [];
 
-  // listDeletedPuestos: Puesto[] = [];
   public eliminarPuesto() {
     if(this.puertoForm.valid && this.actividades.length === 0){
       this.puestos.forEach((elem, index) => {
@@ -175,7 +165,6 @@ export class PuestosYActividadesComponent implements OnInit {
   }
 
   contPuestoAdded: number = 0;
-  // puestosAdded: Puesto[] = [];
   openAgregarPuesto(): void {
     const dialogConfig = new MatDialogConfig();
     let novoPuesto = new Puesto();
@@ -201,19 +190,6 @@ export class PuestosYActividadesComponent implements OnInit {
     });
   }
 
-/*
-  private deletePuestoFromDB(){
-    this.listDeletedPuestos.forEach(async element => {
-      if(element.idPuesto !== 0){
-        let data = await this.puestoservice.eliminarPuesto(element);
-      }      
-      // if (data && data > 0) {
-      //   return data;
-      // }
-      // return null;
-    });
-  }*/
-
   private async deletePuestoFromDB(puesto: Puesto){
     let data = await this.puestoservice.eliminarPuesto(puesto);
     if (data && data > 0) {
@@ -230,13 +206,6 @@ export class PuestosYActividadesComponent implements OnInit {
       return data;
     }
     return null;
-    // let resp = null;
-    // this.puestos.forEach((elem, i) => {
-    //   if(elem.idPuesto === 0){
-    //     resp = this.puestoservice.guardarPuesto(elem);
-    //   }
-    // })
-    // return resp;
   }
 
   contActividadAdded: number = 0;
@@ -308,7 +277,6 @@ export class PuestosYActividadesComponent implements OnInit {
   };
 
   public async guardarActividadToDB(actividad: MatrizActividad){
-    // let data = await this.puestoservice.guardarPuesto(this.puestoSelected);
     actividad.idActividad = 0;
     let data = await this.matrizservice.guardarActividadMatriz(actividad);
     if (data && data > 0) {
@@ -320,18 +288,17 @@ export class PuestosYActividadesComponent implements OnInit {
   guardarPuestoAndActividad() {
     console.log(this.listaOperaciones)
     let data = 0;
-    this.listaOperaciones.forEach(async (element, index) => {
+    this.listaOperaciones.forEach(async (element, index, arr) => {
       data = await element.ejecucion.bind(this)(element.parametro);
+      if(element.parametro.constructor.name === "Puesto"){
+        for(let i=index; i<arr.length; i++){
+          if(arr[i].parametro.constructor.name === "MatrizActividad" && element.parametro.idPuesto === arr[i].parametro.idPuesto ){
+            arr[i].parametro.idPuesto = data;
+          }
+        }
+      }
+      // console.log(data)
     })
     this.listaOperaciones = [];
-    // this.deletePuestoFromDB();
-    // this.guardarPuesto();
-    // this.guardarActividadMatriz()
   }
-
-  // this.listaOperaciones.push({
-  //   ejecucion: this.guardarPuestoToDB,
-  //   parametro: result.nuevoPuesto
-  // })
-
 }

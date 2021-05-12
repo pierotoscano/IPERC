@@ -1,8 +1,8 @@
 export class MCPRiesgo {
   private _idRiesgoMCP: number;
-  private _idMatrizRiesgo: string;
+  private _idMatrizRiesgo: number;
   private _idMatriz: string;
-  private _idRiesgo: string;
+  private _idRiesgo: number;
   private _idMCP: number;
   private _idArea: number;
   private _idTipo: string;
@@ -20,8 +20,8 @@ export class MCPRiesgo {
 
   constructor(
     idRiesgoMCP?: number,
-    idMatrizRiesgo?: string,
-    idRiesgo?: string,
+    idMatrizRiesgo?: number,
+    idRiesgo?: number,
     idMatriz?: string,
     idMCP?: number,
     idArea?: number,
@@ -78,7 +78,7 @@ export class MCPRiesgo {
    * Getter idMatrizRiesgo
    * @return {string}
    */
-  public get idMatrizRiesgo(): string {
+  public get idMatrizRiesgo(): number {
     return this._idMatrizRiesgo;
   }
 
@@ -86,7 +86,7 @@ export class MCPRiesgo {
    * Getter idRiesgo
    * @return {string}
    */
-  public get idRiesgo(): string {
+  public get idRiesgo(): number {
     return this._idRiesgo;
   }
 
@@ -214,7 +214,7 @@ export class MCPRiesgo {
    * Setter idMatrizRiesgo
    * @param {string} value
    */
-  public set idMatrizRiesgo(value: string) {
+  public set idMatrizRiesgo(value: number) {
     this._idMatrizRiesgo = value;
   }
 
@@ -222,7 +222,7 @@ export class MCPRiesgo {
    * Setter idRiesgo
    * @param {string} value
    */
-  public set idRiesgo(value: string) {
+  public set idRiesgo(value: number) {
     this._idRiesgo = value;
   }
 

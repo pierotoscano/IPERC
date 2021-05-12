@@ -235,13 +235,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
                 this.solicitudMatrizSelected.motivo
               );
               this.setCombosValue();
-              this.maestroFlujoEtapaActual.Id = parseInt(
-                this.solicitudMatrizSelected.etapa.slice(-1)
-              );
-
-              // if(solicitudMatriz.estado === "SN"){
-              //   this.maestroFlujoEtapaActual.Id = 2;
-              // }
+              this.maestroFlujoEtapaActual.Id = parseInt(this.solicitudMatrizSelected.etapa.slice(-1));
               return false;
             }
           });
@@ -250,17 +244,19 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
           this.setCascadeCombosValue();
 
           if (this.solicitudMatrizSelected.idMatriz) {
-            //Obtener la matriz
-            console.log('Existe matriz');
             this.matrizservice.obtenerMatriz(this.solicitudMatrizSelected.idMatriz).then((matrices) => {
-              let listMatrices = matrices ? matrices : [];
-
-              this.matrizSelected = listMatrices[0];
-              // if(this.matrizSelected.estado === "MC" && this.matrizSelected.idSupervisor !== ""){
-              //   this.maestroFlujoEtapaActual.Id = 3;
-              // }
+              // let listMatrices = matrices ? matrices : [];
+              // this.matrizSelected = listMatrices.find(
+              //   (m) => m.id == this.solicitudMatrizSelected.idMatriz
+              // );
+              this.matrizSelected = <Matriz[]>matrices ? matrices[0] : [];
+              console.log(this.matrizSelected);
             });
           }
+          
+          // this.matrizSelected = new Matriz();
+          // this.matrizSelected.id = "21000023";
+          // this.matrizSelected.idArea = 3;
         });
     } else {
       this.nuevaSolicitud = true;
@@ -574,7 +570,7 @@ export class EnviarSolicitudComponent implements OnInit, AfterViewInit {
     this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
     this.usuarioLogged.key = usuarioFromSession._key;
     this.usuarioLogged.nombres = usuarioFromSession._nombres;
-    this.usuarioLogged.rol = usuarioFromSession._rol; //usuarioFromSession._rol;
+    this.usuarioLogged.rol = usuarioFromSession._rol;//"JA";
     this.usuarioLogged.selected = usuarioFromSession._selected;
     this.usuarioLogged.tipo = usuarioFromSession._tipo;
     this.usuarioLogged.usuario = usuarioFromSession._usuario;

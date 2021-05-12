@@ -30,7 +30,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
 
 export type Operacion = {
-  ejecucion: {(s: PeligroMatriz | ListaRiesgoMatriz | MCERiesgo | MCPRiesgo) : Promise<number>};
+  ejecucion: {(s: PeligroMatriz | ListaRiesgoMatriz | MCERiesgo | MCPRiesgo) : Promise<number> | number};
   parametro: PeligroMatriz | ListaRiesgoMatriz | MCERiesgo | MCPRiesgo;
   nameop: string
 };
@@ -120,8 +120,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
     public dialog: MatDialog,
     private formBuilder: FormBuilder
   ) {
-    this.dataSourceMCE = new MatTableDataSource<MCERiesgo>();
-    this.dataSourceMCP = new MatTableDataSource<MCPRiesgo>();
+    this.dataSourceMCE = new MatTableDataSource<MCERiesgo>([]);
+    this.dataSourceMCP = new MatTableDataSource<MCPRiesgo>([]);
   }
 
   ngOnInit(): void {
@@ -152,10 +152,6 @@ export class PeligrosYRiesgosComponent implements OnInit {
     this.listPeligroDeleted = [];
     this.listRiesgoDeleted = [];
     this.getPuestos();
-    // this.getMCE();
-    // this.getMCP();
-    // this.getPeligros();
-    // this.getRiesgos();
   }
   
   getPuestos(): void {
@@ -166,47 +162,6 @@ export class PeligrosYRiesgosComponent implements OnInit {
         this.puestos = puestosAux.filter( elem => elem.idArea === this.matriz.idArea)
       });
   }
-
-
-  // getRiesgos(): void {
-  //   this.riesgoService
-  //     .obtenerMatrizRiesgoByIdMatriz(this.matriz.id)
-  //     .then((riesgosMatriz) => {
-  //       this.listRiesgosMatriz = riesgosMatriz ? riesgosMatriz : [];
-  //       // console.log(this.listRiesgosMatriz);
-  //     });
-  // }
-
-  // getActividades(): void {
-  //   this.matrizservice.obtenerActividadMatriz().then((actividades) => {
-  //     this.actividades = actividades ? actividades.slice(0, 1) : [];
-  //   });
-  // }
-
-  // getPeligros(): void {
-  //   this.peligroService
-  //     .obtenerMatrizPeligroByIdMatriz(this.matriz.id)
-  //     .then((peligros) => {
-  //       // this.listPeligrosMatriz = peligros ? peligros : [];        
-  //       peligros = peligros ? peligros : [];
-  //       peligros = peligros.filter(element => element.idPeligro === this.peligroSelected.idPeligro);
-  //       this.listaOperaciones.forEach((element, index) => {
-  //         if(element.nameop === "ADD" && element.parametro.constructor.name === "PeligroMatriz" && element.parametro.idPeligro === value.idPeligro){
-  //           console.log(element);
-  //           (<PeligroMatriz[]>peligros).push(<PeligroMatriz>element.parametro);
-  //           return 0;
-  //         }
-  //         (<PeligroMatriz[]>peligros).forEach((element1, index1) => {
-  //           if (element.nameop === "DELETE" && element.parametro.constructor.name === "PeligroMatriz" && element.parametro.idPuesto === element1.idPuesto){
-  //             console.log(element);
-  //             (<PeligroMatriz[]>peligros).splice(index1, 1);
-  //             return 0;
-  //           }
-  //         });
-  //       });
-  //       this.listPeligrosMatriz = peligros;
-  //     });
-  // }
 
   changePuesto(value: Puesto): void {
     this.actividades = [];
@@ -219,6 +174,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
   changePeligro(value: PeligroMatriz): void {
     this.peligroSelected = value;
     if (this.peligroSelected !== undefined){
+      console.log(value);
       // this.getRiesgosByPeligroSelected();
       // this.getRiesgos();
       this.riesgoService
@@ -261,107 +217,29 @@ export class PeligrosYRiesgosComponent implements OnInit {
     }
   }
 
-  // getPeligrosByActividadSelected(): void {
-  //   // let listPeligrosMatriz = this.peligros ? this.peligros : [];
-  //   // this.getPeligros();
-  //   this.peligroService
-  //     .obtenerMatrizPeligroByIdMatriz(this.matriz.id)
-  //     .then((peligros) => {
-  //       // this.listPeligrosMatriz = peligros ? peligros : [];        
-  //       peligros = peligros ? peligros : [];
-  //       peligros = peligros.filter(element => element.idPeligro === this.peligroSelected.idPeligro);
-  //       this.listaOperaciones.forEach((element, index) => {
-  //         if(element.nameop === "ADD" && element.parametro.constructor.name === "PeligroMatriz" && element.parametro.idPeligro === value.idPeligro){
-  //           console.log(element);
-  //           (<PeligroMatriz[]>peligros).push(<PeligroMatriz>element.parametro);
-  //           return 0;
-  //         }
-  //         (<PeligroMatriz[]>peligros).forEach((element1, index1) => {
-  //           if (element.nameop === "DELETE" && element.parametro.constructor.name === "PeligroMatriz" && element.parametro.idPuesto === element1.idPuesto){
-  //             console.log(element);
-  //             (<PeligroMatriz[]>peligros).splice(index1, 1);
-  //             return 0;
-  //           }
-  //         });
-  //       });
-  //       this.listPeligrosMatriz = peligros;
-  //     });
-  //   this.listPeligrosMatriz = this.listPeligrosMatriz.filter(element => element.idActividad === this.actividades[0].idActividad);
-  //   console.log(this.listPeligrosMatriz);
-  // }
-
-  // getRiesgosByPeligroSelected(): void {
-  //   // let listRiesgosMatriz = this.riesgos ? this.riesgos : [];
-  //   this.getRiesgos();
-  //   this.listRiesgosMatriz = this.listRiesgosMatriz.filter(element => element.idPeligro === this.peligroSelected.idPeligro);
-  //   console.log(this.listRiesgosMatriz);
-  // }
-
   changeRiesgo(value: ListaRiesgoMatriz): void {
     this.riesgoSelected = value;
     if (this.riesgoSelected !== undefined){
       console.log(value)
-      // this.getMCEByRiesgoSelected();
-      // this.getMCE();
       this.riesgoService
         .obtenerMCERiesgo(this.matriz.id, this.riesgoSelected.idRiesgo)
         .then((mces) => {
           this.mces = mces ? mces : [];
-          let mceList = this.mces.filter(element => parseInt(element.idRiesgo) === this.riesgoSelected.idRiesgo);
-          this.dataSourceMCE = new MatTableDataSource<MCERiesgo>(mceList);
+          // let mceList = this.mces.filter(element => element.idRiesgo === this.riesgoSelected.idRiesgo);
+          this.dataSourceMCE.data = <MCERiesgo[]>mces;
         });
-      // let mceList = this.mces.filter(element => parseInt(element.idRiesgo) === this.riesgoSelected.idRiesgo);
-      // this.dataSourceMCE = new MatTableDataSource<MCERiesgo>(mceList);
-      // this.getMCPByRiesgoSelected();
-      // this.getMCP();
       this.riesgoService
         .obtenerMCPRiesgo(this.matriz.id, this.riesgoSelected.idRiesgo)
         .then((mcps) => {
           this.mcps = mcps ? mcps : [];
-          let mcpList = this.mcps.filter(element => parseInt(element.idRiesgo) === this.riesgoSelected.idRiesgo);
-          this.dataSourceMCP = new MatTableDataSource<MCPRiesgo>(mcpList);
+          // let mcpList = this.mcps.filter(element => element.idRiesgo === this.riesgoSelected.idRiesgo);
+          this.dataSourceMCP.data =<MCPRiesgo[]> mcps;
         });
-      // let mcpList = this.mcps.filter(element => parseInt(element.idRiesgo) === this.riesgoSelected.idRiesgo);
-      // this.dataSourceMCP = new MatTableDataSource<MCPRiesgo>(mcpList);
     } else {
-    this.dataSourceMCE = new MatTableDataSource<MCERiesgo>([]);
-    this.dataSourceMCP = new MatTableDataSource<MCPRiesgo>([]);
+      this.dataSourceMCE.data = [];
+      this.dataSourceMCP.data = [];
     }
   }
-
-  // getMCEByRiesgoSelected(): void {
-  //   this.getMCE();
-  //   let mceList = this.mces.filter(element => parseInt(element.idRiesgo) === this.riesgoSelected.idRiesgo);
-  //   this.dataSourceMCE = new MatTableDataSource<MCERiesgo>(mceList);
-  // }
-
-  // getMCPByRiesgoSelected(): void {
-  //   this.getMCP();
-  //   let mcpList = this.mcps.filter(element => parseInt(element.idRiesgo) === this.riesgoSelected.idRiesgo);
-  //   this.dataSourceMCP = new MatTableDataSource<MCPRiesgo>(mcpList);
-  // }
-
-  // getMCE(): void {
-  //   this.riesgoService
-  //     .obtenerMCERiesgo(this.matriz.id)
-  //     .then((mces) => {
-  //       this.mces = mces ? mces : [];
-  //     });
-  // }
-
-  // getMCP(): void {
-  //   this.riesgoService
-  //     .obtenerMCPRiesgo(this.matriz.id)
-  //     .then((mcps) => {
-  //       this.mcps = mcps ? mcps : [];
-  //     });
-  // }
-
-  // getRiesgos(): void {
-  //   this.matrizservice.obtenerPeligroMatriz().then((peligros) => {
-  //     this.peligros = peligros ? peligros : [];
-  //   });
-  // }
 
   contPeligroAdded: number = 0;
   openAgregarPeligro(): void {
@@ -399,7 +277,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
   eliminarPeligroFromList() {
     if(this.peligroFormControl.valid && this.listRiesgosMatriz.length === 0){
       this.listPeligrosMatriz.forEach((elem, index) => {
-        if(elem.idPeligro === this.puestoFormControl.value.idPeligro ){
+        if(elem.idPeligro === this.peligroFormControl.value.idPeligro ){
           // this.listPeligroDeleted.push(elem);
           // this.listPeligrosMatriz.splice(index, 1);
           if(elem.idPeligro > 0){
@@ -420,9 +298,9 @@ export class PeligrosYRiesgosComponent implements OnInit {
           // this.listPeligrosMatriz = this.peligros.filter(element => element.idActividad === this.actividades[0].idActividad)
           this.listRiesgosMatriz = [];
           this.dataSourceMCE.data = [];
-          this.tblMCE.renderRows();
+          // this.tblMCE.renderRows();
           this.dataSourceMCP.data = [];
-          this.tblMCP.renderRows();
+          // this.tblMCP.renderRows();
           return 0;
         }
       })
@@ -445,6 +323,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
         newRiesgoMatriz.idActividad = this.actividades[0].idActividad;
         newRiesgoMatriz.idRiesgo = --this.contRiesgoAdded;
         newRiesgoMatriz.observacion = '';
+        newRiesgoMatriz.idMatrizRiesgo = "0";
 
         this.listRiesgosMatriz.push(newRiesgoMatriz);
         this.listaOperaciones.push({
@@ -485,9 +364,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
           }
           this.listRiesgosMatriz.splice(index, 1);
           this.dataSourceMCE.data = [];
-          this.tblMCE.renderRows();
           this.dataSourceMCP.data = [];
-          this.tblMCP.renderRows();
           return 0;
         }
       })
@@ -506,26 +383,19 @@ export class PeligrosYRiesgosComponent implements OnInit {
           mceAux.idMCE = --this.contMCEAdded;
           // mceAux.estado = this.riesgoSelected.estado;
           mceAux.estado = this.matriz.estado;
-          mceAux.idMatrizRiesgo = `${this.riesgoSelected.idMatrizRiesgo}`;
-          mceAux.idMatriz = this.riesgoSelected.idMatrizRiesgo // this.matriz.id;
+          mceAux.idMatrizRiesgo = Number(this.riesgoSelected.idMatrizRiesgo);
           mceAux.idArea = this.matriz.idArea;
-          mceAux.idRiesgo = `${this.riesgoSelected.idRiesgo}`;
+          mceAux.idRiesgo = this.riesgoSelected.idRiesgo;
           mceAux.usuarioModifica = this.usuario.idUsuario;
           mceAux.usuarioRegistro = this.usuario.idUsuario;
           mceAux.observacion = '';
           this.dataSourceMCE.data.push(mceAux);
           this.dataSourceMCE.filter = "";
-          // this.tblMCE.renderRows();
-          // this.getMCEByRiesgoSelected();
-          // this.dataSourceMCE = new MatTableDataSource<MCERiesgo>(this.mces);
           this.listaOperaciones.push({
             ejecucion: this.guardarMCEToDB,
             parametro: mceAux,
             nameop: "ADD"
           })
-          // this.listRiesgosMatriz = this.riesgos.filter(element => element.idPeligro === this.peligroSelected.idPeligro)
-          // this.dataSourceMCE.data = [];
-          // this.tblMCE.renderRows();
           return 0;
         }
       });
@@ -552,8 +422,6 @@ export class PeligrosYRiesgosComponent implements OnInit {
         }
         datamce.splice(index, 1);
         this.dataSourceMCE.data = datamce;
-        // this.mces.splice(index, 1);
-        // this.tblMCE.renderRows();
         return 0;
       }
     })
@@ -571,13 +439,14 @@ export class PeligrosYRiesgosComponent implements OnInit {
           mcpAux.idMCP = --this.contMCPAdded;
           // mcpAux.estado = this.riesgoSelected.estado;
           mcpAux.estado = this.matriz.estado;
-          mcpAux.idRiesgo = `${this.riesgoSelected.idRiesgo}`;
-          mcpAux.idMatrizRiesgo = this.riesgoSelected.idMatrizRiesgo; // this.matriz.id;
+          mcpAux.idRiesgo = this.riesgoSelected.idRiesgo;
+          mcpAux.idMatrizRiesgo = Number(this.riesgoSelected.idMatrizRiesgo);
           mcpAux.idArea = this.matriz.idArea;
           mcpAux.usuarioModifica = this.usuario.idUsuario;
           mcpAux.usuarioRegistro = this.usuario.idUsuario;
           mcpAux.observacion = '';
           this.dataSourceMCP.data.push(mcpAux);
+          this.dataSourceMCP.filter = "";
           // this.getMCEByRiesgoSelected();
           // this.dataSourceMCE = new MatTableDataSource<MCERiesgo>(this.mces);
           this.listaOperaciones.push({
@@ -585,9 +454,6 @@ export class PeligrosYRiesgosComponent implements OnInit {
             parametro: mcpAux,
             nameop: "ADD"
           })
-          // this.listRiesgosMatriz = this.riesgos.filter(element => element.idPeligro === this.peligroSelected.idPeligro)
-          // this.dataSourceMCE.data = [];
-          // this.tblMCE.renderRows();
           return 0;
         }
       });
@@ -621,6 +487,37 @@ export class PeligrosYRiesgosComponent implements OnInit {
     })
   }
 
+  async guardarPeligrosAndRiesgos() {
+    console.log(this.listaOperaciones)
+    let data = 0;
+    let index = 0;
+    // this.listaOperaciones.forEach((element, index, arr) => {
+    for ( const element of this.listaOperaciones ){
+      data = await element.ejecucion.bind(this)(element.parametro);
+      if(element.parametro.constructor.name === "PeligroMatriz"){
+        for(let i=index; i<this.listaOperaciones.length; i++){
+          if(this.listaOperaciones[i].parametro.constructor.name === "ListaRiesgoMatriz" && (<PeligroMatriz>element.parametro).idPeligro === (<ListaRiesgoMatriz>this.listaOperaciones[i].parametro).idPeligro ){
+            (<ListaRiesgoMatriz>this.listaOperaciones[i].parametro).idPeligro = data;
+          }
+        }
+      }
+      if(element.parametro.constructor.name === "ListaRiesgoMatriz"){
+        for(let i=index; i<this.listaOperaciones.length; i++){
+          if(this.listaOperaciones[i].parametro.constructor.name === "MCERiesgo" && (<ListaRiesgoMatriz>element.parametro).idRiesgo === (<MCERiesgo>this.listaOperaciones[i].parametro).idRiesgo ){
+            (<MCERiesgo>this.listaOperaciones[i].parametro).idMatrizRiesgo = data;
+            // console.log(data)
+          }
+          if(this.listaOperaciones[i].parametro.constructor.name === "MCPRiesgo" && (<ListaRiesgoMatriz>element.parametro).idRiesgo === (<MCPRiesgo>this.listaOperaciones[i].parametro).idRiesgo ){
+            (<MCPRiesgo>this.listaOperaciones[i].parametro).idMatrizRiesgo = data;
+          }
+        }
+      }
+      console.log(data)
+      index++;
+    }
+    this.listaOperaciones = [];
+  }
+
   openSeleccionarActividad(): void {
     if(this.puestoFormControl.valid){
       const dialogConfig = new MatDialogConfig();
@@ -634,6 +531,8 @@ export class PeligrosYRiesgosComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         if (result !== undefined) {
           this.actividades = [result.listActividadesSelected];
+          console.log(this.actividades)
+          console.log(this.matriz)
           // this.getPeligros();
           // this.listPeligrosMatriz = this.peligros.filter(element => element.idActividad === this.actividades[0].idActividad)
           // this.getPeligrosByActividadSelected()
@@ -658,238 +557,83 @@ export class PeligrosYRiesgosComponent implements OnInit {
                 });
               });
               this.listPeligrosMatriz = peligros;
-              console.log(this.listPeligrosMatriz);
+              // console.log(this.listPeligrosMatriz);
             });
           this.listRiesgosMatriz = [];
           this.dataSourceMCE.data = [];
           this.dataSourceMCP.data = [];
-          // this.listPeligrosMatriz = this.listPeligrosMatriz.filter(element => element.idActividad === this.actividades[0].idActividad);
-            // .then(() => this.getRiesgos())
-            // .then(() => {
-            //   this.getMCE();
-            //   this.getMCP();
-            // })
         }
       });
     }
   }
   
-  private async deletePeligroFromDB(peligro: PeligroMatriz){
-    let data = await this.peligroService.eliminarPeligro(peligro);
-    if (data && data > 0) {
+  private deletePeligroFromDB(peligro: PeligroMatriz){
+    let data = this.peligroService.eliminarPeligro(peligro);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   };
 
-  public async guardarPeligroToDB(peligro: PeligroMatriz){
-    peligro.idPeligro = 0;
-    let data = await this.peligroService.guardarPeligroMatriz(peligro);
-    if (data && data > 0) {
+  public guardarPeligroToDB(peligro: PeligroMatriz){
+    // peligro.idPeligro = 0;
+    let data = this.peligroService.guardarPeligroMatriz(peligro);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   }
   
-  private async deleteRiesgoFromDB(riesgo: ListaRiesgoMatriz){
-    let data = await this.riesgoService.eliminarRiesgo(riesgo);
-    if (data && data > 0) {
+  private deleteRiesgoFromDB(riesgo: ListaRiesgoMatriz){
+    let data = this.riesgoService.eliminarRiesgo(riesgo);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   };
 
-  public async guardarRiesgoToDB(riesgo: ListaRiesgoMatriz){
-    riesgo.idMatrizRiesgo = "0";
-    let data = await this.riesgoService.guardarRiesgoMatriz(riesgo);
-    if (data && data > 0) {
+  public guardarRiesgoToDB(riesgo: ListaRiesgoMatriz){
+    // riesgo.idMatrizRiesgo = "0";
+    let data = this.riesgoService.guardarRiesgoMatriz(riesgo);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   }
   
-  private async deleteMCEFromDB(mce: MCERiesgo){
-    let data = await this.riesgoService.eliminarMCERiesgo(mce);
-    if (data && data > 0) {
+  private deleteMCEFromDB(mce: MCERiesgo){
+    let data = this.riesgoService.eliminarMCERiesgo(mce);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   };
 
-  public async guardarMCEToDB(mce: MCERiesgo){
-    mce.idMCE = 0;
-    let data = await this.riesgoService.guardarMCERiesgo(mce);
-    if (data && data > 0) {
+  public guardarMCEToDB(mce: MCERiesgo){
+    // mce.idMCE = 0;
+    let data = this.riesgoService.guardarMCERiesgo(mce);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   }
 
-  private async deleteMCPFromDB(mcp: MCPRiesgo){
-    let data = await this.riesgoService.eliminarMCPRiesgo(mcp);
-    if (data && data > 0) {
+  private deleteMCPFromDB(mcp: MCPRiesgo){
+    let data = this.riesgoService.eliminarMCPRiesgo(mcp);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   };
 
-  public async guardarMCPToDB(mcp: MCPRiesgo){
-    mcp.idMCP = 0;
-    let data = await this.riesgoService.guardarMCPRiesgo(mcp);
-    if (data && data > 0) {
+  public guardarMCPToDB(mcp: MCPRiesgo){
+    // mcp.idMCP = 0;
+    let data = this.riesgoService.guardarMCPRiesgo(mcp);
+    if (data) {
       return data;
     }
-    return -1;
+    return Promise.reject(-1);
   }
-
-  guardarPeligrosAndRiesgos() {
-    console.log(this.listaOperaciones)
-    let data = 0;
-    this.listaOperaciones.forEach(async (element, index) => {
-      data = await element.ejecucion.bind(this)(element.parametro);
-    })
-    this.listaOperaciones = [];
-    // this.deletePuestoFromDB();
-    // this.guardarPuesto();
-    // this.guardarActividadMatriz()
-  }
-
-
-  // guardarPeligrosAndRiesgos1() {
-  //   if(this.mces.length > 0 &&
-  //     this.mcps.length > 0){
-  //       this.guardarListMCERiesgos();
-  //       this.guardarListMCPRiesgos();
-  //   }
-
-  //   if(this.mceEliminados.length > 0 &&
-  //     this.mcpEliminados.length > 0){
-  //       this.eliminarListMCERiesgos();
-  //       this.eliminarListMCPRiesgos();
-  //   }
-
-  //   if(this.riesgos.length > 0){
-  //     this.guardarRiesgos();
-  //   }
-
-  //   if(this.listRiesgoDeleted.length > 0){
-  //     // this.eliminarRiesgo();
-  //   }
-
-    
-  //   if(this.peligros.length > 0){
-  //     this.guardarPeligroMatriz();
-  //   }
-
-  //   if(this.listPeligroDeleted.length > 0){
-  //     // this.eliminarPeligro();
-  //   }
-  //   this.loadDataInitPeligroRiesgos();
-  //   this.router.navigate(['/material-bandeja-solicitud']);
-
-  //   // if (
-  //   //   this.puestoSelected &&
-  //   //   this.peligroMatrizSelected &&
-  //   //   this.riesgoMatrizSelected &&
-  //   //   this.actividades.length > 0 &&
-  //   //   this.mces.length > 0 &&
-  //   //   this.mcps.length > 0
-  //   // ) {
-  //   //   this.guardarPeligroMatriz().then((dataGuardarPeligroMatriz) => {
-  //   //     if (dataGuardarPeligroMatriz && dataGuardarPeligroMatriz > 0) {
-  //   //       this.guardarRiesgoMatriz().then((dataGuardarRiesgoMatriz) => {
-  //   //         if (dataGuardarRiesgoMatriz && dataGuardarRiesgoMatriz > 0) {
-  //   //           this.guardarListMCERiesgos().then((dataGuardarListMCERiesgos) => {
-  //   //             if (dataGuardarListMCERiesgos.length > 0) {
-  //   //               this.guardarListMCPRiesgos().then(
-  //   //                 (dataGuardarListMCPRiesgos) => {
-  //   //                   if (dataGuardarListMCPRiesgos.length > 0) {
-  //   //                     console.log('Éxito al guardar los datos');
-  //   //                   }
-  //   //                 }
-  //   //               );
-  //   //             }
-  //   //           });
-  //   //         }
-  //   //       });
-  //   //     }
-  //   //   });
-  //   // }
-  // }
-
-  // private guardarRiesgos(){
-  //   this.riesgos.forEach((elem, i) => {
-  //     if(elem.idRiesgo === 0){
-  //       this.guardarRiesgoMatrizFromDB(elem);
-  //     }
-  //   })
-  // }
-
-  // private eliminarRiesgo() {
-  //   // if(this.peligroFormControl.valid && this.listRiesgosMatriz.length > 0){
-  //     this.listRiesgoDeleted.forEach(async element => {
-  //       if(element.idRiesgo !== 0){
-  //         this.eliminarRiesgoFromDB(element);
-  //         // let data = await this.puestoservice.eliminarPuesto(element);
-  //       }      
-  //       // if (data && data > 0) {
-  //       //   return data;
-  //       // }
-  //       // return null;
-  //     });
-  //   // }
-  // }
-
-  // private async eliminarRiesgoFromDB(riesgo: ListaRiesgoMatriz){
-  //   let data = await this.riesgoService.eliminarRiesgo(
-  //     riesgo
-  //   );
-  //   if (data > 0) {
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
-  // private guardarPeligroMatriz(){
-  //   this.peligros.forEach(async element => {
-  //     if(element.idPeligro === 0){
-  //       this.guardarPeligroMatrizFromDB(element);
-  //     }
-  //   })
-  // }
-
-  // private async guardarPeligroMatrizFromDB(peligro: PeligroMatriz) {
-  //   let data = await this.peligroService.guardarPeligroMatriz(
-  //     peligro
-  //   );
-  //   if (data > 0) {
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
-  // private eliminarPeligro() {
-  //   this.listPeligroDeleted.forEach(async element => {
-  //     if(element.idPeligro !== 0){
-  //       this.eliminarPeligroFromDB(element);
-  //       // let data = await this.puestoservice.eliminarPuesto(element);
-  //     }      
-  //     // if (data && data > 0) {
-  //     //   return data;
-  //     // }
-  //     // return null;
-  //   });
-  // }
-
-  // private async eliminarPeligroFromDB(peligro: PeligroMatriz){
-  //   let data = await this.peligroService.eliminarPeligro(
-  //     peligro
-  //   );
-  //   if (data > 0) {
-  //     return data;
-  //   }
-  //   return null;
-  // }
 
   async guardarRiesgoMatrizFromDB(riesgoGuardar: ListaRiesgoMatriz) {
     let listaRiesgoMatriz: ListaRiesgoMatriz = new ListaRiesgoMatriz();
@@ -924,92 +668,7 @@ export class PeligrosYRiesgosComponent implements OnInit {
       return data;
     }
     return null;
-
-    // let listaRiesgoMatriz: ListaRiesgoMatriz = new ListaRiesgoMatriz();
-    // listaRiesgoMatriz.idMatriz = this.matriz.id;
-    // listaRiesgoMatriz.idMatrizRiesgo = '';
-    // listaRiesgoMatriz.idArea = this.riesgoMatrizSelected.idArea;
-    // listaRiesgoMatriz.idActividad = 0; // Pendiente por revisar
-    // listaRiesgoMatriz.idPeligro = this.peligroMatrizSelected.idPeligro;
-    // listaRiesgoMatriz.riesgo = this.riesgoMatrizSelected.riesgo;
-    // listaRiesgoMatriz.rPG = 0;
-    // listaRiesgoMatriz.rPDH = 0;
-    // listaRiesgoMatriz.rPMCE = 0;
-    // listaRiesgoMatriz.rPPG = 0;
-    // listaRiesgoMatriz.rPNE = 0;
-    // listaRiesgoMatriz.rPP = 0;
-    // listaRiesgoMatriz.rPIdNivelRiesgo = 1;
-    // listaRiesgoMatriz.rRG = 0;
-    // listaRiesgoMatriz.rRDH = 0;
-    // listaRiesgoMatriz.rRMCE = 0;
-    // listaRiesgoMatriz.rRPG = 0;
-    // listaRiesgoMatriz.rRNE = 0;
-    // listaRiesgoMatriz.rRP = 0;
-    // listaRiesgoMatriz.rRIdNivelRiesgo = 1;
-    // listaRiesgoMatriz.observacion = null;
-    // listaRiesgoMatriz.usuarioRegistro = this.matriz.usuarioRegistro;
-    // listaRiesgoMatriz.fechaRegistro = this.matriz.fechaRegistro;
-    // listaRiesgoMatriz.usuarioModifica = this.matriz.usuarioModifica;
-    // listaRiesgoMatriz.fechaModifica = this.matriz.fechaModifica;
-
-    // let data = await this.riesgoService.guardarRiesgoMatriz(listaRiesgoMatriz);
-    // if (data > 0) {
-    //   return data;
-    // }
-    // return null;
   }
-
-  // async guardarListMCERiesgos() {
-  //   let listDataGuardarMCERiesgo = [];
-  //   for (let i = 0; i < this.mces.length; i++) {
-  //     const mce = this.mces[i];
-  //     if(mce.idMCE === 0){
-  //       let dataGuardarMCERiesgo = await this.riesgoService.guardarMCERiesgo(mce);
-  //       if (dataGuardarMCERiesgo && dataGuardarMCERiesgo > 0) {
-  //         listDataGuardarMCERiesgo.push(dataGuardarMCERiesgo);
-  //       }
-  //     }
-  //   }
-  //   return listDataGuardarMCERiesgo;
-  // }
-
-  // async guardarListMCPRiesgos() {
-  //   let listDataGuardarMCPRiesgo = [];
-  //   for (let i = 0; i < this.mcps.length; i++) {
-  //     const mcp = this.mcps[i];
-  //     if(mcp.idMCP === 0){
-  //       let dataGuardarMCPRiesgo = await this.riesgoService.guardarMCPRiesgo(mcp);
-  //       if (dataGuardarMCPRiesgo && dataGuardarMCPRiesgo > 0) {
-  //         listDataGuardarMCPRiesgo.push(dataGuardarMCPRiesgo);
-  //       }
-  //     }
-  //   }
-  //   return listDataGuardarMCPRiesgo;
-  // }
-
-  // async eliminarListMCERiesgos() {
-  //   let listDataGuardarMCERiesgo = [];
-  //   for (let i = 0; i < this.mceEliminados.length; i++) {
-  //     const mce = this.mces[i];
-  //     let dataGuardarMCERiesgo = await this.riesgoService.eliminarMCERiesgo(mce);
-  //     // if (dataGuardarMCERiesgo && dataGuardarMCERiesgo > 0) {
-  //     //   listDataGuardarMCERiesgo.push(dataGuardarMCERiesgo);
-  //     // }
-  //   }
-  //   return listDataGuardarMCERiesgo;
-  // }
-
-  // async eliminarListMCPRiesgos() {
-  //   let listDataGuardarMCPRiesgo = [];
-  //   for (let i = 0; i < this.mcpEliminados.length; i++) {
-  //     const mcp = this.mcps[i];
-  //     let eliminadosMCPRiesgo = await this.riesgoService.eliminarMCPRiesgo(mcp);
-  //     // if (eliminadosMCPRiesgo && eliminadosMCPRiesgo > 0) {
-  //     //   listDataGuardarMCPRiesgo.push(eliminadosMCPRiesgo);
-  //     // }
-  //   }
-  //   return listDataGuardarMCPRiesgo;
-  // }
 
   async updateMatrizEstado() {
     let data = await this.matrizservice.updateMatrizEstado(

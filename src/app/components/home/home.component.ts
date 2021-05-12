@@ -145,6 +145,20 @@ export class HomeComponent extends FormularioAT implements OnInit {
       show: false,
       footer: "PARA APROBACIÓN"
     },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "NO PUBLICADAS"
+    },
+    {
+      contador: 0,
+      indicador: "",
+      id: 0,
+      show: false,
+      footer: "PUBLICADAS"
+    }
   ]
 
   // contadoresSolicitudesMatrices = {
@@ -279,27 +293,16 @@ export class HomeComponent extends FormularioAT implements OnInit {
     private indicadoresService: IndicadoresService,
     private loginService: LoginService
   ) {
-
     super('Home', applicationRef, dialog, route, router, masterService, zone, _spinner);
     // console.log(JSON.stringify(this.loginService.getUserLogged()));
     this.loggedUser = this.loginService.getUserLogged();
     // this.esMiembroId = false;
-
     // this.formControlAnnio = new FormControl(0);
-
     // this.getScreenSize();
-
     this.getDashboardData();
   }
 
   getDashboardData(): void{
-    // this.accesoservice.obtenerAcceso()
-    //   .then((alcances) => {
-    //     this.accesos = accesos[0]
-    //     ? accesos
-    //     : [];
-    //   })
-
     this.indicadoresService
       // .obtenerDashboardData("xternal", this.loggedUser.rol)
       .obtenerDashboardData("xternal", "JS")
@@ -307,68 +310,15 @@ export class HomeComponent extends FormularioAT implements OnInit {
         this.dataSourceIndicadoresMatriz = listSolicitudesMatriz
           ? listSolicitudesMatriz
           : [];
-
         this.dataSourceIndicadoresMatriz.forEach(
           (element, number, array) => {
             this.cards[element.id - 1].id = element.id;
             this.cards[element.id - 1].indicador = element.indicador;
             this.cards[element.id - 1].contador = element.valor;
             this.cards[element.id - 1].show = true;
-
-            // if(element.id === 4 || element.id === 8){
-            //   this.contadoresSolicitudesMatrices.matricesAprobadas.id = element.id;
-            //   this.contadoresSolicitudesMatrices.matricesAprobadas.indicador = element.indicador;
-            //   this.contadoresSolicitudesMatrices.matricesAprobadas.valor = element.valor;
-            //   this.contadoresSolicitudesMatrices.matricesAprobadas.presente = true;
-            // } else if(element.id === 10 || element.id === 3 || element.id === 6){
-            //   this.contadoresSolicitudesMatrices.matricesEnProceso.id = element.id;
-            //   this.contadoresSolicitudesMatrices.matricesEnProceso.valor = element.valor;
-            //   this.contadoresSolicitudesMatrices.matricesEnProceso.indicador = element.indicador;
-            //   this.contadoresSolicitudesMatrices.matricesEnProceso.presente = true;
-            // } else if(element.id === 2){
-            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.id = element.id;
-            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.valor = element.valor;
-            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.indicador = element.indicador;
-            //   this.contadoresSolicitudesMatrices.solicitudesFinalizadas.presente = true;
-            // } else if(element.id === 9 || element.id === 1 || element.id === 5){
-            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.id = element.id;
-            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.valor = element.valor;
-            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.indicador = element.indicador;
-            //   this.contadoresSolicitudesMatrices.solicitudesEnPendientes.presente = true;
-            // } else if(element.id === 11 || element.id === 7){
-            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.id = element.id;
-            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.valor = element.valor;
-            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.indicador = element.indicador;
-            //   this.contadoresSolicitudesMatrices.matricesEnEjecucion.presente = true;
-            // }
           }
         )
-      });
-
-    // this.matrizService
-    //   .obtenerSolicitudMatriz()
-    //   .then((listSolicitudesMatriz) => {
-    //     this.dataSourceSolicitudesMatriz = listSolicitudesMatriz
-    //       ? listSolicitudesMatriz
-    //       : [];
-
-    //     this.dataSourceSolicitudesMatriz.forEach(
-    //       function(element, number, array){
-    //         if(element.estado === "SF"){
-    //           this.contadoresSolicitudesMatrices.solicitudesFinalizadas++;
-    //         } else if(element.estado === "SA"){
-    //           this.contadoresSolicitudesMatrices.solicitudesEnPendientes++;
-    //         } else if(element.estado === "MC"){
-    //           this.contadoresSolicitudesMatrices.matricesEnProceso++;
-    //         } else if(element.estado === "AC"){
-    //           this.contadoresSolicitudesMatrices.matricesAprobadas++;
-    //         } else if(element.estado === "JS"){
-    //           this.contadoresSolicitudesMatrices.matricesEnEjecucion++;
-    //         }
-    //       }.bind(this)
-    //     )
-    //   });
-      // .finally(() => this._spinner.hide());
+      }).finally(() => this._spinner.hide());
 
   }
 
