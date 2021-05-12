@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12 md-display-1">
-        <div class="col-sm-12 col-lg-9">
+        <div class="col-sm-12">
             <!-- {{currentUserName}} -->
             <h1 class="mt-10 mb-10 ml-0 mr-10">¡Bienvenido!</h1>
             <br />
@@ -8,11 +8,11 @@
             <div class="row">
                 <div *ngFor="let card of cards; let i = index; let isFirst=first">
                    
-                    <div *ngIf="card.show" class="col-xs-12 col-sm-6 col-md-3 mb-16 pl-2 pr-2">
+                    <div *ngIf="card.show" class="col-xs-12 col-sm-4 col-md-3 mb-16 pl-2 pr-2">
                         <mat-card class="flotante active">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <h3>{{card.indicador}}</h3>
+                                    <h3 style="height: 30px;">{{card.indicador}}</h3>
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -24,7 +24,7 @@
                                 </div>
                             </mat-card-content>
                             <mat-card-actions layout="row" align="start">
-                                <div *ngIf="card.footer==='PENDIENTES'" class="row m-0 p-0">
+                                <div *ngIf="card.footer==='PENDIENTES' && usuarioLogged.rol==='JA'" class="row m-0 p-0">
                                     <div class="col-md-12 m-0 p-0">
                                         <button type="button" class="fs-12 m-0 p-0 text-left" [routerLink]="['/enviar-solicitud']" mat-button aria-label="Go">
                                             <mat-icon>add</mat-icon>

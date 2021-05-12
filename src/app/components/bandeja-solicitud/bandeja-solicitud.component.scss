@@ -12,6 +12,21 @@
 /* @media screen and (max-width: 920px) {
 
 } */
+
+
+table {
+    width: 100%;
+    overflow-x: auto;
+    
+    margin-bottom: 0px !important;
+}
+.css_tam_col{
+    font-size: 12px;
+    color: rgb(56, 56, 56);
+}
+
+
+
 @media (max-width: 992px){
     .fechaIni{
         padding-right: 0px;
@@ -19,13 +34,99 @@
     .fechaFin{
         padding-left: 0px;
     }
+    .table {
+        display: block !important;
+      } 
+      .mat-table {
+        overflow-x: auto;
+    }
+     .mat-cell,
+    .mat-header-cell {
+      word-wrap: initial;
+      display: table-cell;
+      padding: 0px 10px;
+      line-break: unset;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: middle;
+    } 
+    
+    
+     .mat-row,
+    .mat-header-row {
+      display: table-row;
+    }
+    .mat-card {
+        min-width: 100% !important;
+        max-width: 100% !important;
+    } 
 }
 
-table {
-    width: 100%;
-}
-.css_tam_col{
-    font-size: 12px;
-    color: rgb(56, 56, 56);
-}
+
+/**************/
+
+  
+ /* 
+  .data {
+      display: block;
+      width: 95vw;
+      overflow: auto;
+  
+      .table {
+          width: 100vw;
+          max-width: 100%;
+          overflow: auto;
+          margin-bottom: 10px;
+          display: table;
+          border-collapse: collapse;
+          margin: 0px;
+          background-color: rgb(238, 238, 238);
+      }
+    
+      .mat-row,
+      .mat-header-row {
+          display: table-row;
+          min-height: 36px !important;
+      }
+  
+      .mat-cell,
+      .mat-header-cell {
+          word-wrap: initial;
+          display: table-cell;
+          padding: 0px 5px;
+          line-break: unset;
+          width: fit-content;
+          white-space: nowrap;
+          overflow: hidden;
+          vertical-align: middle;
+          text-align: center;
+      }
+  
+      .mat-header-row,
+      .mat-header-cell {
+          margin: 0 auto;
+          min-height: 100px !important;
+          text-align: center;
+          vertical-align: middle;
+          align-self: center;
+      }
+  
+      .mat-sort-header {
+          display: flex;
+          align-content: center;
+          text-align: center;
+          justify-content: center;
+          font-size: 12pt;
+      }
+  
+      .mat-header-cell {
+          font-weight: bold;
+      }
+  }
+  
+  .mat-card {
+      min-width: 100%;
+      max-width: 100%;
+  }  */
   

@@ -40,7 +40,7 @@ import { Area } from 'src/app/shared/models/fisics/Area';
 import { TipoMotivo } from 'src/app/shared/models/fisics/TipoMotivo';
 import { MotivoService } from 'src/app/shared/services/motivo.service';
 import { SolicitudMatrizService } from 'src/app/shared/services/solicitudmatriz.service';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
 import { LoginService } from 'src/app/shared/services/login.service';
 
@@ -77,7 +77,9 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
   itemCount: number;
 
   dataSourceProjects: MaestroMaterial[] = [];
-  dataSourceSolicitudesMatriz: SolicitudMatriz[] = [];
+  // dataSourceSolicitudesMatriz: SolicitudMatriz[] = [];
+
+  dataSourceSolicitudesMatriz: MatTableDataSource<SolicitudMatriz> = new MatTableDataSource<SolicitudMatriz>([]);
   displayedColumnsProjects: string[] = [
     'Solicitud',
     'Matriz',
@@ -210,7 +212,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
         rows
       )
       .then((listSolicitudesMatriz) => {
-        this.dataSourceSolicitudesMatriz = listSolicitudesMatriz
+        this.dataSourceSolicitudesMatriz.data = listSolicitudesMatriz
           ? listSolicitudesMatriz
           : [];
         this.tableSolicitudesMatriz.renderRows();
@@ -231,7 +233,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
       idEstado: new FormControl(null),
       supervisor: new FormControl(null),
       estadoMatriz: new FormControl(null),
-      fechaInicio: new FormControl(new Date(), [Validators.required]),
+      fechaInicio: new FormControl(new Date(new Date().getFullYear(), 0, 1), [Validators.required]),
       fechaFin: new FormControl(new Date(), [Validators.required]),
     });
 
@@ -240,6 +242,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
     this.getAreas();
     this.getSolicitudesMatriz();
     // console.log("material-bandeja-solicitud")
+    
   }
 
   tipomotivos: TipoMotivo[];
@@ -261,7 +264,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
       this.solicitudMatrizService
       .obtenerSolicitudMatriz(
         true,
-        new Date(1, 0, 2021),
+        new Date(new Date().getFullYear(), 0, 1),
         new Date(),
         undefined,
         undefined,
@@ -272,27 +275,102 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
         undefined
       )
       .then((listSolicitudesMatriz) => {
-        this.dataSourceSolicitudesMatriz = listSolicitudesMatriz
+        this.dataSourceSolicitudesMatriz.data = listSolicitudesMatriz
           ? listSolicitudesMatriz
           : [];
       })
       .finally(() => this._spinner.hide());
     } else {
+      let estadoSolicitud = undefined;
+      let estadoMatriz = undefined;
+      let idSolicitante = undefined;
+      let idSupervisor = undefined;
+
+      switch(this.estadoSolicitudMatriz){
+        case 0:
+          this.formBuscarSolicitudes.controls["idEstado"].setValue("SN");
+          estadoSolicitud = "SN"
+          this.formBuscarSolicitudes.controls["idSolicitante"].setValue(this.usuarioLogged.usuario);
+          idSolicitante = this.usuarioLogged.usuario;
+        break;
+        case 1:
+          this.formBuscarSolicitudes.controls["idEstado"].setValue("SF");
+          estadoSolicitud = "SF";
+          this.formBuscarSolicitudes.controls["idSolicitante"].setValue(this.usuarioLogged.usuario);
+          idSolicitante = this.usuarioLogged.usuario;
+        break;
+        case 2:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MC", "JS", "MO", "GA", "MP"]);
+          estadoMatriz = "MC,JS,MO,GA,MP";
+          this.formBuscarSolicitudes.controls["idSolicitante"].setValue(this.usuarioLogged.usuario);
+          idSolicitante = this.usuarioLogged.usuario;
+        break;
+        case 3:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MA"]);
+          estadoMatriz = "SF";
+          this.formBuscarSolicitudes.controls["idSolicitante"].setValue(this.usuarioLogged.usuario);
+          idSolicitante = this.usuarioLogged.usuario;
+        break;
+        case 4:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MC"]);
+          estadoMatriz = "MC";
+          this.formBuscarSolicitudes.controls["supervisor"].setValue(this.usuarioLogged.usuario);
+          idSolicitante = this.usuarioLogged.usuario;
+        break;
+        case 5:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MC"]);
+          estadoMatriz = "MC";
+          this.formBuscarSolicitudes.controls["supervisor"].setValue(this.usuarioLogged.usuario);
+          idSupervisor = this.usuarioLogged.usuario;
+        break;
+        case 6:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["JS", "MO", "GA", "MA"]);
+          estadoMatriz = "JS,MO,GA,MA";
+          this.formBuscarSolicitudes.controls["supervisor"].setValue(this.usuarioLogged.usuario);
+          idSupervisor = this.usuarioLogged.usuario;
+        break;
+        case 7:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MP"]);
+          estadoMatriz = "MP";
+          this.formBuscarSolicitudes.controls["supervisor"].setValue(this.usuarioLogged.usuario);
+          idSupervisor = this.usuarioLogged.usuario;
+        break;
+        case 8:
+          this.formBuscarSolicitudes.controls["idEstado"].setValue("SN");
+          estadoSolicitud = "SN";
+        break;
+        case 9:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MC", "JS"]);
+          estadoMatriz  = "MC,JS";
+        break;
+        case 10:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MO", "GA"]);
+          estadoMatriz = "MO,GA";
+        break;
+        case 11:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MP"]);
+          estadoMatriz = "MP";
+        break;
+        case 12:
+          this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MA"]);
+          estadoMatriz = "MA";
+        break;
+      }
       // let estadoSolicitud = this.estadoSolicitudMatriz.slice(0,1) === "S" ? this.estadoSolicitudMatriz : "SA";
       // let estadoMatriz = this.estadoSolicitudMatriz.slice(0,1) === "S" ? undefined : this.estadoSolicitudMatriz;
       this.solicitudMatrizService
       .obtenerSolicitudMatriz(
         true,
-        new Date(1, 0, 2021),
+        new Date(new Date().getFullYear(), 0, 1),
         new Date(),
         undefined,
         undefined,
         undefined,
         undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+        idSolicitante,
+        idSupervisor,
+        estadoSolicitud,
+        estadoMatriz,
         // estadoSolicitud,
         // estadoMatriz
       )
@@ -301,39 +379,20 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
           ? listSolicitudesMatriz
           : [];
 
-        this.dataSourceSolicitudesMatriz = solmatAux.filter(
-          e => {
-            if (this.estadoSolicitudMatriz === 0){
-              return ((e.estado === "SN") && (e.solicitante === this.usuarioLogged.email));
-            } else if (this.estadoSolicitudMatriz === 1){
-              return ((e.estado === "SF") && (e.solicitante === this.usuarioLogged.email));
-            } else if (this.estadoSolicitudMatriz === 2){
-              // return ((e.estadoMatriz !== "MA") && (e.solicitante === this.usuarioLogged.email));
-              return ((e.estadoMatriz !== "MA") && (e.solicitante === this.usuarioLogged.email));
-            } else if (this.estadoSolicitudMatriz === 3){
-              return ((e.estadoMatriz === "MA") && (e.solicitante === this.usuarioLogged.email));
-            } else if (this.estadoSolicitudMatriz === 4){
-              return ((e.estadoMatriz === "MC") && (e.supervisor === this.usuarioLogged.email) && (e.visita === "NO"));
-            } else if (this.estadoSolicitudMatriz === 5){
-              return ((e.estadoMatriz === "MC") && (e.supervisor === this.usuarioLogged.email) && (e.visita === "SI"));
-            } else if (this.estadoSolicitudMatriz === 6){
-              // return (((e.estadoMatriz === "JS") || (e.estadoMatriz === "MO") || (e.estadoMatriz === "GA") || (e.estadoMatriz === "MA")) && (e.supervisor === this.usuarioLogged.email));
-              return (((e.estadoMatriz === "JS") || (e.estadoMatriz === "MO") || (e.estadoMatriz === "GA") || (e.estadoMatriz === "MA")) && (e.supervisor === this.usuarioLogged.email));
-            } else if (this.estadoSolicitudMatriz === 7){
-              // return ((e.estadoMatriz === "MA") && (e.supervisor === this.usuarioLogged.email));
-              return ((e.estadoMatriz === "MP") && (e.supervisor === this.usuarioLogged.email));
-            } else if (this.estadoSolicitudMatriz === 8){
-              return e.estado === "SN";
-            } else if (this.estadoSolicitudMatriz === 9){
-              return ((e.estadoMatriz === "MC") || (e.estadoMatriz === "JS"));
-            } else if (this.estadoSolicitudMatriz === 10){
-              return ((e.estadoMatriz === "MO") || (e.estadoMatriz === "GA"));
-            } else if (this.estadoSolicitudMatriz === 11){
-              return (e.estadoMatriz === "MA");
-            } else if (this.estadoSolicitudMatriz === 12){
-              return (e.estadoMatriz === "MP");
-            }
-        })
+          if (this.estadoSolicitudMatriz === 4){
+            this.dataSourceSolicitudesMatriz.data = solmatAux.filter(
+              e => {
+                  return (e.visita === "NO");
+            })
+          } else if (this.estadoSolicitudMatriz === 5){
+            this.dataSourceSolicitudesMatriz.data = solmatAux.filter(
+              e => {
+                  return (e.visita === "SI");
+            })
+          } else {
+            this.dataSourceSolicitudesMatriz.data = solmatAux
+          }
+        this.dataSourceSolicitudesMatriz.filter = "";
       })
       .finally(() => this._spinner.hide());
     }
@@ -381,7 +440,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
 
   reload() {
     this._spinner.show();
-    this.dataSourceSolicitudesMatriz = [];
+    this.dataSourceSolicitudesMatriz.data = [];
     this.getSolicitudesMatriz();
   }
 /*

@@ -47,6 +47,7 @@ import { IndicadoresService } from '../../shared/services/indicadores.service';
 import { Observable } from 'rxjs';
 import { LoginService } from 'src/app/shared/services/login.service';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
+import { Console } from 'console';
 
 // import { AccesoService } from '../../shared/services/user.service';
 // import { Puesto } from '../../shared/models/fisics/Puesto';
@@ -60,13 +61,11 @@ declare var $: any;
   animations: [slideInAnimation], // register the animation
 })
 export class HomeComponent extends FormularioAT implements OnInit {
-
-
-
   @ViewChild('sidenav') sidenav: MatSidenav;
-
-
   dataSourceIndicadoresMatriz: any[] = [];
+  nuevaSolicitud: boolean = true;
+  // loggedUser: Usuario;
+  usuarioLogged: Usuario;
   cards: any[] = [
     {
       contador: 7,
@@ -203,8 +202,6 @@ export class HomeComponent extends FormularioAT implements OnInit {
   // solicitudesEnPendientes: number;
   // solicitudesCerradas: number;
   // solicitudesVencidas: number;
-  nuevaSolicitud: boolean = true;
-  usuarioLogged: Usuario;
 
   // barChartOptions: ChartOptions = {
   //   responsive: true,
@@ -300,6 +297,26 @@ export class HomeComponent extends FormularioAT implements OnInit {
     // this.formControlAnnio = new FormControl(0);
     // this.getScreenSize();
     this.getDashboardData();
+    console.log(this.usuarioLogged)
+  }
+
+  getDashboardData(): void{
+    this.indicadoresService
+      .obtenerDashboardData(this.usuarioLogged.idUsuario, this.usuarioLogged.rol)
+      // .obtenerDashboardData("xternal", "JS")
+      .then((listSolicitudesMatriz) => {
+        this.dataSourceIndicadoresMatriz = listSolicitudesMatriz
+          ? listSolicitudesMatriz
+          : [];
+        this.dataSourceIndicadoresMatriz.forEach(
+          (element, number, array) => {
+            this.cards[element.id - 1].id = element.id;
+            this.cards[element.id - 1].indicador = element.indicador;
+            this.cards[element.id - 1].contador = element.valor;
+            this.cards[element.id - 1].show = true;
+          }
+        )
+      }).finally(() => this._spinner.hide());
   }
 
   getUserLogged() {
@@ -319,34 +336,13 @@ export class HomeComponent extends FormularioAT implements OnInit {
     this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
     this.usuarioLogged.key = usuarioFromSession._key;
     this.usuarioLogged.nombres = usuarioFromSession._nombres;
-    this.usuarioLogged.rol = usuarioFromSession._rol;//"JA";
+    this.usuarioLogged.rol = usuarioFromSession._rol;
     this.usuarioLogged.selected = usuarioFromSession._selected;
     this.usuarioLogged.tipo = usuarioFromSession._tipo;
     this.usuarioLogged.usuario = usuarioFromSession._usuario;
     this.usuarioLogged.usuarioModifica = usuarioFromSession._usuarioModifica;
     this.usuarioLogged.usuarioRegistro = usuarioFromSession._usuarioRegistro;
   }
-
-  getDashboardData(): void{
-    this.indicadoresService
-      // .obtenerDashboardData("xternal", this.loggedUser.rol)
-      .obtenerDashboardData(this.usuarioLogged.idUsuario, this.usuarioLogged.rol)
-      .then((listSolicitudesMatriz) => {
-        this.dataSourceIndicadoresMatriz = listSolicitudesMatriz
-          ? listSolicitudesMatriz
-          : [];
-        this.dataSourceIndicadoresMatriz.forEach(
-          (element, number, array) => {
-            this.cards[element.id - 1].id = element.id;
-            this.cards[element.id - 1].indicador = element.indicador;
-            this.cards[element.id - 1].contador = element.valor;
-            this.cards[element.id - 1].show = true;
-          }
-        )
-      }).finally(() => this._spinner.hide());
-
-  }
-
 
   // @HostListener('window:resize', ['$event'])
   // getScreenSize(event?): void {
