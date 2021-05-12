@@ -330,7 +330,7 @@ export class Variables {
     ObtenerMenuAcceso: `${Variables.mainUrlIpercApi}PA_ObtenerMenuAccesoTest`,
     ObtenerMenu: `${Variables.mainUrlIpercApi}PA_ObtenerMenuTest`,
     ObtenerProceso: `${Variables.mainUrlIpercApi}PA_ObtenerProcesoTest`,
-    ObtenerPuesto: `${Variables.mainUrlIpercApi}PA_ObtenerPuestoTest`,
+    ObtenerPuesto: `${Variables.mainUrlIpercApi}PA_ObtenerMatrizPuestoTest`,
     ObtenerResponsable: `${Variables.mainUrlIpercApi}PA_ObtenerResponsableTest`,
     ObtenerRol: `${Variables.mainUrlIpercApi}PA_ObtenerRolTest`,
     ObtenerSolicitudMatriz: `${Variables.mainUrlIpercApi}PA_ObtenerSolicitudMatrizTest`,
@@ -351,9 +351,9 @@ export class Variables {
 
     ObtenerLogin: `${Variables.mainUrlIpercApi}PA_LoginUsuarioTest`,
     ObtenerIndicadores: `${Variables.mainUrlIpercApi}PA_ObtenerIndicadoresTest`,
-    
-    EliminarPuesto: `${Variables.mainUrlIpercApi}WF_EliminarPuestoTest`,    
-    EliminarActividad: `${Variables.mainUrlIpercApi}WF_EliminarActividadTest`, 
+
+    EliminarPuesto: `${Variables.mainUrlIpercApi}WF_EliminarPuestoTest`,
+    EliminarActividad: `${Variables.mainUrlIpercApi}WF_EliminarActividadTest`,
     EliminarRiesgo: `${Variables.mainUrlIpercApi}WF_EliminarRiesgoTest`,
     EliminarPeligro: `${Variables.mainUrlIpercApi}WF_EliminarPeligroTest`,
     EliminarRiesgoMCPRiesgo: `${Variables.mainUrlIpercApi}WF_EliminarRiesgoMCPTest`,

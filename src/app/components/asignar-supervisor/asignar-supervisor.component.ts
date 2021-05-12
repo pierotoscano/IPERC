@@ -221,7 +221,7 @@ export class AsignarSupervisorComponent implements OnInit, OnChanges {
         AsuntoSupervisor: asuSupervisorAsignado.valor1,
         NombreSupervisor: supervisorSelected.nombres,
         Area: this.solicitudMatriz.area,
-        CorreoSolicitante: this.solicitudMatriz.emailSupervisor,
+        CorreoSolicitante: this.solicitudMatriz.emailSolicitante,
         AsuntoSolicitante: asuAsigMatrizRiesgo.valor1,
         NombreSolicitante: this.solicitudMatriz.solicitante,
       });

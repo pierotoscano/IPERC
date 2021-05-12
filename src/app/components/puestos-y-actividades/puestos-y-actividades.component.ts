@@ -15,6 +15,7 @@ import { MatTable } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from 'src/app/shared/models/fisics/Usuario';
 import { ActividadesComponent } from '../peligros-y-riesgos/actividades/actividades.component';
+import { AlertComponent } from '../alert/alert.component';
 
 export type Operacion = {
   ejecucion: {(s: Puesto | MatrizActividad) : Promise<number>};
@@ -120,7 +121,7 @@ export class PuestosYActividadesComponent implements OnInit {
               console.log(element);
               (<MatrizActividad[]>actividades).push(<MatrizActividad>element.parametro);
               return 0;
-            } 
+            }
             (<MatrizActividad[]>actividades).forEach((element1, index1) => {
               if (element.nameop === "DELETE" && element.parametro.constructor.name === "MatrizActividad" && element.parametro.idPuesto === element1.idPuesto){
                 console.log(element);
@@ -267,7 +268,7 @@ export class PuestosYActividadesComponent implements OnInit {
       }
     })
   }
-  
+
   private async deleteActividadFromDB(actividad: MatrizActividad){
     let data = await this.matrizservice.eliminarActividadMatriz(actividad);
     if (data && data > 0) {
@@ -300,5 +301,13 @@ export class PuestosYActividadesComponent implements OnInit {
       // console.log(data)
     })
     this.listaOperaciones = [];
+    this.showMessage("Éxito al guardar puestos y actividades");
+  }
+
+  showMessage(text: string) {
+    const alertRef = this.dialog.open(AlertComponent, {
+      width: '250px',
+      data: { mensaje: text },
+    });
   }
 }

@@ -62,7 +62,7 @@ declare var $: any;
 export class HomeComponent extends FormularioAT implements OnInit {
 
 
-  
+
   @ViewChild('sidenav') sidenav: MatSidenav;
 
 
@@ -150,14 +150,14 @@ export class HomeComponent extends FormularioAT implements OnInit {
       indicador: "",
       id: 0,
       show: false,
-      footer: "NO PUBLICADAS"
+      footer: "PUBLICADAS"
     },
     {
       contador: 0,
       indicador: "",
       id: 0,
       show: false,
-      footer: "PUBLICADAS"
+      footer: "NO PUBLICADAS"
     }
   ]
 
@@ -204,7 +204,7 @@ export class HomeComponent extends FormularioAT implements OnInit {
   // solicitudesCerradas: number;
   // solicitudesVencidas: number;
   nuevaSolicitud: boolean = true;
-  loggedUser: Usuario;
+  usuarioLogged: Usuario;
 
   // barChartOptions: ChartOptions = {
   //   responsive: true,
@@ -279,7 +279,7 @@ export class HomeComponent extends FormularioAT implements OnInit {
     }
   }
 */
-  
+
   constructor(
     public applicationRef: ApplicationRef,
     public dialog: MatDialog,
@@ -295,17 +295,42 @@ export class HomeComponent extends FormularioAT implements OnInit {
   ) {
     super('Home', applicationRef, dialog, route, router, masterService, zone, _spinner);
     // console.log(JSON.stringify(this.loginService.getUserLogged()));
-    this.loggedUser = this.loginService.getUserLogged();
+    this.getUserLogged()
     // this.esMiembroId = false;
     // this.formControlAnnio = new FormControl(0);
     // this.getScreenSize();
     this.getDashboardData();
   }
 
+  getUserLogged() {
+    let usuarioFromSession = JSON.parse(
+      sessionStorage.getItem('usuarioLogged')
+    );
+    this.usuarioLogged = new Usuario();
+    this.usuarioLogged.apellidoMaterno = usuarioFromSession._apellidoMaterno;
+    this.usuarioLogged.apellidoMaterno = usuarioFromSession._apellidoMaterno;
+    this.usuarioLogged.apellidoPaterno = usuarioFromSession._apellidoPaterno;
+    this.usuarioLogged.email = usuarioFromSession._email;
+    this.usuarioLogged.estado = usuarioFromSession._estado;
+    this.usuarioLogged.fechaModifica = usuarioFromSession._fechaModifica;
+    this.usuarioLogged.fechaRegistro = usuarioFromSession._fechaRegistro;
+    this.usuarioLogged.idLogin = usuarioFromSession._idLogin;
+    this.usuarioLogged.idUbicacion = usuarioFromSession._idUbicacion;
+    this.usuarioLogged.idUsuario = usuarioFromSession._idUsuario;
+    this.usuarioLogged.key = usuarioFromSession._key;
+    this.usuarioLogged.nombres = usuarioFromSession._nombres;
+    this.usuarioLogged.rol = usuarioFromSession._rol;//"JA";
+    this.usuarioLogged.selected = usuarioFromSession._selected;
+    this.usuarioLogged.tipo = usuarioFromSession._tipo;
+    this.usuarioLogged.usuario = usuarioFromSession._usuario;
+    this.usuarioLogged.usuarioModifica = usuarioFromSession._usuarioModifica;
+    this.usuarioLogged.usuarioRegistro = usuarioFromSession._usuarioRegistro;
+  }
+
   getDashboardData(): void{
     this.indicadoresService
       // .obtenerDashboardData("xternal", this.loggedUser.rol)
-      .obtenerDashboardData("xternal", "JS")
+      .obtenerDashboardData(this.usuarioLogged.idUsuario, this.usuarioLogged.rol)
       .then((listSolicitudesMatriz) => {
         this.dataSourceIndicadoresMatriz = listSolicitudesMatriz
           ? listSolicitudesMatriz
