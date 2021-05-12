@@ -188,7 +188,7 @@
     <ng-container matColumnDef="eliminar" style="justify-content: center;">
         <th mat-header-cell *matHeaderCellDef> Eliminar </th>
         <td mat-cell *matCellDef="let element">
-            <button mat-icon-button color="warn" (click)="eliminarMCP(element)">
+            <button mat-icon-button color="warn" (click)="eliminarMCP(element)" *ngIf="(this.etapa === 5 && this.usuario.rol === 'SS') ? true : false">
                 <mat-icon>delete</mat-icon>
             </button>
         </td>

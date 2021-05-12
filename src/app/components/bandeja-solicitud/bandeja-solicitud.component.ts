@@ -242,7 +242,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
     this.getAreas();
     this.getSolicitudesMatriz();
     // console.log("material-bandeja-solicitud")
-    
+
   }
 
   tipomotivos: TipoMotivo[];
@@ -315,7 +315,7 @@ export class BandejaSolicitudComponent extends FormularioAT implements OnInit {
           this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MC"]);
           estadoMatriz = "MC";
           this.formBuscarSolicitudes.controls["supervisor"].setValue(this.usuarioLogged.usuario);
-          idSolicitante = this.usuarioLogged.usuario;
+          idSupervisor = this.usuarioLogged.usuario;
         break;
         case 5:
           this.formBuscarSolicitudes.controls["estadoMatriz"].setValue(["MC"]);
