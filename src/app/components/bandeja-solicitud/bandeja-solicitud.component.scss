@@ -1,0 +1,31 @@
+.mat-form-field {
+    display: block !important;
+}
+
+.fechaIni{
+    padding-right: 15px;
+    padding-left: 0px;
+}
+.fechaFin{
+    padding-right: 0px;
+}
+/* @media screen and (max-width: 920px) {
+
+} */
+@media (max-width: 992px){
+    .fechaIni{
+        padding-right: 0px;
+    }
+    .fechaFin{
+        padding-left: 0px;
+    }
+}
+
+table {
+    width: 100%;
+}
+.css_tam_col{
+    font-size: 12px;
+    color: rgb(56, 56, 56);
+}
+  
